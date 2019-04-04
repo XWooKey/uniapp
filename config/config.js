@@ -1,4 +1,4 @@
-export const baseUrl = 'http://www.b2c.com/';//注意最后斜杠
+export const baseUrl = 'http://demo.jihainet.com/';//注意最后斜杠
 export const entId = '10519';//客服ID
 export const aboutArticleId = '2';//关于我们文章id
 export const paymentType = { //支付单类型
