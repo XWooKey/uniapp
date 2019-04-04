@@ -41,7 +41,7 @@ Jshop小程序商城，是一款开源的电商系统，包含微信小程序和
 
 
 #### 项目演示
-- H5体验地址：
+- H5体验地址：http://demo.jihainet.com/wap1
 - QQ交流群：823732583（开发手册、接口文档、操作手册请进群查看哦~）
 - 交流社区：[https://bbs.jihainet.com/](https://bbs.jihainet.com/)
 - 小程序体验二维码
