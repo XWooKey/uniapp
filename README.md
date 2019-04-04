@@ -47,7 +47,7 @@ Jshop小程序商城，是一款开源的电商系统，包含微信小程序和
 - 小程序体验二维码
 
 #### 项目截图
-
+![输入图片说明](https://gitee.com/uploads/images/2019/0404/180847_9615f414_8503.png "未标题-1.png")
 
 #### 目录结构
 
@@ -75,11 +75,11 @@ wap  WEB部署目录（或者子目录）
 
 1. 小程序发布教程
 具体配置稍后提供
-相关介绍：https://uniapp.dcloud.io/
+开发相关介绍：https://uniapp.dcloud.io/
 
 2. H5发布教程
 具体配置稍后提供
-相关开发介绍：https://uniapp.dcloud.io/
+开发相关开发介绍：https://uniapp.dcloud.io/
 
 
 #### 安全&缺陷
