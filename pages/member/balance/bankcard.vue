@@ -1,10 +1,10 @@
 <template>
 	<view class="content">
-		<view class="content-top"
-		v-for="(item, index) in cards"
-		:key="index"
-		>
-			<view class="card-item">
+		<view class="content-top" v-if="cards.length">
+			<view class="card-item"
+			v-for="(item, index) in cards"
+			:key="index"
+			>
 				<view class="card-item-tip" v-if="item.is_default === 1">
 					<view class="cit-bg"></view>
 					<view class="cit-text">默</view>
@@ -22,6 +22,12 @@
 						</view>
 					</view>
 				</view>
+				<view class="mr-card" 
+				v-if="item.is_default === 2"
+				@click="setDefault(item.id)"
+				>
+					<button class="btn btn-w">设为默认</button>
+				</view>
 				<view class="del-card" 
 				v-if="mold"
 				@click="selected(index)"
@@ -35,6 +41,9 @@
 					<button class="btn btn-b">删除</button>
 				</view>
 			</view>
+		</view>
+		<view class="cards-none" v-else>
+			<image class="cards-none-img" src="../../../static/image/order.png" mode=""></image>
 		</view>
 		<view class="button-bottom">
 			<button class="btn btn-b" @click="goAddcard()">添加银行卡</button>
@@ -85,6 +94,20 @@ export default {
 			})
 		},
 		// 设置默认卡
+		setDefault (id) {
+			let data = {
+				id: id
+			}
+			this.$api.setDefaultBankCard(data, res => {
+				if (res.status) {
+					this.$common.successToShow(res.msg, () => {
+						this.getBankCards()
+					})
+				} else {
+					this.$common.errorToShow(res.msg)
+				}
+			})
+		},
 		// 添加新的银行卡
 		goAddcard(){
 			this.$common.navigateTo('./add_bankcard')
@@ -99,6 +122,10 @@ export default {
 			
 			// #ifdef MP-WEIXIN
 			beforePage.$vm.cardInfo = this.cards[index]
+			// #endif
+			
+			// #ifdef MP-ALIPAY
+			beforePage.rootVM.cardInfo = this.cards[index]
 			// #endif
 			
 			uni.navigateBack({
@@ -176,15 +203,28 @@ export default {
 	font-size: 26upx;
 	text-align: center;
 }
+.mr-card{
+	position: absolute;
+	right: 140upx;
+	bottom: 0upx;
+}
 .del-card{
 	position: absolute;
 	right: 30upx;
 	bottom: 0upx;
 }
-.del-card .btn{
+.del-card .btn,.mr-card .btn{
 	font-size: 24upx;
 	height: 48upx;
 	line-height: 46upx;
 	padding: 0 16upx;
+}
+.cards-none{
+	text-align: center;
+	padding: 200upx 0;
+}
+.cards-none-img{
+	width: 274upx;
+	height: 274upx;
 }
 </style>

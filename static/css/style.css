@@ -4,6 +4,73 @@ body{
 view{
   box-sizing: border-box;
 }
+/* #ifdef MP-ALIPAY */
+image{
+	background-size: 100% 100%;
+}
+button{
+	height: auto;
+	border: none;
+	line-height: 2.55555556;
+	padding: 0 28upx;
+}
+input{
+	background: none;
+	padding: 0;
+}
+shared-checkbox{
+	border-radius: 50%;
+}
+shared-checkbox{
+    border-radius: 50%;
+    height: 36rpx;
+    width: 36rpx;
+    margin-top: -4rpx;
+    border: 1rpx solid #d1d1d1;
+	color: #FF7159;
+}
+shared-checkbox:checked {
+  /* width: 36rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 28rpx;
+  color: #fff;
+  background: transparent;
+  transform: translate(-50%, -50%) scale(1);
+  -webkit-transform: translate(-50%, -50%) scale(1);
+  background-color: #FF7159;
+  border: 1rpx solid #FF7159; */
+  background-color: #000;
+  color: #000;
+}
+._radio{
+   border-radius: 50%;/* 圆角 */
+   width: 36rpx;
+   height: 36rpx;
+   margin-top: -4rpx;
+   border: 1rpx solid #d1d1d1;
+}
+/* 选中后的 背景样式 （红色背景 无边框 可根据UI需求自己修改） */
+._radio:checked{
+   border: 1rpx solid #FF7159;
+   background: #FF7159;
+}
+/* 选中后的 对勾样式 （白色对勾 可根据UI需求自己修改） */
+._radio:checked::before{
+   border-radius: 50%;/* 圆角 */
+   width: 36rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+   height: 36rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+   line-height: 36rpx;
+   text-align: center;
+   font-size:28rpx; /* 对勾大小 30rpx */
+   color:#fff; /* 对勾颜色 白色 */
+   background: transparent;
+   transform:translate(-50%, -50%) scale(1);
+   -webkit-transform:translate(-50%, -50%) scale(1);
+}
+/* #endif */
 uni-toast .uni-toast{
 	/* width: 6em; */
 	font-size: 24upx;
@@ -55,13 +122,21 @@ uni-input div div.input-placeholder{
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding: 10upx 90upx 10upx 30upx;
+  line-height: 52upx;
+  padding: 10upx 90upx 10upx 40upx;
   border-radius: 50upx;
   font-size: 24upx;
-	transition: all .5s;
+	transition: all .5s;  
 }
 .search-input-p{
   color: #999;
+  width: 100%;
+  height: 100%;
+}
+.search-input-p-c{
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }
 .search-icon{
   position: absolute;
@@ -115,6 +190,9 @@ uni-input div div.input-placeholder{
   min-width: 150upx;
   border: none !important;
 }
+.btn-c{
+	background-color: #f7f7f7;
+}
 .btn-w{
   border: 2upx solid #333;
   color: #333;
@@ -147,6 +225,11 @@ uni-input div div.input-placeholder{
   background-color: #fff;
   float: left;
   min-height: 130upx;
+  /* #ifdef MP-ALIPAY */
+  width: 330rpx;
+  margin: 25rpx;
+  min-height: 130rpx;
+  /* #endif */
 }
 .img-grids-item:nth-child(2n-1){
   margin-right: 0;
@@ -154,6 +237,10 @@ uni-input div div.input-placeholder{
 .img-grids-item-t{
   width: 336upx;
   height: 336upx;
+   /* #ifdef MP-ALIPAY */
+  width: 330rpx;
+  height: 330rpx;
+  /* #endif */
 }
 .img-grids-item-b{
   padding: 0 10upx 10upx;
@@ -165,7 +252,10 @@ uni-input div div.input-placeholder{
   overflow: hidden;
   color: #333;  
   width: 100%; 
-  min-height: 70upx;  
+  min-height: 70upx;
+  /* #ifdef MP-ALIPAY */
+  min-height: 56rpx;
+  /* #endif */
 }
 .grids-goods-name{
   font-size: 26upx;
@@ -239,6 +329,10 @@ uni-input div div.input-placeholder{
   height: 40upx;
   float: right;
 }
+.medium-img{
+	width: 196upx;
+	height: 196upx;
+}
 .little-img{
   width: 140upx;
   height: 140upx;
@@ -246,6 +340,10 @@ uni-input div div.input-placeholder{
 .small-img{
   width: 120upx;
   height: 120upx;
+}
+.medium-right{
+	width: 340upx;
+	min-height: 140upx;
 }
 .little-right{
   width: 520upx;
@@ -318,6 +416,7 @@ uni-input div div.input-placeholder{
   min-width: 160upx;
   max-width: 180upx;
   font-size: 28upx;
+	position: relative;
 }
 .cell-hd-icon{
   width: 40upx;
@@ -330,6 +429,9 @@ uni-input div div.input-placeholder{
   float: left;
   display: inline-block;
   position: relative;
+  /* #ifdef MP-ALIPAY */
+  top: 4upx;
+  /* #endif */
 }
 .cell-item-bd{
   display: table-cell;
@@ -368,6 +470,7 @@ uni-input div div.input-placeholder{
 }
 .right-img .cell-item-ft{
 	right: 8upx;
+	height: 50upx;
 }
 .cell-ft-view{
 	position: relative;
@@ -384,7 +487,8 @@ uni-input div div.input-placeholder{
   font-size: 28upx;
   float: right;
   position: relative;
-  top: 8upx;
+  /* top: 8upx; */
+  line-height: 50upx;
 }
 .cell-ft-next{
   float: right;  
@@ -404,6 +508,9 @@ uni-input div div.input-placeholder{
 .icon{
   width: 50upx;
   height: 50upx;
+  /* #ifdef MP-ALIPAY */
+  background-size: 100% 100%;
+  /* #endif */
 }
 .swiper-grids .swiper-list{
   white-space:nowrap;
@@ -516,14 +623,14 @@ uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked:before{
 .badge{
 	display: inline-block;
 	position: absolute;
-	min-width:28upx;
-	height:28upx;
-	line-height:26upx;
+	min-width:13px;
+	height:13px;
+	line-height:13px;
 	background-color:#FF7159;
 	color:#fff;
-	font-size:16upx;
+	font-size:12px;
 	border-radius:50upx;
-	padding:0 6upx;
+	padding:0 3px;
 	z-index: 99;
 }
 .button-bottom{
@@ -561,7 +668,7 @@ uni-checkbox .uni-checkbox-input.uni-checkbox-input-checked:before{
 
 
 
-/*  #ifdef MP-WEIXIN  */
+/*  #ifdef MP */
 checkbox .wx-checkbox-input{
     border-radius: 50%;
     height: 36rpx;

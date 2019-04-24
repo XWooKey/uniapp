@@ -3,7 +3,11 @@
 		<!-- 搜索框 -->
 		<view class="search">
 			<view class="search-c" @click="goSearch">
-				<view class="search-input search-input-p">{{ searchKey }}</view>
+				<view class="search-input search-input-p">
+					<view class="search-input-p-c">
+					{{ searchKey }}
+					</view>
+				</view>
 				<image class="icon search-icon" src="../../static/image/zoom.png"></image>
 			</view>
 		</view>
@@ -17,81 +21,135 @@
 			<view class="screen-item" @click="priceSort">
 				<text class="screen-item-text">价格</text>
 				<view class="screen-item-icon">
-					<image v-if="searchData.order.key == 'price' && searchData.order.sort == 'asc' "
-						class="screen-item-icon-img"
-						src="../../static/image/top-black.png"
-					></image>
-					<image v-else-if="!(searchData.order.key == 'price' && searchData.order.sort == 'asc')  "
-						class="screen-item-icon-img"
-						src="../../static/image/top-gray.png"
-					></image>
-					
-					<image
-						v-if="searchData.order.key == 'price' && searchData.order.sort == 'desc'  "
-						class="screen-item-icon-img"
-						src="../../static/image/bottom-black.png"
-					></image>
-					
-					<image
-						v-if="!(searchData.order.key == 'price' && searchData.order.sort == 'desc')"
-						class="screen-item-icon-img"
-						src="../../static/image/bottom-gray.png"
-					></image>
-					
+					<image v-if="searchData.order.key == 'price' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="../../static/image/top-black.png"></image>
+					<image v-else-if="!(searchData.order.key == 'price' && searchData.order.sort == 'asc')" class="screen-item-icon-img" src="../../static/image/top-gray.png"></image>
+					<image v-if="searchData.order.key == 'price' && searchData.order.sort == 'desc'" class="screen-item-icon-img" src="../../static/image/bottom-black.png"></image>
+					<image v-if="!(searchData.order.key == 'price' && searchData.order.sort == 'desc')" class="screen-item-icon-img" src="../../static/image/bottom-gray.png" ></image>
 				</view>
 			</view>
 			<view class="screen-item" @click="salesVolume">
 				<text class="screen-item-text">销量</text>
 				<view class="screen-item-icon">
-					<image v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'asc'"
-						class="screen-item-icon-img"
-						src="../../static/image/top-black.png"
-					></image>
-					<image v-else-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'asc') "
-						class="screen-item-icon-img"
-						src="../../static/image/top-gray.png"
-					></image>
-					
-					<image
-						v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'desc' "
-						class="screen-item-icon-img"
-						src="../../static/image/bottom-black.png"
-					></image>
-					
-					<image
-						v-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'desc') "
-						class="screen-item-icon-img"
-						src="../../static/image/bottom-gray.png"
-					></image>
+					<image v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="../../static/image/top-black.png"></image>
+					<image v-else-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'asc')" class="screen-item-icon-img" src="../../static/image/top-gray.png"></image>
+					<image v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'desc'" class="screen-item-icon-img" src="../../static/image/bottom-black.png"></image>
+					<image v-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'desc')" class="screen-item-icon-img" src="../../static/image/bottom-gray.png"></image>
 				</view>
 			</view>
 			<view class="screen-item">
-				<view
-					class="screen-item-icon"
-					style-type="button"
-					:current="current"
-					@click="listGrid"
-				>
-					<image class="list-grid" src="../../static/image/switch-ic-side-2.png" v-show="current == 0"></image>
-					<image class="list-grid" src="../../static/image/switch-ic-list.png" v-show="current == 1"></image>
+				<view class="screen-item-icon" style-type="button" :current="current" @click="listGrid">
+					<image class="list-grid" src="../../static/image/switch-ic-side-2.png" v-if="current == 0"></image>
+					<image class="list-grid" src="../../static/image/switch-ic-list.png" v-else-if="current == 1"></image>
 				</view>
 			</view>
-			<!-- <view class="screen-item">
+			<view class="screen-item screents" v-if="screents" @click="toshow()">
 				<text class="screen-item-text">筛选</text>
 				<image class="filter-img" src="../../static/image/top.png"></image>
-			</view> -->
+			</view>
+			<view class="screen-item screents" v-else-if="screentc" @click="toclose()">
+				<text class="screen-item-text">筛选</text>
+				<image class="filter-img" src="../../static/image/bottom.png"></image>
+			</view>
 		</view>
+		
+		<!-- 高级赛选 -->
+		<lvv-popup position="top" ref="lvvpopref" style="background: none;">
+			<view class="fliter-c">
+				<scroll-view scroll-y="true" style="height: 100%;">
+					<view class="fliter-item">
+						<view class='cell-item right-img'>
+							<view class='cell-item-hd'>
+								<view class='cell-hd-title'>价格区间</view>
+							</view>
+						</view>
+						<view class="fliter-i-c">
+							<view class="fic-item">
+								<input class="fic-item-input" type="number" v-model="sPrice" />
+							</view>
+							<view class="fic-item-line"></view>
+							<view class="fic-item">
+								<input class="fic-item-input" type="number" v-model="ePrice" />
+							</view>
+						</view>
+					</view>
+					<view class="fliter-item" v-if="cat_list.length > 0">
+						<view class='cell-item right-img'>
+							<view class='cell-item-hd'>
+								<view class='cell-hd-title'>分类</view>
+							</view>
+						</view>
+						<view class="fliter-i-c">
+							<view v-for="item in cat_list" :key="item.goods_cat_id" v-if="item.goods_cat_id && item.name" @click="selectKey('cat_list', item.goods_cat_id)">
+								<view class="fic-item" v-if="!item.isSelect">
+									<view class="fic-item-text two-line" >
+										{{item.name}}
+									</view>
+								</view>
+								<view class="fic-item fic-item-active" v-else-if="item.isSelect">
+									<view class="fic-item-text two-line">
+										{{item.name}}
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="fliter-item" v-if="brand_list.length > 0">
+						<view class='cell-item right-img'>
+							<view class='cell-item-hd'>
+								<view class='cell-hd-title'>品牌</view>
+							</view>
+						</view>
+						<view class="fliter-i-c">
+							<view v-for="item in brand_list" :key="item.brand_id" v-if="item.brand_id && item.name" @click="selectKey('brand_list', item.brand_id)">
+								<view class="fic-item" v-if="!item.isSelect">
+									<view class="fic-item-text two-line">
+										{{item.name}}
+									</view>
+								</view>
+								<view class="fic-item fic-item-active" v-else-if="item.isSelect">
+									<view class="fic-item-text two-line">
+										{{item.name}}
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="fliter-item" v-if="label_list.length > 0">
+						<view class='cell-item right-img'>
+							<view class='cell-item-hd'>
+								<view class='cell-hd-title'>标签</view>
+							</view>
+						</view>
+						<view class="fliter-i-c">
+							<view v-for="item in label_list" :key="item.id" v-if="item.id && item.name" @click="selectKey('label_list', item.id)">
+								<view class="fic-item" v-if="!item.isSelect">
+									<view class="fic-item-text two-line">
+										{{item.name}}
+									</view>
+								</view>
+								<view class="fic-item fic-item-active" v-else-if="item.isSelect">
+									<view class="fic-item-text two-line">
+										{{item.name}}
+									</view>
+								</view>
+							</view>
+						</view>
+					</view>
+				</scroll-view>
+				<view class="button-bottom">
+					<button class="btn btn-square" @click="filterNo()">取消</button>
+					<button class="btn btn-b btn-square" @click="filterOk()">确定</button>
+				</view>
+			</view>
+		</lvv-popup>
 
-		<!-- 表格图片 -->
+		<!-- 商品列表 -->
 		<scroll-view scroll-y="true" :scroll-into-view="toView" class="scroll-Y" @scrolltolower="lower" enable-back-to-top="true" lower-threshold="45">
+			<!-- 表格图片 -->
 			<view class="img-grids" v-show="current === 0">
 				<view v-if="goodsList.length>0">
-					<view class="img-grids-item"  v-for="(item, index) in goodsList" :key="index" @click="goodsDetail(item.id)">
-						<image
-							class="img-grids-item-t have-none"
-							:src="item.image_url"
-							mode='aspectFill'
-						></image>
+					<view class="img-grids-item" v-for="(item, index) in goodsList" :key="index" @click="goodsDetail(item.id)">
+						<image class="img-grids-item-t have-none" :src="item.image_url" mode='aspectFill'></image>
 						<view class="img-grids-item-b">
 							<view class="goods-name grids-goods-name">
 								{{item.name}}
@@ -105,75 +163,15 @@
 				</view>
 				<!-- 无数据时默认显示 -->
 				<view class="order-none" v-else>
-					<!-- <view class="img-grids-item have-none">
-						<image
-							class="img-grids-item-t have-none"
-							mode='aspectFill'
-						></image>
-						<view class="img-grids-item-b ">
-							<view class="goods-name grids-goods-name have-none">
-							</view>
-							<view class="goods-item-c">
-								<view class="goods-price red-price have-none"></view>
-								<image class="goods-cart have-none"></image>
-							</view>
-						</view>
-					</view>
-					<view class="img-grids-item have-none">
-						<image
-							class="img-grids-item-t have-none"
-							mode='aspectFill'
-						></image>
-						<view class="img-grids-item-b ">
-							<view class="goods-name grids-goods-name have-none">
-							</view>
-							<view class="goods-item-c">
-								<view class="goods-price red-price have-none"></view>
-								<image class="goods-cart have-none"></image>
-							</view>
-						</view>
-					</view>
-					<view class="img-grids-item have-none">
-						<image
-							class="img-grids-item-t have-none"
-							mode='aspectFill'
-						></image>
-						<view class="img-grids-item-b ">
-							<view class="goods-name grids-goods-name have-none">
-							</view>
-							<view class="goods-item-c">
-								<view class="goods-price red-price have-none"></view>
-								<image class="goods-cart have-none"></image>
-							</view>
-						</view>
-					</view>
-					<view class="img-grids-item have-none">
-						<image
-							class="img-grids-item-t have-none"
-							mode='aspectFill'
-						></image>
-						<view class="img-grids-item-b ">
-							<view class="goods-name grids-goods-name have-none">
-							</view>
-							<view class="goods-item-c">
-								<view class="goods-price red-price have-none"></view>
-								<image class="goods-cart have-none"></image>
-							</view>
-						</view>
-					</view> -->
 					<image class="order-none-img" src="../../static/image/order.png" mode=""></image>
 				</view>
 			</view>
 		
-		<!-- 列表图片 -->
+			<!-- 列表图片 -->
 			<view class="img-list" v-show="current === 1">
 				<view v-if="goodsList.length>0">
-					<view class="img-list-item"  v-for="(item, index) in goodsList" :key="index" @click="goodsDetail(item.id)">
-						<image
-							class="img-list-item-l"
-							:src="item.image_url"
-							mode='aspectFill'
-						></image>
+					<view class="img-list-item" v-for="(item, index) in goodsList" :key="index" @click="goodsDetail(item.id)">
+						<image class="img-list-item-l" :src="item.image_url" mode='aspectFill'></image>
 						<view class="img-list-item-r">
 							<view class="goods-name list-goods-name">
 								{{item.name}}
@@ -181,8 +179,8 @@
 							<view class="goods-item-c">
 								<view class="goods-price red-price">￥{{item.price}}</view>
 								<view class="goods-buy">
-									<view class="goods-salesvolume" v-show="item.comments_count > 0">{{item.comments_count}}条评论</view>
-									<view class="goods-salesvolume" v-show="item.comments_count <= 0">暂无评论</view>
+									<view class="goods-salesvolume" v-if="item.comments_count > 0">{{item.comments_count}}条评论</view>
+									<view class="goods-salesvolume" v-else-if="item.comments_count <= 0">暂无评论</view>
 									<image class="goods-cart" src="../../static/image/ic-car.png"></image>
 								</view>
 							</view>
@@ -190,67 +188,15 @@
 					</view>
 				</view>
 				<view class="order-none" v-else>
-					<!-- <view class="img-list-item">
-						<image class="img-list-item-l have-none" src="" mode="aspectfill"></image>
-						<view class="img-list-item-r">
-							<view class="goods-name list-goods-name have-none"></view>
-							<view class="goods-item-c">
-								<view class="goods-price have-none"></view>
-								<view class="goods-buy">
-									<view class="goods-salesvolume have-none"></view>
-									<image class="goods-cart have-none" src=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="img-list-item">
-						<image class="img-list-item-l have-none" src="" mode="aspectfill"></image>
-						<view class="img-list-item-r">
-							<view class="goods-name list-goods-name have-none"></view>
-							<view class="goods-item-c">
-								<view class="goods-price have-none"></view>
-								<view class="goods-buy">
-									<view class="goods-salesvolume have-none"></view>
-									<image class="goods-cart have-none" src=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="img-list-item">
-						<image class="img-list-item-l have-none" src="" mode="aspectfill"></image>
-						<view class="img-list-item-r">
-							<view class="goods-name list-goods-name have-none"></view>
-							<view class="goods-item-c">
-								<view class="goods-price have-none"></view>
-								<view class="goods-buy">
-									<view class="goods-salesvolume have-none"></view>
-									<image class="goods-cart have-none" src=""></image>
-								</view>
-							</view>
-						</view>
-					</view>
-					<view class="img-list-item">
-						<image class="img-list-item-l have-none" src="" mode="aspectfill"></image>
-						<view class="img-list-item-r">
-							<view class="goods-name list-goods-name have-none"></view>
-							<view class="goods-item-c">
-								<view class="goods-price have-none"></view>
-								<view class="goods-buy">
-									<view class="goods-salesvolume have-none"></view>
-									<image class="goods-cart have-none" src=""></image>
-								</view>
-							</view>
-						</view>
-					</view> -->
 					<image class="order-none-img" src="../../static/image/order.png" mode=""></image>
 				</view>
-				
 			</view>
 		</scroll-view>
 	</view>
 </template>
 
 <script>
+import lvvPopup from '@/components/lvv-popup/lvv-popup.vue'
 export default {
 	data() {
 		return {
@@ -276,7 +222,14 @@ export default {
 			},
 			searchKey: '请输入关键字搜索', //关键词
 			alllist: true,
-			allgrid: false
+			allgrid: false,
+			screents: true,
+			screentc: false,
+			sPrice: '',
+			ePrice: '',
+			brand_list: [],
+			cat_list: [],
+			label_list: []
 		};
 	},
 	//加载执行
@@ -314,7 +267,7 @@ export default {
 		this.getGoods();
 	},
 
-	components: {},
+	components: {lvvPopup},
 	methods: {
 		listGrid() {
 			if (this.current == 0) {
@@ -360,7 +313,6 @@ export default {
 			);
 			this.getGoods();
 		},
-
 		//销量
 		salesVolume: function() {
 			if (this.searchData.order.key == 'buy_count') {
@@ -397,53 +349,47 @@ export default {
 			this.setSearchData(this.searchData, true);
 			this.getGoods();
 		},
-
 		//设置查询价格区间
-		orderPrice: function(e) {
-			var reg = /^[0-9]+(.[0-9]{2})?$/;
-			if (!reg.test(e.detail.value)) {
-				this.$common.errorToShow('请输入正确金额');
-				this.maxPrice = '';
-			} else {
-				this.maxPrice = e.detail.value;
-			}
-		},
-
+// 		orderPrice: function(e) {
+// 			var reg = /^[0-9]+(.[0-9]{2})?$/;
+// 			if (!reg.test(e.detail.value)) {
+// 				this.$common.errorToShow('请输入正确金额');
+// 				this.maxPrice = '';
+// 			} else {
+// 				this.maxPrice = e.detail.value;
+// 			}
+// 		},
 		//查询价格区间
-		searchPrice: function(event) {
-			if (
-				this.minPrice > 0 &&
-				this.maxPrice > 0 &&
-				this.minPrice > this.maxPrice
-			) {
-				app.common.errorToShow('价格区间有误');
-				return false;
-			}
-
-			this.setSearchData(
-				{
-					page: 1,
-					where: {
-						price_f: this.minPrice,
-						price_t: this.maxPrice
-					}
-				},
-				true
-			);
-			this.getGoods();
-		},
-
+// 		searchPrice: function(event) {
+// 			if (
+// 				this.minPrice > 0 &&
+// 				this.maxPrice > 0 &&
+// 				this.minPrice > this.maxPrice
+// 			) {
+// 				app.common.errorToShow('价格区间有误');
+// 				return false;
+// 			}
+// 
+// 			this.setSearchData(
+// 				{
+// 					page: 1,
+// 					where: {
+// 						price_f: this.minPrice,
+// 						price_t: this.maxPrice
+// 					}
+// 				},
+// 				true
+// 			);
+// 			this.getGoods();
+// 		},
 		//页面相关事件处理函数--监听用户下拉动作
-		onPullDownRefresh: function() {
-		},
-
+		onPullDownRefresh: function() {},
 		//跳转到商品详情页面
 		goodsDetail: function(id) {
 			let ins = encodeURIComponent('id='+id);
 			let url = '/pages/goods/index/index?scene=' + ins;
 			this.$common.navigateTo(url);
 		},
-
 		//取得商品数据
 		getGoods: function() {
 			var _this = this;
@@ -479,10 +425,30 @@ export default {
 					_this.toView = '';
 					_this.loadingComplete =  isEnd && !isEmpty;
 					_this.nodata = isEmpty;
+					if(res.data.filter){
+						let filter = res.data.filter;
+						if(filter.brand_ids){
+							for(let i = 0; i < filter.brand_ids.length; i++){
+								filter.brand_ids[i].isSelect = false;
+							}
+							_this.brand_list = filter.brand_ids;
+						}
+						if(filter.goods_cat){
+							for(let i = 0; i < filter.goods_cat.length; i++){
+								filter.goods_cat[i].isSelect = false;
+							}
+							_this.cat_list = filter.goods_cat;
+						}
+						if(filter.label_ids){
+							for(let i = 0; i < filter.label_ids.length; i++){
+								filter.label_ids[i].isSelect = false;
+							}
+							_this.label_list = filter.label_ids;
+						}
+					}
 				}
 			});
 		},
-
 		//上拉加载
 		lower: function() {
 			var _this = this;
@@ -495,7 +461,6 @@ export default {
 				_this.getGoods();
 			}
 		},
-
 		listgrid: function() {
 			let _this = this;
 			if (_this.alllist) {
@@ -509,26 +474,27 @@ export default {
 			}
 		},
 		// 统一返回筛选条件 查询条件 分页
-        conditions () {
-		  let data = this.searchData;
-          var newData = {};
-		  newData = this.$common.deepCopy(newData,data);
-		  //把data里的where换成json
-		  if(data.where){
-			newData.where = JSON.stringify(data.where);
-		  }
-		  //把排序换成字符串
-		  if(data.order){
-			var sort = data.order.key + ' ' + data.order.sort;
-			if(data.order.key != 'sort'){
-			  sort = sort + ',sort asc'   //如果不是综合排序，增加上第二个排序优先级排序
+		conditions () {
+			let data = this.searchData;
+			var newData = {};
+			newData = this.$common.deepCopy(newData,data);
+			//把data里的where换成json
+			if(data.where){
+				newData.where = JSON.stringify(data.where);
 			}
-			newData.order = sort;
-		  }else{
-			newData.order = 'sort asc';
-		  }
-		  return newData;
-        },
+			//把排序换成字符串
+			if(data.order){
+				var sort = data.order.key + ' ' + data.order.sort;
+				if(data.order.key != 'sort'){
+					sort = sort + ',sort asc'   //如果不是综合排序，增加上第二个排序优先级排序
+				}
+				newData.order = sort;
+			}else{
+				newData.order = 'sort asc';
+			}
+			return newData;
+		},
+		//老搜索
 		search(){
 			this.setSearchData(
 				{
@@ -541,40 +507,190 @@ export default {
 			);
 			this.getGoods();
 		},
+		//去搜索
 		goSearch() {
 			let pages = getCurrentPages();
-			let prevPage = pages[pages.length - 2]
-			let search_flag = prevPage.route;
-			if (search_flag == 'pages/index/search') {
-				uni.navigateBack({
-					delta: 1
-				});
+			let prevPage = pages[pages.length - 2];
+			// #ifdef H5 || MP-WEIXIN
+			if(prevPage && prevPage.route){
+				let search_flag = prevPage.route;
+				if (search_flag == 'pages/index/search') {
+					uni.navigateBack({
+						delta: 1
+					});
+				}else{
+					this.$common.navigateTo('/pages/index/search');
+				}
 			}else{
 				this.$common.navigateTo('/pages/index/search');
 			}
+			// #endif
+			
+			// #ifdef MP-ALIPAY
+			if(prevPage && prevPage.__proto__.route){
+				let search_flag = prevPage.__proto__.route;
+				if (search_flag == 'pages/index/search') {
+					uni.navigateBack({
+						delta: 1
+					});
+				}else{
+					this.$common.navigateTo('/pages/index/search');
+				}
+			}else{
+				this.$common.navigateTo('/pages/index/search');
+			}
+			// #endif
+		},
+		//筛选条件弹出窗口
+		toshow(){
+			this.$refs.lvvpopref.show();
+			this.screents = false;
+			this.screentc = true;
+		},
+		//关闭筛选
+		toclose(){
+			this.$refs.lvvpopref.close();
+			this.screentc = false;
+			this.screents = true;
+		},
+		//取消筛选
+		filterNo(){
+			this.ePrice = '';
+			this.sPrice = '';
+			for(let i = 0; i < this.cat_list.length; i++){
+				this.cat_list[i].isSelect = false;
+			}
+			for(let i = 0; i < this.brand_list.length; i++){
+				this.brand_list[i].isSelect = false;
+			}
+			for(let i = 0; i < this.label_list.length; i++){
+				this.label_list[i].isSelect = false;
+			}
+			this.filterOk();
+			this.toclose();
+		},
+		//确认筛选
+		filterOk(){
+			let data = {
+				page: 1,
+				where: {}
+			};
+			
+			//获取分类
+			data.where.cat_id = '';
+			for(let i = 0; i < this.cat_list.length; i++){
+				if(this.cat_list[i].isSelect){
+					data.where.cat_id = this.cat_list[i].goods_cat_id;
+				}
+			}
+			
+			//获取多个品牌
+			let brand_ids = '';
+			for(let i = 0; i < this.brand_list.length; i++){
+				if(this.brand_list[i].isSelect){
+					brand_ids += this.brand_list[i].brand_id+',';
+				}
+			}
+			if(brand_ids){
+				brand_ids = brand_ids.substr(0, brand_ids.length-1);
+			}
+			data.where.brand_id = brand_ids;
+			
+			//获取标签
+			data.where.label_id = '';
+			for(let i = 0; i < this.label_list.length; i++){
+				if(this.label_list[i].isSelect){
+					data.where.label_id = this.label_list[i].id;
+				}
+			}
+			
+			//价格区间
+			data.where.price_f = '';
+			data.where.price_t = '';
+			if(this.sPrice*1 < 0 || (this.ePrice != '' && this.ePrice <= 0) || this.ePrice*1 < 0 || (this.sPrice*1 > this.ePrice*1 && this.sPrice != '' && this.ePrice != '')){
+				this.$common.errorToShow('价格区间有误');
+				return false;
+			}else{
+				data.where.price_f = this.sPrice;
+				data.where.price_t = this.ePrice;
+			}
+
+			this.setSearchData(data, true);
+			this.getGoods();
+			this.toclose();
+		},
+		//选择
+		selectKey(type, id){
+			//分类一次只能选择一个
+			if(type == 'cat_list'){
+				for(let i = 0; i < this.cat_list.length; i++){
+					if(this.cat_list[i].goods_cat_id == id){
+						this.cat_list[i].isSelect = this.cat_list[i].isSelect?false:true;
+					}else{
+						this.cat_list[i].isSelect = false;
+					}
+				}
+			}
+			
+			if(type == 'brand_list'){
+				for(let i = 0; i < this.brand_list.length; i++){
+					if(this.brand_list[i].brand_id == id){
+						this.brand_list[i].isSelect = this.brand_list[i].isSelect?false:true;
+					}
+				}
+			}
+			
+			if(type == 'label_list'){
+				for(let i = 0; i < this.label_list.length; i++){
+					if(this.label_list[i].id == id){
+						this.label_list[i].isSelect = this.label_list[i].isSelect?false:true;
+					}else{
+						this.label_list[i].isSelect = false;
+					}
+				}
+			}
 		}
-	}
+	},
+	// #ifdef MP-ALIPAY
+	onChangeShowState_show: function () {
+		var that = this;
+		that.setData({
+		showView: that.showView =true
+		})
+		},
+		onChangeShowState_hid: function () {
+		var that = this;
+		that.setData({
+		showView: that.showView =false
+		})
+	},
+	// #endif
 };
 </script>
 
 <style>
+.search{
+	position: relative;
+}
 .screen {
 	width: 100%;
 	padding: 10upx 26upx 20upx;
 	overflow: hidden;
 	margin-bottom: 2upx;
 	background-color: #fff;
+	position: relative;
+	z-index: 997;
 }
 .screen-item {
-	width: 25%;
+	width: 20%;
 	height: 50upx;
 	line-height: 42upx;
 	float: left;
 	text-align: center;
 	position: relative;
 }
-.screen-item:last-child {
-	/* border-left: 2upx solid #eee; */
+.screents {
+	border-left: 2upx solid #eee;
 }
 .screen-item-text {
 	font-size: 24upx;
@@ -616,16 +732,14 @@ export default {
 }
 .scroll-Y{
 	/*  #ifdef  H5  */
-	height:calc(100vh - 270upx);
+	height:calc(100vh - 44px - 186upx);
 	/*  #endif  */
-	/*  #ifndef  H5  */
-	height:calc(100vh - 190upx);
+	/*  #ifndef H5 */
+	height:calc(100vh - 186upx);
 	/*  #endif  */
 }
 .search-input-p{
 	color: #888;
-    line-height: 52upx;
-    padding-left: 48upx;
 }
 .order-none{
 	text-align: center;
@@ -635,4 +749,75 @@ export default {
 	width: 274upx;
 	height: 274upx;
 }
+.fliter-c{
+	width: 100%;
+	/*  #ifdef  H5  */
+	height: calc(100% - 44px - 184upx);
+	top: calc(44px + 182upx);
+	/*  #endif  */
+	/*  #ifndef H5 */
+	height: calc(100% - 184upx);
+	top: 182upx;
+	/*  #endif  */
+	background: #FFFFFF;
+	position: absolute;
+	left:0;
+	
+	padding-bottom: 90upx;
+}
+.fliter-item{}
+.fliter-item .cell-item{
+	border-bottom: none;
+}
+.fliter-i-c{
+	padding: 0 26upx;
+	overflow: hidden;
+}
+.fic-item{
+	display: inline-block;
+	float: left;
+	width: 160upx;
+	margin-right: 14upx;
+	height: 70upx;
+	background-color: #f1f1f1;
+	text-align: center;
+	font-size: 24upx;
+	margin-bottom: 14upx;
+	color: #333;
+	padding: 0 10upx;
+}
+.fic-item-active{
+	background-color: #FF7159;
+	color: #fff;
+}
+.fic-item-text{
+	position: relative;
+	top:50%;
+	transform: translateY(-50%);
+}
+.fic-item:nth-child(4n){
+	margin-right: 0;
+}
+.fic-item-line{
+	float: left;
+	margin: 34upx 18upx 0 0;
+	width: 50upx;
+	height: 2upx;
+	border-bottom: 2upx solid #ccc;
+}
+.fic-item-input{
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* #ifdef MP-ALIPAY */
+.hide{
+ display: none;
+}
+.show{ 
+ display: block;
+
+}
+/* #endif */
 </style>

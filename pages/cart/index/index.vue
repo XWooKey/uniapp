@@ -1,96 +1,92 @@
 <template>
 	<view class="content" v-if="cartData.list && cartData.list.length > 0">
-		<view class="cell-group margin-cell-group" >
-			<view class="cell-item">
-				<view class="cell-item-hd">
-					<image class="cell-hd-icon" src="../../../static/image/homepage.png" style="width: 32upx;height: 32upx;"></image>
-				</view>
-				<view class="cell-item-bd">
-					<text class="cell-bd-text">{{ shopName }}</text>
-				</view>
-				<view class="cell-item-ft">
-					<text class="cell-bd-text" @click="editBtn" v-if="!editStatus">编辑</text>
-					<text class="cell-bd-text" @click="editNoBtn" v-else>完成</text>
-					<!-- <image class='cell-ft-next icon' src='../../../static/image/right.png'></image> -->
+		<view class="content-top">
+			<view class="cell-group margin-cell-group" >
+				<view class="cell-item">
+					<view class="cell-item-hd">
+						<image class="cell-hd-icon" src="../../../static/image/homepage.png" style="width: 32upx;height: 32upx;"></image>
+					</view>
+					<view class="cell-item-bd">
+						<text class="cell-bd-text">{{ shopName }}</text>
+					</view>
+					<view class="cell-item-ft">
+						<text class="cell-bd-text" @click="editBtn" v-if="!editStatus">编辑</text>
+						<text class="cell-bd-text" @click="editNoBtn" v-else>完成</text>
+						<!-- <image class='cell-ft-next icon' src='../../../static/image/right.png'></image> -->
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="img-list cart-list">
-			<checkbox-group
-				class="cart-checkbox"
-				v-for="(item, index) in cartData.list"
-				:key="index"
-				:val="item.id"
-				@change="checkboxChange(item.id)"
-			>
-				<view class="">
-					<label class="uni-list-cell uni-list-cell-pd">
-						<view class="cart-checkbox-c" >
-							<checkbox :checked="item.is_select" :value="item.id" :disabled="item.stockNo" v-if="item.stockNo" class="checkboxNo" />
-							<checkbox :checked="item.is_select" :value="item.id" v-else/>
-						</view>
-					</label>
-					<view class="img-list-item">
-						<image
-							class="img-list-item-l little-img have-none"
-							:src="item.products.image_path"
-							mode="aspectFill"
-						></image>
-						<view class="img-list-item-r little-right">
-							<view class="little-right-t">
-								<view class="goods-name list-goods-name"
-								@click="goodsDetail(item.products.goods_id)"
-								>
-									{{ item.products.name }}
-								</view>
-								<view class="goods-price red-price">
-									￥{{ item.products.price }}
-								</view>
+			<view class="img-list cart-list">
+				<checkbox-group
+					class="cart-checkbox"
+					v-for="(item, index) in cartData.list"
+					:key="index"
+					:val="item.id"
+					@change="checkboxChange(item.id)"
+				>
+					<view class="">
+						<label class="uni-list-cell uni-list-cell-pd">
+							<view class="cart-checkbox-c" >
+								<checkbox color="#FF7159" :checked="item.is_select" :value="item.id" :disabled="item.stockNo" v-if="item.stockNo" class="checkboxNo" />
+								<checkbox color="#FF7159" :checked="item.is_select" :value="item.id" v-else/>
 							</view>
-							<view class="romotion-tip"
-							v-if="item.products.promotion_list"
-							>
-								<view class="romotion-tip-item"
-								:class="item.type !== 2 ? 'bg-gray' : ''"
-								v-for="(item, key) in item.products.promotion_list"
-								:key="key"
-								>
-									{{ item.name }}
-								</view>
-							</view>
-							<view class="goods-item-c">
-								<view class="goods-buy">
-									<!-- 商品规格 -->
-									<view class="goods-salesvolume" v-if="item.products.spes_desc">
-										{{ item.products.spes_desc }}
+						</label>
+						<view class="img-list-item">
+							<image
+								class="img-list-item-l little-img have-none"
+								:src="item.products.image_path"
+								mode="aspectFill"
+							></image>
+							<view class="img-list-item-r little-right">
+								<view class="little-right-t">
+									<view class="goods-name list-goods-name"
+									@click="goodsDetail(item.products.goods_id)"
+									>
+										{{ item.products.name }}
 									</view>
-									<view class="goods-salesvolume" v-else></view>
-									<view class="goods-numbox" >
-										<text v-if="item.stockNo && !editStatus" class="stockError">库存不足</text>
-										<text v-else-if="item.stockTension && !editStatus" class="stockError stockTension">库存紧张</text>
-										<uni-number-box
-											v-on:change="bindChange($event, item)"
-											:min="1"
-											:max="item.maxStock"
-											:value="item.nums"
-											v-if="!editStatus"
-										></uni-number-box>
-										<view v-else="" @click="del(index,item.id)"  class='click-del'>
-											<image class="icon" src="../../../static/image/delete.png" mode=""></image>
+									<view class="goods-price red-price">
+										￥{{ item.products.price }}
+									</view>
+								</view>
+								<view class="romotion-tip" v-if="item.products.promotion_list">
+									<view class="romotion-tip-item" v-for="(v, k) in item.products.promotion_list" :key="k" :class="v.type !== 2 ? 'bg-gray' : ''">
+										{{v.name}}
+									</view>
+								</view>
+								<view class="goods-item-c">
+									<view class="goods-buy">
+										<!-- 商品规格 -->
+										<view class="goods-salesvolume" v-if="item.products.spes_desc">
+											{{ item.products.spes_desc }}
+										</view>
+										<view class="goods-salesvolume" v-else></view>
+										<view class="goods-numbox" >
+											<text v-if="item.stockNo && !editStatus" class="stockError">库存不足</text>
+											<text v-else-if="item.stockTension && !editStatus" class="stockError stockTension">库存紧张</text>
+											<uni-number-box
+												v-on:change="bindChange($event, item)"
+												:min="1"
+												:max="item.maxStock"
+												:value="item.nums"
+												v-if="!editStatus"
+											></uni-number-box>
+											<view v-else="" @click="del(index,item.id)"  class='click-del'>
+												<image class="icon" src="../../../static/image/delete.png" mode=""></image>
+											</view>
 										</view>
 									</view>
 								</view>
 							</view>
 						</view>
 					</view>
-				</view>
-			</checkbox-group>
+				</checkbox-group>
+			</view>
 		</view>
 		<view class="cart-bottom">
 			<checkbox-group class="cart-checkbox" @change="checkboxAllButton">
 				<label class="uni-list-cell uni-list-cell-pd">
 					<view class="cart-checkbox-c">
-						<checkbox :checked="checkboxAll"/>
+						<checkbox :checked="checkboxAll" color="#FF7159"/>
 						全选
 					</view>
 				</label>
@@ -611,7 +607,7 @@ export default {
 	/*  #ifndef  H5  */
 	bottom: 0;
 	/*  #endif  */
-	
+	z-index: 99;
 	height: 90upx;
 	width: 100%;
 	background-color: #fff;
@@ -679,4 +675,9 @@ export default {
 .stockTension{
 	background-color: #FFC107;
 }
+/* #ifdef MP-ALIPAY */
+label{
+	display: block;
+}
+/* #endif */
 </style>

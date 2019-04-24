@@ -76,8 +76,14 @@ export default {
 		},
 		// 支付方式处理
 		formatPayments (payments) {
+			// 过滤非线上支付方式
 			payments = payments.filter(item => item.is_online === 1)
 
+			// 如果是充值订单 过滤余额支付
+			if (this.type === 2) {
+				payments = payments.filter(item => item.code !== 'balancepay')
+			}
+			
 			// 设置logo图片
 			payments.forEach(item => {
 				this.$set(item, 'icon', '/static/image/' + item.code + '.png')
@@ -187,8 +193,6 @@ export default {
 										}
 										// 使用以上方式判断前端返回,微信团队郑重提示：
 										// res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-									} else {
-										_this.$common.errorToShow('支付失败')
 									}
 							})
 						})

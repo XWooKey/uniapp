@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view class="collection">
+		<view class="collection" v-if="list.length">
 			<view class="container_of_slide" 
 			v-for="(item, index) in list" 
 			:key="index"
@@ -45,6 +45,9 @@
 			<uni-load-more
 			:status="loadStatus"
 			></uni-load-more>
+		</view>
+		<view class="history-none" v-else>
+			<image class="history-none-img" src="../../../static/image/order.png" mode=""></image>
 		</view>
 	</view>
 </template>
@@ -308,5 +311,13 @@ import { goods } from '@/config/mixins.js'
 	-webkit-box-orient:vertical;
 	-webkit-line-clamp:1;
 	overflow:hidden;
+}
+.history-none{
+	text-align: center;
+	padding: 200upx 0;
+}
+.history-none-img{
+	width: 274upx;
+	height: 274upx;
 }
 </style>

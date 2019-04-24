@@ -31,9 +31,7 @@
 						<input class='cell-bd-input' v-model="name" placeholder='抬头名称'></input>
 					</view>
 				</view>
-				<view class='cell-item'
-				v-show="type === '3'"
-				>
+				<view class='cell-item' v-show="type === '3'">
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>税号</view>
 					</view>
@@ -98,11 +96,15 @@ export default {
 		invoice = pre.invoice
 		// #endif
 		
-		// #ifdef MP-WEIXIN
+		// #ifdef MP-WEIXIN || APP-PLUS || APP-PLUS-NVUE
 		invoice = pre.$vm.invoice
 		// #endif
 		
-		if (invoice.type !== '1') {
+		// #ifdef MP-ALIPAY
+		invoice = pre.rootVM.invoice;
+		// #endif
+
+		if (invoice && invoice.hasOwnProperty('type') && invoice.type !== '1') {
 			// 发票不是未使用, 展示发票信息
 			this.name = invoice.name
 			this.code = invoice.code
@@ -157,12 +159,16 @@ export default {
 			let pages = getCurrentPages();//当前页
 			let beforePage = pages[pages.length - 2];//上个页面
 			
-			// #ifdef MP-WEIXIN
-			beforePage.$vm.invoice = data
+			// #ifdef MP-ALIPAY
+			beforePage.rootVM.invoice = data;
 			// #endif
 			
-			// #ifdef H5
-			beforePage.invoice = data
+			// #ifdef MP-WEIXIN || APP-PLUS || APP-PLUS-NVUE
+			beforePage.$vm.invoice = data;
+			// #endif
+			
+			// #ifdef H5 
+			beforePage.invoice = data;
 			// #endif
 			
 			uni.navigateBack({

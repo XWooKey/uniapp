@@ -12,13 +12,12 @@
 				<button :class="sendCodeBtn" @click="sendCode" v-if="verification">发送验证码</button>
 				<span class="btn btn-g" v-if="!verification">{{ timer }} 秒后重新获取</span>
 			</view>
-			<view class="reg-item" v-if="type === 1">
+			<view class="reg-item">
 				<input class="login-item-input" :password="true" placeholder-class="login-item-i-p" type="text" v-model="pwd" placeholder="请输入密码"/>
 			</view>
 		</view>
 		<view class="reg-b">
-			<button :class="regButtonClass"  @click="toReg()" hover-class="btn-hover" v-if="type === 1">注册</button>
-			<button :class="regButtonClass"  @click="toBind()" hover-class="btn-hover" v-else>绑定</button>
+			<button :class="regButtonClass"  @click="toReg()" hover-class="btn-hover">注册</button>
 		</view>
 		<view class="registered-item">
 			<!-- <button class="btn btn-g btn-square" @click="selectLoginType()">账号密码登录</button> -->
@@ -39,8 +38,7 @@ export default {
 			pwd: '', // 用户密码
 			verification: true, // 通过v-show控制显示获取还是倒计时
 			timer: 60, // 定义初始时间为60s
-			btnb: 'btn btn-square btn-all', //按钮背景
-			type: 1 // 类型 1普通注册 2授权账号绑定
+			btnb: 'btn btn-c btn-square btn-all' //按钮背景
 		}
 	},
 	onLoad (options) {
@@ -53,13 +51,6 @@ export default {
 		
 		if (options.invitecode) {
 			this.$db.set('invitecode', options.invitecode)
-		}
-		
-		if (options.type && options.type === 'bind') {
-			this.type = 2
-			uni.setNavigationBarTitle({
-				title: '绑定账号'
-			});
 		}
 	},
 	computed: {
@@ -79,11 +70,7 @@ export default {
 		},
 		// 动态更改登录按钮bg
 		regButtonClass () {
-			if (this.type === 1) {
-				return this.mobile && this.mobile.length === 11 && this.pwd && this.code ? this.btnb + ' btn-b' : this.btnb
-			} else {
-				return this.mobile && this.mobile.length === 11 && this.code ? this.btnb + ' btn-b' : this.btnb
-			}
+			return this.mobile && this.mobile.length === 11 && this.pwd && this.code ? this.btnb + ' btn-b' : this.btnb
 		},
 		// 动态修改发送验证码按钮
 		sendCodeBtn () {
@@ -175,58 +162,25 @@ export default {
                 this.$api.smsLogin(data, res => {
                     if (res.status) {
 						this.$db.set('userToken', res.data)
-						this.redirectHandler('注册成功!')
+						this.$common.successToShow('注册成功', () => {
+							// 清除随机uid 和 邀请码
+							this.$db.del('uuid')
+							this.$db.del('invitecode')
+							let redirect = this.$store.state.redirectPage ? this.$store.state.redirectPage : '/pages/member/index/index'
+							this.$store.commit({
+								type: 'redirect',
+								page: ''
+							})
+							uni.reLaunch({
+								url: redirect
+							})
+						})
                     } else {
 						this.$common.errorToShow(res.msg)
 					}
                 })
             }
         },
-		// 第三方登录账号绑定
-		toBind () {
-			if (!this.rightMobile.status) {
-				this.$common.errorToShow(this.rightMobile.msg)
-			} else if (!this.code) {
-				this.$common.errorToShow('请输入短信验证码')
-			} else {
-                let data = {
-					mobile: this.mobile,
-					code: this.code,
-					uuid: this.$db.get('uuid')
-				}
-				
-				// 获取邀请码
-				let invicode = this.$db.get('invitecode')
-                if (invicode) {
-					data.invitecode = invicode
-				}
-				
-                this.$api.trustBind(data, res => {
-                    if (res.status) {
-                        this.$db.set('userToken', res.data)
-						this.redirectHandler('绑定成功!')
-                    } else {
-						this.$common.errorToShow(res.msg)
-					}
-                })
-            }
-		},
-		// 注册成功后页面跳转操作
-		redirectHandler (completedName = '注册成功!') {
-			this.$common.successToShow(completedName, () => {
-				// 清除随机uid 和 邀请码
-				this.$db.del('uuid')
-				this.$db.del('invitecode')
-				let redirect = this.$store.state.redirectPage ? this.$store.state.redirectPage : '/pages/member/index/index'
-				this.$store.commit({
-					type: 'redirect',
-					page: ''
-				})
-				uni.reLaunch({
-					url: redirect
-				})
-			})
-		},
 		toLogin () {
 			this.$common.navigateTo('/pages/login/login/index1')
 		}
@@ -271,6 +225,7 @@ export default {
 .reg-item-input{
 	display: inline-block;
 	width: 60%;
+	box-sizing: border-box;
 }
 .reg-item .btn{
 	display: inline-block;

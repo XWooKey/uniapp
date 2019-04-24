@@ -275,7 +275,7 @@ export default {
 <style>
 .segmented-control {
 	/*  #ifdef  H5  */
-	top: 88upx;
+	top: 44px;
 	/*  #endif  */
 	/*  #ifndef  H5  */
 	top: 0;
@@ -326,6 +326,7 @@ export default {
 }
 .goods-num .cell-ft-text{
 	color: #999;
+	line-height: 32upx;
 }
 .goods-num .cell-ft-text:first-child{
 	margin-left: 10upx;

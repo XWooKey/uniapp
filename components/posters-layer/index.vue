@@ -1,10 +1,10 @@
 <style lang="less">
 .posters-layer {
   position: fixed;
-  top: -5000rpx;
-  left: -5000rpx;
-  /* top: 0;
-  left: 0; */
+  top: -5000px;
+  left: -5000px;
+//   top: 0;
+//   left: 0;
 }
 </style>
 
@@ -20,8 +20,6 @@ const CACHE_KEYS = 'temp_canvasdrawer_pic_cache';
 export default {
     data() {
         return {
-            width: 100,
-            height: 100,
             width: 100,
             height: 100,
             paintingData: { views: [] },
@@ -240,38 +238,6 @@ export default {
             // 这个地方想要的是头像，简单点就放了个矩形
             ctx.drawImage(url, x, y, w, h);
             ctx.restore();
-        },
-         _drawRadiusRect(params) {
-            const {
-                top = 0,
-                left = 0,
-                width = 0,
-                height = 0,
-                radius = 0,
-             } = params;
-            let x = left;
-            let y = top;
-            let w = width;
-            let h = height;
-            // let bgc = background;
-            let r = radius;
-            // let br = radius;
-            this.ctx.beginPath();
-            this.ctx.moveTo(x + r, y);    // 移动到左上角的点
-            this.ctx.lineTo(x + w - r, y);
-            this.ctx.arc(x + w - r, y + r, r, 2 * Math.PI * (3 / 4), 2 * Math.PI * (4 / 4));
-            this.ctx.lineTo(x + w, y + h - r);
-            this.ctx.arc(x + w - r, y + h - r, r, 0, 2 * Math.PI * (1 / 4));
-            this.ctx.lineTo(x + r, y + h);
-            this.ctx.arc(x + r, y + h - r, r, 2 * Math.PI * (1 / 4), 2 * Math.PI * (2 / 4));
-            this.ctx.lineTo((x), (y + r));
-            this.ctx.arc(x + r, y + r, r, 2 * Math.PI * (2 / 4), 2 * Math.PI * (3 / 4));
-
-            // this.ctx.moveTo(x + r, y);
-            // this.ctx.arcTo(x + w, y, x + w, y + h, r);
-            // this.ctx.arcTo(x + w, y + h, x, y + h, r);
-            // this.ctx.arcTo(x, y + h, x, y, r);
-            // this.ctx.arcTo(x, y, x + w, y, r);
         },
          _drawRadiusRect(params) {
             const {

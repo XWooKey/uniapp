@@ -1,19 +1,11 @@
 <template>
 	<view class="content">
 		<view class="content-top">
-			
+
 			<!-- 轮播图 -->
 			<view class='swiper'>
-				<swiper class="swiper-c" 
-				:indicator-dots="swiper.indicatorDots" 
-				:autoplay="swiper.autoplay" 
-				:interval="swiper.interval" 
-				:duration="swiper.duration"
-				>
-					<swiper-item class="have-none"
-					v-for="(item, index) in goodsInfo.album"
-					:key="index"
-					>
+				<swiper class="swiper-c" :indicator-dots="swiper.indicatorDots" :autoplay="swiper.autoplay" :interval="swiper.interval" :duration="swiper.duration" >
+					<swiper-item class="have-none" v-for="(item, index) in goodsInfo.album" :key="index" @click="clickImg(item)">
 						<image class='' :src='item' mode="aspectFill"></image>
 					</swiper-item>
 				</swiper>
@@ -36,29 +28,18 @@
 						<view class='cell-hd-title'>{{ product.name }}</view>
 					</view>
 					<view class='cell-item-ft'>
-						<!-- #ifdef H5 -->
-							<image class='cell-ft-next icon' src='../../../static/image/share.png'></image>
-						<!-- #endif -->
-						<!-- #ifdef MP-WEIXIN -->
-							<button class='mask-share-wechat' open-type="share"><image class="cell-ft-next icon" src="../../../static/image/share.png"></image></button>
-						<!-- #endif -->
+						<image class='cell-ft-next icon' @click="goShare()" src='../../../static/image/share.png'></image>
 					</view>
 				</view>
 				
 				<!-- 促销 -->
-				<view class='cell-item goods-title-item'
-				v-if="promotion.length"
-				>
+				<view class='cell-item goods-title-item' v-if="promotion.length">
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>促销</view>
 					</view>
 					<view class='cell-item-bd'>
 						<view class="romotion-tip">
-							<view class="romotion-tip-item" 
-							:class="item.type !== 2 ? 'bg-gray' : ''"
-							v-for="(item, index) in promotion"
-							:key="index"
-							>
+							<view class="romotion-tip-item" :class="item.type !== 2 ? 'bg-gray' : ''" v-for="(item, index) in promotion" :key="index">
 								{{ item.name }}
 							</view>
 						</view>
@@ -67,9 +48,7 @@
 				<!-- 促销end -->
 				
 				<!-- 规格 -->
-				<view class='cell-item goods-title-item'
-				v-if="isSpes"
-				>
+				<view class='cell-item goods-title-item' v-if="isSpes">
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>规格</view>
 					</view>
@@ -94,31 +73,17 @@
 						</view>
 					</view>
 				</view>
-				
 			</view>
 			
 			<view class="goods-content">
-				<uni-segmented-control 
-				:current="current" 
-				:values="items" 
-				@clickItem="onClickItem" 
-				style-type="text" 
-				active-color="#333"
-				></uni-segmented-control>
+				<uni-segmented-control :current="current" :values="items" @clickItem="onClickItem" style-type="text" active-color="#333"></uni-segmented-control>
 				<view class="goods-content-c">
-					<view class="goods-detail" 
-					v-show="current === 0"
-					>
-						<rich-text 
-						:nodes="goodsInfo.intro"
-						></rich-text>
+					<view class="goods-detail" v-show="current === 0">
+						<rich-text :nodes="goodsInfo.intro"></rich-text>
 					</view>
 					<view class="goods-parameter" v-show="current === 1">
 						<view class='cell-group' v-if="goodsParams.length">
-							<view class='cell-item'
-							v-for="(item, index) in goodsParams"
-							:key="index"
-							>
+							<view class='cell-item' v-for="(item, index) in goodsParams" :key="index">
 								<view class='cell-item-hd'>
 									<view class='cell-hd-title'>{{ item.name }}</view>
 								</view>
@@ -142,52 +107,91 @@
 						</view>
 					</view>
 					<view class="goods-assess" v-show="current === 2">
-						<view class="goods-assess-item"
-						v-for="(item, index) in goodsComments.list"
-						:key="index"
-						>
-							<view class='cell-group'>
-								<view class='cell-item goods-title-item'>
-									<view class='cell-item-hd'>
-										<image class='user-head-img' :src='item.user.avatar' mode="aspectFill"></image>
-									</view>
-									<view class='cell-item-bd'>
-										<view class="cell-bd-view">
-											<text class="cell-bd-text">{{ item.user.nickname }}</text>
-
-											<view class="cell-bd-text-right"><uni-rate size="16" disabled="true" :value="item.score"></uni-rate></view>
-
-
+						<view v-if="goodsComments.list.length">
+							<view class="goods-assess-item" v-for="(item, index) in goodsComments.list" :key="index">
+								<view class='cell-group'>
+									<view class='cell-item goods-title-item'>
+										<view class='cell-item-hd'>
+											<image class='user-head-img' :src='item.user.avatar' mode="aspectFill"></image>
 										</view>
-										<view class="cell-bd-view">
-											<text class="cell-bd-text color-9" style="margin-right: 16upx;">{{ item.ctime }}</text>
-											<text class="cell-bd-text color-9">{{ item.addon }}</text>
+										<view class='cell-item-bd'>
+											<view class="cell-bd-view">
+												<text class="cell-bd-text">{{ item.user.nickname }}</text>
+												<view class="cell-bd-text-right"><uni-rate size="16" disabled="true" :value="item.score"></uni-rate></view>
+											</view>
+											<view class="cell-bd-view">
+												<text class="cell-bd-text color-9" style="margin-right: 16upx;">{{ item.ctime }}</text>
+												<text class="cell-bd-text color-9">{{ item.addon }}</text>
+											</view>
 										</view>
 									</view>
 								</view>
-							</view>
-							<view class="gai-body">
-								<view class="gai-body-text">
-									{{ item.content }}
-								</view>
-								<view class="gai-body-img"
-								v-if="item.images_url.length"
-								>
-									<image :src="img" mode="aspectFill"
-									v-for="(img, key) in item.images_url"
-									:key="key"
-									></image>
+								<view class="gai-body">
+									<view class="gai-body-text">
+										{{ item.content }}
+									</view>
+									<view class="gai-body-img" v-if="item.images_url.length">
+										<image :src="img" mode="aspectFill" v-for="(img, key) in item.images_url" :key="key" @click="clickImg(img)"></image>
+									</view>
 								</view>
 							</view>
+							<uni-load-more :status="goodsComments.loadStatus"></uni-load-more>
 						</view>
-						<uni-load-more
-						:status="goodsComments.loadStatus"
-						></uni-load-more>
+						<view class="comment-none" v-else>
+							<image class="comment-none-img" src="../../../static/image/order.png" mode=""></image>
+						</view>
 					</view>
 				</view>
 			</view>
 		</view>
 		
+		<lvv-popup position="bottom" ref="share">
+			
+			<!-- #ifdef H5 -->
+			<shareByH5
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByH5>
+			<!-- #endif -->
+		
+			<!-- #ifdef MP-WEIXIN -->
+			<shareByWx
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByWx>
+			<!-- #endif -->
+			
+			<!-- #ifdef MP-ALIPAY -->
+			<shareByAli
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByAli>
+			<!-- #endif -->
+			
+			<!-- #ifdef APP-PLUS -->
+			<shareByApp
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByApp>
+			<!-- #endif -->
+
+		</lvv-popup>
 		
 		<!-- 弹出层 -->
 		<lvv-popup position="bottom" ref="lvvpopref">
@@ -206,54 +210,26 @@
 						</view>
 		        	</view>
 					<scroll-view class="pop-m" scroll-y="true" style="max-height: 560upx;">
-						<view class="goods-specs"
-						v-for="(item, index) in product.default_spes_desc"
-						:key="index"
-						>
-							<text class="pop-m-title">{{ index }}</text>
-							<view class="pop-m-bd">
-								
-								<view 
-								:class="spes.cla"
-								v-for="(spes, key) in item"
-								:key="key"
-								@click="changeSpes(index, key)"
-								>
-									{{ spes.name }}
-								</view>
-
-							</view>
-						</view>
+						<spec :spesData="product.default_spes_desc" ref="spec" @changeSpes="changeSpes"></spec>
 						<view class="goods-number">
 							<text class="pop-m-title">数量</text>
 							<view class="pop-m-bd-in">
-								<uni-number-box 
-								:min="minNums"
-								:max="product.stock"
-								:value="buyNum"
-								@change="bindChange"
-								></uni-number-box>
+								<uni-number-box :min="minNums" :max="product.stock" :value="buyNum" @change="bindChange" ></uni-number-box>
 							</view>
 						</view>
 					</scroll-view> 
 					<view class="pop-b">
-<!-- 						<button class='btn btn-square btn-g btn-half' @click="addToCart">加入购物车</button>
+						<!-- <button class='btn btn-square btn-g btn-half' @click="addToCart">加入购物车</button>
 						<button class='btn btn-square btn-b btn-half' @click="buyNow">立即购买</button> -->
-						<button class='btn btn-square btn-b btn-all' 
-						hover-class="btn-hover2"
-						@click="clickHandle()"
-						v-if="product.stock"
-						>确定</button>
-						<button class='btn btn-square btn-g btn-all' 
-						v-else
-						>已售罄</button>
+						<button class='btn btn-square btn-b btn-all' hover-class="btn-hover2" @click="clickHandle()" v-if="product.stock">确定</button>
+						<button class='btn btn-square btn-g btn-all' v-else>已售罄</button>
 					</view>
 		        </view>
 		    </view>
 		</lvv-popup>
 		<!-- 弹出层end -->
 	
-		
+		<div id="qrCode" ref="qrCodeDiv"></div>
 		<!-- 底部按钮 -->
 		<view class="goods-bottom">
 			<view class="goods-bottom-ic" @click="collection">
@@ -278,15 +254,7 @@
 				<image class="icon" src="../../../static/image/tab-ic-hom-selected.png" mode=""></image>
 			</view>
 		</view> -->
-		<uni-fab
-            :pattern="pattern"
-            :content="content"
-            :horizontal="horizontal"
-            :vertical="vertical"
-            :direction="direction"
-            @trigger="trigger"
-        ></uni-fab>
-		
+		<uni-fab :pattern="pattern" :content="content" :horizontal="horizontal" :vertical="vertical" :direction="direction" @trigger="trigger"></uni-fab>
 	</view>
 </template>
 
@@ -298,8 +266,50 @@ import uniRate from "@/components/uni-rate/uni-rate.vue";
 import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 import uniFab from '@/components/uni-fab/uni-fab.vue';
 import { get } from '@/config/db.js';
+import { baseUrl } from '@/config/config.js'
+import spec from '@/components/spec/spec.vue'
+// #ifdef H5
+import shareByH5 from '@/components/share/shareByh5.vue'
+// #endif
+// #ifdef MP-WEIXIN
+import shareByWx from '@/components/share/shareByWx.vue'
+// #endif
+// #ifdef MP-ALIPAY
+import shareByAli from '@/components/share/shareByAli.vue'
+// #endif
+// #ifdef APP-PLUS
+import shareByApp from '@/components/share/shareByApp.vue'
+// #endif
+
+import htmlParser from '@/common/html-parser'
+
+
 export default {
-	components: {uniSegmentedControl,lvvPopup,uniNumberBox,uniRate, uniLoadMore, uniFab},
+	components: {
+		uniSegmentedControl,
+		lvvPopup,uniNumberBox,
+		uniRate,
+		uniLoadMore,
+		uniFab,
+		spec,
+		// #ifdef H5
+		shareByH5,
+		// #endif
+		
+		// #ifdef MP-WEIXIN
+		shareByWx,
+		// #endif
+		
+		// #ifdef MP-ALIPAY
+		shareByAli,
+		// #endif
+		
+		// #ifdef APP-PLUS
+		shareByApp,
+		// #endif
+		
+		
+	},
 	data() {
 		return {
 			swiper: {
@@ -347,7 +357,6 @@ export default {
                     active: false,
 					url: '/pages/index/index'
                 },
-                
                 {
                     iconPath: '../../../static/image/tab-ic-me-selected.png',
                     selectedIconPath: '../../../static/image/tab-ic-me-unselected.png',
@@ -355,18 +364,20 @@ export default {
                     active: false,
 					url: '/pages/member/index/index'
                 }
-            ]
+            ],
+			query: '' // query参数登录跳转回来使用
 		}
 	},
 	onLoad(options) {
 		let scene = decodeURIComponent(options.scene);
+		this.query = scene
         let arr1 = scene.split('&');
         let invite = '';
         let id = '';
         for (var i = 0; i < arr1.length; i++) {
             let key = arr1[i].split("=")[0];
             if (key == 'invite') {
-                invite = arr1[i].split("=")[1];
+                invite = arr1[i].split("=")[1]
             }
             if (key == 'id') {
                 id = arr1[i].split("=")[1];
@@ -407,6 +418,7 @@ export default {
 			// 获取购物车数量
 			this.getCartNums();
 		}
+
 	},
 	computed: {
 		// 规格切换计算规格商品的 可购买数量
@@ -430,6 +442,17 @@ export default {
                 }
             }
 			return arr;
+		},
+		shareHref () {
+			let pages = getCurrentPages()
+			let page = pages[pages.length - 1]
+			// #ifdef H5 || MP-WEIXIN || APP-PLUS || APP-PLUS-NVUE
+			return baseUrl + 'wap/#/' + page.route + '?scene=' + this.query;
+			// #endif
+			
+			// #ifdef MP-ALIPAY
+			return baseUrl + 'wap/#/' + page.__proto__.route + '?scene=' + this.query;
+			// #endif
 		}
 	},
 	onReachBottom () {
@@ -450,14 +473,20 @@ export default {
 			if (userToken) {
 				data['token'] = userToken;
 			}
-			
+					
 			this.$api.goodsDetail(data, res => {
 				if (res.status == true) {
 					let info = res.data;
 					let products = res.data.product;
+					
+					var htmlString = info.intro;//replace(/\\/g, "").replace(/<img/g, "<img style=\"display:none;\"")
+					info.intro = htmlParser(htmlString);
 					this.goodsInfo = info;
 					this.isfav = this.goodsInfo.isfav === 'true' ? true : false;
 					this.product = this.spesClassHandle(products);
+					
+				
+			
 					// 判断如果登录用户添加商品浏览足迹
 					if (userToken) {
 						this.goodsBrowsing();
@@ -490,7 +519,9 @@ export default {
 			this.$refs.lvvpopref.close();
 		},
 		// 切换商品规格
-		changeSpes (index, key) {
+		changeSpes (obj) {
+			let index = obj.v;
+			let key = obj.k;
 			if (this.product.default_spes_desc[index][key].hasOwnProperty('product_id') && this.product.default_spes_desc[index][key].product_id) {
 				this.$api.getProductInfo({id: this.product.default_spes_desc[index][key].product_id}, res => {
 					if (res.status == true) {
@@ -673,9 +704,24 @@ export default {
 			uni.switchTab({
 				url: e.item.url
 			})
-        }
+        },
+		// 跳转到h5分享页面
+		goShare() {
+			this.$refs.share.show();
+		},
+		closeShare(){
+			this.$refs.share.close();
+		},
+		// 图片点击放大
+		clickImg (imgs) {
+			// 预览图片
+			uni.previewImage({
+				urls: imgs.split()
+			});
+		}
 	},
 	//分享
+	// #ifdef MP-WEIXIN
 	onShareAppMessage() {
 		let userToken = this.$db.get('userToken');
 		if (userToken) {
@@ -706,7 +752,46 @@ export default {
 				path: path
 			}
 		}
+	},
+	// #endif
+	
+	
+	// #ifdef MP-ALIPAY
+	onShareAppMessage () {
+		let userToken = this.$db.get('userToken');
+		if (userToken) {
+			let myInviteCode = this.myShareCode;
+			if (myInviteCode) {
+				let ins = encodeURIComponent('id=' + this.goodsInfo.id + '&invite=' + myInviteCode);
+				let path = '/pages/goods/index/index?scene=' + ins;
+				return {
+					title: this.goodsInfo.name,
+					desc: this.goodsInfo.brief,
+					imageUrl: this.goodsInfo.album[0],
+					path: path
+				}
+			} else {
+				let ins = encodeURIComponent('id=' + this.goodsInfo.id);
+				let path = '/pages/goods/index/index?scene=' + ins;
+				return {
+					title: this.goodsInfo.name,
+					desc: this.goodsInfo.brief,
+					imageUrl: this.goodsInfo.album[0],
+					path: path
+				}
+			}
+		} else {
+			let ins = encodeURIComponent('id=' + this.goodsInfo.id);
+			let path = '/pages/goods/index/index?scene=' + ins;
+			return {
+				title: this.goodsInfo.name,
+				desc: this.goodsInfo.brief,
+				imageUrl: this.goodsInfo.album[0],
+				path: path
+			}
+		}
 	}
+	// #endif
 }
 </script>
 
@@ -770,6 +855,9 @@ export default {
 	position: absolute;
 	top: 50%;
 	transform: translateY(-50%);
+	/* #ifdef MP-ALIPAY */
+	background-size: 100% 100%;
+	/* #endif */
 }
 .cell-bd-view .cell-bd-text{
 	margin-left: 30upx;
@@ -813,6 +901,9 @@ export default {
 	position: relative;
 	top: 6upx;
 	/* left: -6upx; */
+	/* #ifdef MP-ALIPAY */
+	background-size: 100% 100%;
+	/* #endif */
 }
 .goods-bottom .btn-g{
 	color: #333;
@@ -887,7 +978,6 @@ export default {
 .pop-m{
 	font-size: 28upx;
 	margin-bottom: 90upx;
-	
 }
 .goods-specs,.goods-number{
 	padding: 26upx;
@@ -998,5 +1088,83 @@ export default {
 	color: #fff;
 	background-color: rgba(0,0,0,.5);
 	border-radius: 50%;
+}
+.comment-none{
+	text-align: center;
+	padding: 200upx 0;
+}
+.comment-none-img{
+	width: 274upx;
+	height: 274upx;
+}
+
+
+.price-salesvolume{
+  width: 100%;
+  padding: 0 0 0 26upx;
+  overflow: hidden;
+  color: #A5A5A5;
+  background-color: rgb(252, 226, 80);
+  position: relative;
+}
+.commodity-price{
+  width: 224upx;
+  display: inline-block;
+  float: left; 
+}
+.current-price{
+  font-size: 40upx;
+  color: #FF7159;
+  display: block;
+  line-height:1.5;
+}
+.cost-price{
+  font-size: 26upx;
+  text-decoration:line-through;
+  /* margin-left: 8rpx; */
+  display: block;
+}
+.commodity-salesvolume{
+  width: 240upx;
+  display: inline-block;
+  font-size: 22upx;
+  float: left;
+  padding: 16upx 0;
+}
+.commodity-salesvolume>text{
+  display: block;
+}
+.commodity-time-img{
+  display:block;
+    width:0;
+    height:0;
+    border-width:48upx 28upx 50upx 0;
+    border-style:solid;
+    border-color:transparent #FF7159 transparent transparent;/*透明 黄 透明 透明 */
+    position:absolute;
+    top:0px;
+    left:462upx;
+}
+.commodity-time{
+  display: inline-block;
+  width: 260upx;
+  text-align: center;
+  font-size: 24upx;
+  background-color: #FF7159;
+  padding: 16upx 0 18upx;
+  color: rgb(250, 233, 0);
+}
+.commodity-time>text{
+  display: block;
+}
+.commodity-day{
+  font-size: 22upx;
+}
+.commodity-day>text{
+  display: inline-block;
+  background-color: rgb(255, 212, 176);
+  color: rgb(255, 115, 0);
+  padding: 0 6upx;
+  border-radius: 6upx;
 }
 </style>

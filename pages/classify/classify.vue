@@ -18,7 +18,7 @@
 					<view class="goods-item">
 						<view class="goods-item-box" v-if="isChild">
 							<view class="goods-items" v-for="(item, index) in beans[ins].child" :key="index" @click="goClass(item.id)">
-								<image class="goods-item-img" :src="item.image_url" alt=""/>
+								<image class="goods-item-img" :src="item.image_url" alt="" mode="aspectFill"/>
 								<view class="goods-item-name">{{item.name}}</view>
 							</view>
 						</view>

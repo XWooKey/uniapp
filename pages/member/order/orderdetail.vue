@@ -45,6 +45,32 @@
 					</view>
 				</view>
 			</view>
+			
+			<!-- 团购分享拼单 -->
+			<!-- <view class="cell-group margin-cell-group">
+				<view class='cell-item right-img'>
+					<view class='cell-item-hd'>
+						<view class='cell-hd-title'>待分享，还差1人</view>
+					</view>
+				</view>
+				<view class="group-swiper">
+					<view class='cell-item'>
+						<view class='cell-item-hd'>
+							<view class="user-head-img-c">
+								<view class="user-head-img-tip">拼主</view>
+								<image class="user-head-img cell-hd-icon have-none" src="../../../static/demo-img/user-head.jpg" mode=""></image>
+							</view>
+							<view class="user-head-img-c">
+								<image class="user-head-img cell-hd-icon have-none" src="../../../static/demo-img/user-head.jpg" mode=""></image>
+							</view>
+							<view class="uhihn">?</view>
+						</view>
+						<view class="cell-item-ft">
+							<button class="btn" @click="goInvition()">邀请拼单</button>
+						</view>
+					</view>
+				</view>
+			</view> -->
 
 			<view class='img-list'>
 				<view class='img-list-item' v-for="item in orderInfo.items" :key="item.id">
@@ -141,7 +167,7 @@
 				>
 					<view class='cell-item-bd'>
 						<view class="cell-bd-view">
-							<text class="cell-bd-text">积分优惠</text>
+							<text class="cell-bd-text">积分抵扣</text>
 						</view>
 					</view>
 					<view class='cell-item-ft'>
@@ -165,7 +191,7 @@
 				>
 					<view class='cell-item-bd'>
 						<view class="cell-bd-view">
-							<text class="cell-bd-text">其他优惠</text>
+							<text class="cell-bd-text">优惠券抵扣</text>
 						</view>
 					</view>
 					<view class='cell-item-ft'>
@@ -361,6 +387,10 @@ export default {
 								// #ifdef H5
 								beforePage.isReload = true
 								// #endif
+								
+								// #ifdef MP-ALIPAY
+								beforePage.rootVM.isReload = true
+								// #endif
 							}
 							
 							this.orderDetail()
@@ -390,6 +420,11 @@ export default {
 		//查看售后
 		showCustomerService(id) {
 			this.$common.navigateTo('../after_sale/detail?aftersales_id='+id);
+		},
+		goInvition(){
+			uni.navigateTo({
+				url:'./invitation_group'
+			})
 		}
 	}
 }	
@@ -451,5 +486,57 @@ export default {
 }
 .tax_code{
 	
+}
+.user-head-img-c{
+	position: relative;
+	width: 80upx;
+	height: 80upx;
+	border-radius: 50%;
+	margin-right: 20upx;
+	box-sizing: border-box;
+	display: inline-block;
+	float: left;
+	border: 1px solid #f3f3f3;
+}
+.user-head-img-tip{
+	position: absolute;
+	top: -6upx;
+	left: -10upx;
+	display: inline-block;
+	background-color: #FF7159;
+	color: #fff;
+	font-size: 22upx;
+	z-index: 99;
+	padding: 0 10upx;
+	border-radius: 10upx;
+	transform: scale(.8);
+}
+.group-swiper .cell-item .user-head-img{
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+}
+.group-swiper .cell-item .user-head-img-c:first-child{
+	border: 1px solid #FF7159;
+}
+.uhihn{
+	width: 80upx;
+	height: 80upx;
+	border-radius: 50%;
+	margin-right: 20upx;
+	display: inline-block;
+	border: 2upx dashed #e1e1e1;
+	text-align: center;
+	line-height: 80upx;
+	color: #d1d1d1;
+	font-size: 40upx;
+	box-sizing: border-box;
+}
+.group-swiper .cell-item .cell-item-ft .btn{
+	font-size: 26upx;
+	color: #fff;
+	background-color: #FF7159;
+	/* padding: 0; */
+	text-align: center;
 }
 </style>

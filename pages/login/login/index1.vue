@@ -60,7 +60,7 @@ export default {
 			isCaptcha: false, // 是否需要验证码
 			captcha: '', // 输入的验证码
 			captchaUrl: '', // 验证码图片地址
-			btnb: 'btn btn-square btn-all', // 按钮bg
+			btnb: 'btn btn-square btn-c btn-all', // 按钮bg
 			weixinBrowser: false, // 是否是微信浏览器
 			thirdPartyLogins: [], // 第三方登录列表
 		}
@@ -164,18 +164,25 @@ export default {
 				type: 'redirect',
 				page: ''
 			})
-			uni.reLaunch({
-				url: redirect
-			})
+
+			if (redirect.indexOf('?') !== -1) {
+				uni.navigateBack({
+					delta: 1
+				})
+			} else {
+				uni.reLaunch({
+					url: redirect
+				})
+			}
 		},
 		// 登录方式切换
 		selectLoginType () {
-			this.$common.redirectTo('./index')
+			this.$common.redirectTo('/pages/login/login/index')
 		},
 		// 获取第三方登录列表
 		getAuths () {
 			let data = {
-				url: baseUrl,
+				url: baseUrl + 'wap/#/pages/author',
 				uuid: this.getNonDuplicateID()
 			}
 			
@@ -236,6 +243,7 @@ export default {
 .login-item-input{
 	display: inline-block;
 	width: 60%;
+	box-sizing: border-box;
 }
 .login-item .btn{
 	display: inline-block;

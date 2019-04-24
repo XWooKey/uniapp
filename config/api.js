@@ -260,7 +260,7 @@ export const uploadFiles = (callback) => {
 export const uploadImage = (num, callback) => {
 	uni.chooseImage({
 		count:num,
-		success: function (res) {
+		success: (res) => {
 			uni.showLoading({
 				title: '上传中...'
 			});
@@ -269,19 +269,29 @@ export const uploadImage = (num, callback) => {
 				uni.uploadFile({
 					url: baseUrl + 'api.html',
 					filePath: tempFilePaths[i],
-					name: 'upfile',
-					formData: {
-						method: 'images.upload'
+					fileType: 'image',
+					name: 'file',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'multipart/form-data',
 					},
-					success: function (res) {
-						let obj = JSON.parse(res.data);
-						callback(obj);
+					formData: {
+						'method': 'images.upload',
+						'upfile': tempFilePaths[i]
+					},
+					success: (uploadFileRes) => {
+						callback(JSON.parse(uploadFileRes.data));
+					},
+					fail: (error) => {
+						if (error && error.response) {
+							showError(error.response);
+						}
 					},
 					complete: () => {
 						setTimeout(function () {
 							uni.hideLoading();
 						}, 250);
-					}
+					},
 				});
 			}
 		}
@@ -602,3 +612,18 @@ export const myInvite = (callback) => post('user.myinvite', {}, callback);
 
 // 设置我的上级邀请人
 export const setMyInvite = (data, callback) => post('user.activationinvite', data, callback);
+
+// 获取小程序二维码
+export const getInviteQRCode = (data, callback) => post('store.getinviteqrcode', data, callback);
+
+// 生成海报
+export const createPoster = (data, callback) => post('user.getposter', data, callback);
+
+// 获取秒杀团购
+export const getGroup = (data, callback) => post('group.getlist', data, callback);
+
+// 获取秒杀团购详情
+export const groupInfo = (data, callback) => post('group.getgoodsdetial', data, callback);
+
+// app更新
+export const appUpdate = (data, callback) => post('appplus.checkversion', data, callback);

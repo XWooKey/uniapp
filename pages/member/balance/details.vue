@@ -3,9 +3,9 @@
 		<view class='cell-group'>
 			<view class='cell-item right-img'>
 				<view class='cell-item-hd'>
-					<view class='cell-hd-title color-6'>类型筛选</view>
+					<view class='cell-hd-title color-6' style="top: 0;">类型筛选</view>
 				</view>
-				<view class='cell-item-bd'>
+				<view class='cell-item-bd down-pull'>
 					<view class="uni-list">
 						<view class="uni-list-cell-db color-6">
 							<picker @change="changeState" :value="index" :range="objectType">
@@ -131,9 +131,11 @@ export default {
 }
 .uni-list-cell-db{
 	float: left;
-	padding-top: 8upx;
+	/* padding-top: 8upx; */
 	margin-right: 6upx;
 	display: inline-block;
+	height: 50upx;
+	line-height: 50upx;
 }
 .uni-list .right-img{
 	float: left;
@@ -162,5 +164,11 @@ export default {
 .balance-none-img{
 	width: 274upx;
 	height: 274upx;
+}
+.down-pull{
+	position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 120upx;
 }
 </style>

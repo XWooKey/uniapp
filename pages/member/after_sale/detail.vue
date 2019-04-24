@@ -32,12 +32,12 @@
 					<view class='cell-item-ft'><view class="cell-ft-p red-price">{{refund}}元</view></view>
 				</view>
 			</view>
-			<view class='cell-group margin-cell-group'>
+			<view class='cell-group margin-cell-group' v-if="images.length > 0">
 				<view class='cell-item right-img'><view class='cell-item-hd'><view class='cell-hd-title'>图片凭证</view></view></view>
 				<view class="">
 					<view class="evaluate-c-b">
 						<view class="goods-img-item" v-for="(item, key) in images" :key="key">
-							<image :src="item.url" mode="aspectFit"></image>
+							<image :src="item.url" mode="aspectFit" @click="clickImg(item.url)"></image>
 						</view>
 					</view>
 				</view>
@@ -184,6 +184,13 @@ export default {
 		},
 		repeat() {
 			this.$common.navigateTo('../after_sale/index?order_id='+this.order_id);
+		},
+		// 图片点击放大
+		clickImg (img) {
+			// 预览图片
+			uni.previewImage({
+				urls: img.split()
+			});
 		}
 	},
 	//页面加载

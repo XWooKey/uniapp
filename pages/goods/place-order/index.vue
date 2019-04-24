@@ -1,67 +1,98 @@
-<template>
+ <template>
 	<view class="content">
 		<view class="content-top">
-			<!-- 收货地址信息 -->
-			<view class='cell-group margin-cell-group' v-if="userShip.id"  @click="showAddressList">
-				<view class='cell-item add-title-item right-img'>
-					<view class='cell-item-hd'>
-						<image class='cell-hd-icon' src='../../../static/image/location.png'></image>
-					</view>
-					<view class='cell-item-bd'>
-						<view class="cell-bd-view">
-							<text class="cell-bd-text">收货人：{{ userShip.name }}</text>
-							<text class="cell-bd-text-right">{{ userShip.mobile }}</text>
+			<uni-segmented-control :current="type_current" :values="type_items" @clickItem="onTypeItem" style-type="text" active-color="#333" v-if="storeSwitch == 1"></uni-segmented-control>
+			<view class="content">
+				<view v-show="type_current === 0">
+					<!-- 收货地址信息 -->
+					<view class='cell-group margin-cell-group' v-if="userShip.id"  @click="showAddressList">
+						<view class='cell-item add-title-item right-img'>
+							<view class='cell-item-hd'>
+								<image class='cell-hd-icon' src='../../../static/image/location.png'></image>
+							</view>
+							<view class='cell-item-bd'>
+								<view class="cell-bd-view">
+									<text class="cell-bd-text">收货人：{{ userShip.name }}</text>
+									<text class="cell-bd-text-right">{{ userShip.mobile }}</text>
+								</view>
+								<view class="cell-bd-view">
+									<text class="cell-bd-text address">{{ userShip.area_name }}</text>
+								</view>
+							</view>
+							<view class='cell-item-ft'>
+								<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+							</view>
 						</view>
-						<view class="cell-bd-view">
-							<text class="cell-bd-text address">{{ userShip.area_name }}</text>
+					</view>
+					<view class="cell-group margin-cell-group" v-else>
+						<view class='cell-item add-title-items'>
+							<button class="btn btn-b" @click="goAddress()" hover-class="btn-hover2">添加收货地址</button>
 						</view>
 					</view>
-					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+				</view>
+				<view v-show="type_current === 1">
+					<!-- 门店信息 -->
+					<view v-if="store.id != 0" class='cell-group margin-cell-group' @click="goStorelist()">
+						<view class='cell-item add-title-item right-img'>
+							<view class='cell-item-hd'>
+								<image class='cell-hd-icon' src='../../../static/image/homepage.png'></image>
+							</view>
+							<view class='cell-item-bd'>
+								<view class="cell-bd-view">
+									<text class="cell-bd-text">{{store.name}}</text>
+									<text class="cell-bd-text-right">{{store.mobile}}</text>
+								</view>
+								<view class="cell-bd-view">
+									<text class="cell-bd-text address">{{store.address}}</text>
+								</view>
+							</view>
+							<view class='cell-item-ft'>
+								<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+							</view>
+						</view>
+					</view>
+					<view v-else class='cell-group margin-cell-group'>
+						<view class='cell-item add-title-item right-img no-store'>暂无门店</view>
 					</view>
 				</view>
 			</view>
 			
-			<view class="cell-group margin-cell-group" v-else>
-				<view class='cell-item add-title-items'>
-					<button class="btn btn-b" @click="goAddress()" hover-class="btn-hover2">添加收货地址</button>
+			<view class='cell-group margin-cell-group' v-if="storeSwitch == 1 && type_current === 1">
+				<view class='cell-item user-head'>
+					<view class='cell-item-hd'>
+						<view class='cell-hd-title'>姓名</view>
+					</view>
+					<view class='cell-item-bd'>
+						<input class='cell-bd-input' placeholder='请输入提货人姓名' v-model="store_pick.name"></input>
+					</view>
+				</view>
+				<view class='cell-item'>
+					<view class='cell-item-hd'>
+						<view class='cell-hd-title'>电话</view>
+					</view>
+					<view class='cell-item-bd'>
+						<input class='cell-bd-input' placeholder='请输入提货人电话' v-model="store_pick.mobile"></input>
+					</view>
 				</view>
 			</view>
 			
 			<!-- 商品列表信息 -->
 			<view class='img-list'>
-				<view class='img-list-item'
-				v-for="(item, index) in products"
-				:key="index"
-				>
-					<image 
-					class='img-list-item-l little-img have-none' 
-					:src='item.products.image_path' 
-					mode='aspectFill'
-					></image>
+				<view class='img-list-item' v-for="(item, index) in products" :key="index">
+					<image class='img-list-item-l little-img have-none' :src='item.products.image_path' mode='aspectFill'></image>
 					<view class='img-list-item-r little-right'>
 						<view class='little-right-t'>
-							<view class='goods-name list-goods-name'
-							@click="goodsDetail(item.products.goods_id)"
-							>{{ item.products.name }}</view>
+							<view class='goods-name list-goods-name' @click="goodsDetail(item.products.goods_id)">{{ item.products.name }}</view>
 							<view class='goods-price'>￥{{ item.products.price }}</view>
 						</view>
-						<view class="romotion-tip"
-						v-if="item.products.promotion_list"
-						>
-							<view class="romotion-tip-item"
-							:class="item.type !== 2 ? 'bg-gray' : ''"
-							v-for="(item, key) in item.products.promotion_list"
-							:key="key"
-							>
-								{{ item.name }}
+						<view class="romotion-tip" v-if="item.products.promotion_list">
+							<view class="romotion-tip-item" :class="v.type !== 2 ? 'bg-gray' : ''" v-for="(v, k) in item.products.promotion_list" :key="k">
+								{{ v.name }}
 							</view>
 						</view>
 						<view class='goods-item-c'>
 							<view class='goods-buy'>
-								<view class='goods-salesvolume'
-								v-if="item.products.spes_desc !== null"
-								>{{ item.products.spes_desc }}</view>
+								<view class='goods-salesvolume' v-if="item.products.spes_desc !== null">{{ item.products.spes_desc }}</view>
 								<view class='goods-num'>× {{ item.nums }}</view>
 							</view>
 						</view>
@@ -88,15 +119,15 @@
 							<text class="cell-bd-text address color-9">可用 {{ canUsePoint }} 积分，可抵扣 {{ pointMoney }} 元，共有 {{ userPointNums }} 积分。</text>
 						</view>
 					</view>
-					<view class='cell-item-ft'>
-						<label class="radio" >
-							<radio value="1" @click="changePointHandle" :checked="isUsePoint" color="#FF7159" v-if="userPointNums > 0" />
+					<view class='cell-item-ft' @click="changePointHandle">
+						<label class="radio">
+							<radio value="1" :checked="isUsePoint" color="#FF7159" v-if="userPointNums > 0" />
 							<radio class="radioNo" disabled="true" v-else />
 						</label>
 					</view>
 				</view>
 				
-				<view class='cell-item invoice right-img' v-if="invoice_switch == 1">
+				<view class='cell-item invoice right-img' v-if="invoiceSwitch == 1">
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>发票</view>
 					</view>
@@ -111,17 +142,21 @@
 						<view class='cell-bd-view'>商品价格</view>
 						<view class='cell-bd-view' v-if="cartData.goods_pmt_old > 0">商品优惠</view>
 						<view class='cell-hd-view' v-if="cartData.order_pmt_old > 0">订单优惠</view>
+						<view class='cell-hd-view' v-if="!couponIsUsed">优惠券抵扣</view>
+						<view class='cell-hd-view' v-if="cartData.point > 0">积分抵扣</view>
 						<view class='cell-hd-view'>运费</view>
 					</view>
 					<view class='cell-item-ft'>
 						<view class="cell-ft-view red-price">{{ cartData.goods_amount }}</view>
 						<view class="cell-ft-view" v-if="cartData.goods_pmt_old > 0">-{{ cartData.goods_pmt }}</view>
 						<view class="cell-ft-view" v-if="cartData.order_pmt_old > 0">-{{ cartData.order_pmt }}</view>
+						<view class="cell-ft-view" v-if="!couponIsUsed">-{{ cartData.coupon_pmt }}</view>
+						<view class="cell-ft-view" v-if="cartData.point > 0">-{{ cartData.point_money }}</view>
 						<view class="cell-ft-view">{{ cartData.cost_freight }}</view>
 					</view>
 				</view>
 			</view>
-			
+
 			<view class='cell-group leave-message'>
 				<view class='cell-item right-img'>
 					<view class='cell-item-hd'>
@@ -165,49 +200,55 @@
 							active-color="#333"
 							></uni-segmented-control>
 						</view>
-						<scroll-view class="coupon-c" scroll-y="true" style="" v-show="current === 0">
-							<view class="coupon-c-item" v-for="(item, index) in userCoupons" :key="index">
-								<view :class="item.cla">
-									<view class="cci-l-c color-f">
-										coupon
-									</view>
-								</view>
-
-								<view class="cci-r">
-									<!-- <image class="cci-r-img" src="" mode=""></image> -->
-									<view class="cci-r-c">
-										<view class="ccirc-t color-9">
-											{{ item.name }}
-										</view>
-										<view class="ccirc-b">
-											<view class="ccirc-b-l">
-												<view class="ccirc-b-tip">
-													{{ item.expression1 + item.expression2 }}
-												</view>
-												<view class="ccirc-b-time color-9">
-													有效期：{{ item.stime + ' - ' + item.etime }}
-												</view>
-											</view>
-											<view class="ccirc-b-r color-f"
-											@click="couponHandle(index)"
-											v-if="!item.checked && !item.disabled"
-											>
-												立即使用
-											</view>
-											<view class="ccirc-b-r color-f"
-											@click="couponHandle(index)"
-											v-else-if="item.checked && !item.disabled"
-											>
-												取消使用
-											</view>
-											<!-- <view class="ccirc-b-r color-f bg-c">
-												不可用
-											</view> -->
+						<view class="" v-show="current === 0">
+							<scroll-view class="coupon-c" scroll-y="true" style="" v-if="userCoupons.length">
+								<view class="coupon-c-item" v-for="(item, index) in userCoupons" :key="index">
+									<view :class="item.cla">
+										<view class="cci-l-c color-f">
+											coupon
 										</view>
 									</view>
+							
+									<view class="cci-r">
+										<!-- <image class="cci-r-img" src="" mode=""></image> -->
+										<view class="cci-r-c">
+											<view class="ccirc-t color-9">
+												{{ item.name }}
+											</view>
+											<view class="ccirc-b">
+												<view class="ccirc-b-l">
+													<view class="ccirc-b-tip">
+														{{ item.expression1 + item.expression2 }}
+													</view>
+													<view class="ccirc-b-time color-9">
+														有效期：{{ item.stime + ' - ' + item.etime }}
+													</view>
+												</view>
+												<view class="ccirc-b-r color-f"
+												@click="couponHandle(index)"
+												v-if="!item.checked && !item.disabled"
+												>
+													立即使用
+												</view>
+												<view class="ccirc-b-r color-f"
+												@click="couponHandle(index)"
+												v-else-if="item.checked && !item.disabled"
+												>
+													取消使用
+												</view>
+												<!-- <view class="ccirc-b-r color-f bg-c">
+													不可用
+												</view> -->
+											</view>
+										</view>
+									</view>
 								</view>
+							</scroll-view>
+							<view class="coupon-none" v-else>
+								<image class="coupon-none-img" src="../../../static/image/order.png" mode=""></image>
 							</view>
-						</scroll-view>
+						</view>
+						
 						<view class="coupon-c" v-show="current === 1">
 							<view class="coupon-enter">
 								<view class="coupon-input">
@@ -257,6 +298,8 @@ export default {
 	mixins: [ goods ],
 	data () {
 		return {
+			type_items: ['快递配送','门店自提'],//门店自提切换
+            type_current: 0,
 			cartData: {}, // 购物车商品详情
 			products: [], // 货品信息
 			promotions: [], // 促销信息
@@ -289,7 +332,16 @@ export default {
 			usedCoupons: {}, // 已经选择使用的优惠券
 			inputCouponCode: '', // 输入的优惠券码
 			optCoupon: '' ,// 当前选择使用的优惠券(暂存使用 如果接口返回不可用则剔除优惠券状态)
-			invoice_switch: 2, //发票开关
+			store : {
+				id: 0,
+				name: '',
+				mobile: '',
+				address: ''
+			},
+			store_pick: {
+				name: '',
+				mobile: ''
+			}
 		}
 	},
 	components: {lvvPopup,uniSegmentedControl},
@@ -309,10 +361,29 @@ export default {
 		// 获取用户的可用优惠券信息
 		this.getUserCounpons()
 		
-		//获取发票开关
-		this.invoice_switch = this.$store.state.config.invoice_switch;
+		//获取默认门店信息
+		this.getDefaultStore();
 	},
 	methods: {
+		// 切换门店
+		onTypeItem(index) {
+            if (this.type_current !== index) {
+                this.type_current = index;
+            }
+			let receiptType = 1;
+			if(this.type_current != 0){
+				receiptType = 2;
+			}
+			this.receiptType = receiptType;
+			
+			this.getCartList();
+        },
+		// 跳转到门店列表
+		goStorelist(){
+			uni.navigateTo({
+				url: './storelist'
+			})
+		},
 		// 没有收货地址时跳转
 		goAddress(){
 			uni.navigateTo({
@@ -439,7 +510,6 @@ export default {
 					arr.push(item.coupon_code)
 				}
 			})
-			
 			if (this.userCoupons[index].checked) {
 				// 使用
 				this.params.coupon_code = arr.join()
@@ -447,7 +517,7 @@ export default {
 				// 取消使用
 				let paramsCodes = this.params.coupon_code.split(',')
 				let usedIndex = paramsCodes.indexOf(this.userCoupons[index].coupon_code)
-				if (usedIndex > 0) {
+				if (usedIndex !== -1) {
 					paramsCodes.splice(usedIndex, 1)
 					this.params.coupon_code = paramsCodes.join()
 				}
@@ -499,6 +569,12 @@ export default {
 		},
 		// 去支付
 		toPay () {
+			let receiptType = 1;
+			if(this.type_current != 0){
+				receiptType = 2;
+			}
+			this.receiptType = receiptType;
+			
 			let data = {
                 cart_ids: this.params.ids,
                 memo: this.memo,
@@ -509,14 +585,38 @@ export default {
 			
 			let delivery = {}
 			// 判断是快递配送还是门店自提
-
-			// 快递配送
-			delivery = {
-				uship_id: this.userShip.id,
-				area_id: this.params.area_id
+			if(this.receiptType == 1){
+				if(!this.userShip.id || !this.params.area_id){
+					this.$common.errorToShow('请选择收货地址');
+					return false;
+				}
+				// 快递配送
+				delivery = {
+					uship_id: this.userShip.id,
+					area_id: this.params.area_id
+				}
 			}
-			// 门店自提
-			
+			if(this.receiptType == 2){
+				if(!this.store.id){
+					this.$common.errorToShow('请选择自提门店');
+					return false;
+				}
+				if(!this.store_pick.name){
+					this.$common.errorToShow('请输入提货人姓名');
+					return false;
+				}
+				if(!this.store_pick.mobile){
+					this.$common.errorToShow('请输入提货人电话');
+					return false;
+				}
+				// 门店自提
+				delivery = {
+					store_id: this.store.id,
+					lading_name: this.store_pick.name,
+					lading_mobile: this.store_pick.mobile
+				}
+			}
+
 			// 发票信息
 			data['tax_type'] = this.invoice.type
 			data['tax_name'] = this.invoice.name
@@ -527,6 +627,12 @@ export default {
 			// #endif
 			// #ifdef MP-WEIXIN
 			data['source'] = 3;
+			// #endif
+			// #ifdef MP-ALIPAY
+			data['source'] = 4;
+			// #endif
+			// #ifdef APP-PLUS|| APP-PLUS-NVUE
+			data['source'] = 5;
 			// #endif
 			
 			data = Object.assign(data, delivery)
@@ -554,6 +660,20 @@ export default {
                 this.current = index;
             }
         },
+		// 获取默认店铺
+		getDefaultStore(){
+			this.$api.defaultStore({}, res => {
+				if(res.status){
+					let store = {
+						id: res.data.id,
+						name: res.data.store_name,
+						mobile: res.data.store_mobile,
+						address: res.data.all_address
+					}
+					this.store = store;
+				}
+			});
+		}
 		//扫码
 // 		scanCode() {
 // 			console.log(1);
@@ -597,6 +717,18 @@ export default {
 				name = coupons.join()
 			}
 			return name
+		},
+		// 判断是否开启发票功能
+		invoiceSwitch () {
+			return this.$store.state.config.invoice_switch || 2;
+		},
+		// 判断店铺开关
+		storeSwitch() {
+			return this.$store.state.config.store_switch || 2;
+		},
+		// 根据接口返回数据判断是否使用优惠券
+		couponIsUsed () {
+			return this.cartData.coupon instanceof Array
 		}
 	},
 	watch: {
@@ -684,8 +816,9 @@ export default {
 	line-height: 70upx;
 }
 .invoice .cell-ft-text{
-	top: 4upx;
+	/* top: 4upx; */
 	color: #666;
+	font-size: 24upx;
 }
 .pop-t{
 	border-bottom: 2upx solid #f4f4f4;
@@ -846,5 +979,19 @@ export default {
 .bg-c{
 	background-color: #ccc;
 }
-
+.no-store{
+	text-align: center;
+    padding: 30upx 0;
+	font-size: 26upx;
+	color: #666;
+	/* min-height: 60upx; */
+}
+.coupon-none{
+	text-align: center;
+	padding: 120upx 0;
+}
+.coupon-none-img{
+	width: 274upx;
+	height: 274upx;
+}
 </style>

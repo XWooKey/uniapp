@@ -6,8 +6,8 @@
 					<view class='cell-hd-title'>订单类型</view>
 				</view>
 				<view class='cell-item-ft'>
-					<text class="cell-ft-p" v-if="type == 1">商品订单</text>
-					<text class="cell-ft-p" v-if="type == 2">充值订单</text>
+					<text class="cell-ft-p" v-if="type == 1" @click="orderDetail(orderId)">商品订单</text>
+					<text class="cell-ft-p" v-if="type == 2" @click="toRecharge()">充值订单</text>
 				</view>
 			</view>
 			<view v-if="type == 1">
@@ -16,7 +16,7 @@
 						<view class='cell-hd-title'>订单编号</view>
 					</view>
 					<view class='cell-item-ft'>
-						<text class="cell-ft-p">{{ orderId }}</text>
+						<text class="cell-ft-p" @click="orderDetail(orderId)">{{ orderId }}</text>
 					</view>
 				</view>
 				<view class='cell-item'>
@@ -57,7 +57,24 @@
 		:uid="userInfo.id"
 		></payments-by-wx>
 		<!-- #endif -->
+		
+		<!-- #ifdef MP-ALIPAY -->
+		<payments-by-ali
+		:orderId="orderId"
+		:recharge="recharge"
+		:type="type"
+		:uid="userInfo.id"
+		></payments-by-ali>
+		<!-- #endif -->
 
+		<!-- #ifdef APP-PLUS||APP-PLUS-NVUE -->
+		<payments-by-app
+		:orderId="orderId"
+		:recharge="recharge"
+		:type="type"
+		:uid="userInfo.id"
+		></payments-by-app>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -70,7 +87,17 @@ import paymentsByH5 from '@/components/payments/paymentsByH5.vue'
 import paymentsByWx from '@/components/payments/paymentsByWx.vue'
 // #endif
 
+// #ifdef MP-ALIPAY
+import paymentsByAli from '@/components/payments/paymentsByAli.vue'
+// #endif
+
+// #ifdef APP-PLUS||APP-PLUS-NVUE
+import paymentsByApp from '@/components/payments/paymentsByApp.vue'
+// #endif
+
+import { orders } from '@/config/mixins.js'
 export default {
+	mixins: [orders],
 	data () {
 		return {
 			orderId: 0,
@@ -87,6 +114,12 @@ export default {
 		// #endif
 		// #ifdef MP-WEIXIN
 		paymentsByWx,
+		// #endif
+		// #ifdef MP-ALIPAY
+		paymentsByAli,
+		// #endif
+		// #ifdef APP-PLUS||APP-PLUS-NVUE
+		paymentsByApp,
 		// #endif
 	},
 	
@@ -129,6 +162,10 @@ export default {
 					this.$common.errorToShow(res.msg)
 				}
 			})
+		},
+		// 跳转我的余额页面
+		toRecharge () {
+			this.$common.navigateTo('/pages/member/balance/index')
 		}
 	}
 }	

@@ -1,8 +1,11 @@
 # Jshop小程序uniapp前台简约模板
 
 #### 介绍
-uni-app简约前台H5+小程序模板，全新UI设计，更多交互细节，我们倾尽全力为您提供更加流畅舒爽的体验，后续会对这套模板进行APP以及支付宝等小程序兼容。
+uni-app简约前台H5+小程序模板，全新UI设计，更多交互细节，我们倾尽全力为您提供更加流畅舒爽的体验。
 
+增加对支付宝小程序、APP的支持，实现一个后台，管理5个前端。
+
+同时又实现了一套前端代码，发布多个平台，为您的业务可以提供更加强有力的支撑！
 
 #### Jshop小程序商城介绍
 Jshop小程序商城，是一款开源的电商系统，包含微信小程序和H5端，为大中小企业提供移动电子商务优秀的解决方案。
@@ -83,6 +86,25 @@ wap  WEB部署目录（或者子目录）
 2. H5发布教程
 具体配置稍后提供
 开发相关开发介绍：https://uniapp.dcloud.io/
+
+## 配置
+### 服务器地址
+config/config.js中
+```
+export const baseUrl = 'http://www.b2c.com/';//注意最后斜杠,填写你的域名地址
+export const entId = '';//客服ID	在https://www.jihainet.com中找客服开通
+
+```
+
+### 海报H5中保存图片跨域
+nginx中添加以下配置
+```
+    location ~ .*\.(gif|jpg|jpeg|png)$ {
+      add_header Access-Control-Allow-Origin *;
+      add_header Access-Control-Allow-Headers X-Requested-With;
+      add_header Access-Control-Allow-Methods GET,POST,OPTIONS;
+    }
+```
 
 
 #### 安全&缺陷

@@ -16,15 +16,20 @@
 		</view>
 		<view class="login-b">
 			<!-- #ifdef H5|APP-PLUS|APP-PLUS-NVUE -->
-			<button :class="btnb"  @click="login()" hover-class="btn-hover">登录</button>
-			<view class="registered-item">
-				<button class="btn btn-g btn-square" @click="selectLoginType()">账号密码登录</button>
-				<button class="btn btn-g btn-square registered" @click="toReg">注册</button>
+			<view v-if="type === 'bind' && weixinBrowser">
+				<button :class="regButtonClass"  @click="toBind()" hover-class="btn-hover">登录</button>
 			</view>
 			
+			<view v-else>
+				<button :class="regButtonClass"  @click="login()" hover-class="btn-hover">登录</button>
+				<view class="registered-item">
+					<button class="btn btn-g btn-square" @click="selectLoginType()">账号密码登录</button>
+					<button class="btn btn-g btn-square registered" @click="toReg">注册</button>
+				</view>
+			</view>
 			<!-- #endif -->
 			<!-- #ifdef MP -->
-			<button :class="btnb" @click="showTopTips()" hover-class="btn-hover">登录</button>
+			<button :class="regButtonClass" @click="showTopTips()" hover-class="btn-hover">登录</button>
 			<!-- #endif -->
 		</view>
 	</view>
@@ -42,7 +47,9 @@ export default {
 			user_wx_id: 0, //授权id
 			verification: true, // 通过v-show控制显示获取还是倒计时
 			timer: 60, // 定义初始时间为60s
-			btnb:'btn btn-square btn-all' //按钮背景
+			btnb:'btn btn-square btn-c btn-all', //按钮背景
+			type: '', // 有值是第三方登录账号绑定
+			weixinBrowser: this.$common.isWeiXinBrowser()
 		}
 	},
 	onLoad (option) {
@@ -58,6 +65,15 @@ export default {
 			uni.setNavigationBarTitle({
 				title: '绑定账号'
 			});
+		}
+		console.log(_this.verification);
+		
+		// H5第三方授权登录绑定
+		if (option.type && option.type === 'bind') {
+			this.type = option.type
+			uni.setNavigationBarTitle({
+				title: '绑定账号'
+			})
 		}
 	},
 	computed: {
@@ -76,15 +92,17 @@ export default {
 			return res;
 		},
 		// 动态计算发送验证码按钮样式
-		sendCodeBtn: {
-			get () {
-				let btn = 'btn btn-g'
-				if (this.mobile.length === this.maxMobile && this.rightMobile.status) {
-					return btn + ' btn-b'
-				} else {
-					return btn
-				}
+		sendCodeBtn () {
+			let btn = 'btn btn-g'
+			if (this.mobile.length === this.maxMobile && this.rightMobile.status) {
+				return btn + ' btn-b'
+			} else {
+				return btn
 			}
+		},
+		// 动态更改登录按钮bg
+		regButtonClass () {
+			return this.mobile && this.mobile.length === this.maxMobile && this.code ? this.btnb + ' btn-b' : this.btnb
 		},
 		logoImage() {
 			return this.$store.state.config.shop_logo;
@@ -120,7 +138,7 @@ export default {
 							this.verification = false;
 							this.$common.successToShow(res.msg);
 							this.countDown(); // 执行验证码计时
-							this.btnb = 'btn btn-square btn-all btn-b';
+							// this.btnb = 'btn btn-square btn-all btn-b';
 						} else {
 							this.$common.errorToShow(res.msg)
 						}
@@ -232,6 +250,7 @@ export default {
 			}
 			_this.$api.smsLogin(data, function(res) {
 				if (res.status) {
+					_this.$db.set('userToken', res.data);
 					_this.redirectHandler();
 				} else {
 					//报错了
@@ -239,6 +258,39 @@ export default {
 				}
 			});
 		},
+		// 公众号第三方登录账号绑定
+		toBind () {
+			if (this.mobile == '') {
+				this.$common.errorToShow('请输入手机号码');
+				return false;
+			}
+			if (this.code == '') {
+				this.$common.errorToShow('请输入验证码');
+				return false;
+			}
+			
+			let data = {
+				mobile: this.mobile,
+				code: this.code,
+				uuid: this.$db.get('uuid')
+			}
+			
+			// 获取邀请码
+			let invicode = this.$db.get('invitecode')
+			if (invicode) {
+				data.invitecode = invicode
+			}
+			
+			this.$api.trustBind(data, res => {
+				if (res.status) {
+					this.$db.set('userToken', res.data)
+					this.redirectHandler()
+				} else {
+					this.$common.errorToShow(res.msg)
+				}
+			})
+		},
+		// 切换登录方式
 		selectLoginType() {
 			this.$common.redirectTo('./index1')
 		}
@@ -283,6 +335,7 @@ export default {
 .login-item-input{
 	display: inline-block;
 	width: 60%;
+	box-sizing: border-box;
 }
 .login-item .btn{
 	display: inline-block;

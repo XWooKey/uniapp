@@ -57,7 +57,7 @@
 					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
 				</view>
 			</view>
-			<!-- #ifdef H5 -->
+			<!-- #ifdef H5 || APP-PLUS -->
 			<view class='cell-item'>
 				<view class='cell-item-hd' 
 				@click="showChat()"	
@@ -70,9 +70,9 @@
 				</view>
 			</view>
 			<!-- #endif -->
-			<!-- #ifdef MP -->
+			<!-- #ifdef MP-WEIXIN -->
 			<view class='cell-item'>
-				  <button class="cell-item-hd " hover-class="none" open-type="contact" bindcontact="showChat">
+				<button class="cell-item-hd " hover-class="none" open-type="contact" bindcontact="showChat">
 				  <image src='../../../static/image/me-ic-phone.png'  class='cell-hd-icon'></image>
 				  <view class='cell-hd-title'>联系客服</view>
 				</button>
@@ -81,20 +81,42 @@
 				</view>
 			</view>
 			<!-- #endif -->
+			<!-- #ifdef MP-ALIPAY -->
+			<view class='cell-item'>
+			<contact-button icon="../../../static/image/kefu2.png" size="170rpx*76rpx" tnt-inst-id="WKPKUZXG" scene="SCE00040186" class="cell-item-hd " hover-class="none" />
+			<view class='cell-item-ft'>
+				<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+			</view>
+			</view>
+			<!-- #endif -->
+		</view>
+		
+		<view class='cell-group margin-cell-group right-img' v-if="isClerk">
+			<view class='cell-item' v-for="(item, index) in clerk" :key="index">
+				<view class='cell-item-hd' @click="navigateToHandle(item.router)">
+					<image class='cell-hd-icon' :src='item.icon'></image>
+					<view class='cell-hd-title'>{{ item.name }}</view>
+				</view>
+				<view class='cell-item-ft'>
+					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+				</view>
+			</view>
 		</view>
 		<!-- 其他功能菜单end -->
-		
+		<jihaiCopyright></jihaiCopyright>
 	</view>
 </template>
 
 
 <script>
+import jihaiCopyright from '@/components/jihai-copyright/jihaiCopyright.vue'
 export default {
-	components: {  },
+	components: { jihaiCopyright },
 	data () {
 		return {
 			userInfo: {}, // 用户信息
 			afterSaleNums: 0,
+			isClerk: false,
 			orderItems: [
 				{
 					name: '待付款',
@@ -129,6 +151,11 @@ export default {
 					router: '../balance/index'
 				},
 				{
+					name: '我的积分',
+					icon: '../../../static/image/ic-me-balance.png',
+					router: '../integral/index'
+				},
+				{
 					name: '地址管理',
 					icon: '../../../static/image/me-ic-site.png',
 					router: '../address/list'
@@ -143,17 +170,6 @@ export default {
 					icon: '../../../static/image/ic-me-track.png',
 					router: '../history/index'
 				},
-// 				{
-// 					name: '关于我们',
-// 					icon: '../../../static/image/me-ic-about.png',
-// 					router: ''
-// 				},
-				
-				/* {
-					name: '联系客服',
-					icon: '../../../static/image/me-ic-phone.png',
-					router: ''
-				}, */
 				{
 					name: '邀请好友',
 					icon: '../../../static/image/ic-me-invite.png',
@@ -163,6 +179,18 @@ export default {
 					name: '系统设置',
 					icon: '../../../static/image/me-ic-set.png',
 					router: '../setting/index'
+				},
+			],
+			'clerk': [
+				{
+					name: '提货单列表',
+					icon: '../../../static/image/me-ic-phone.png',
+					router: '../take_delivery/list'
+				},
+				{
+					name: '提货单核销',
+					icon: '../../../static/image/me-ic-about.png',
+					router: '../take_delivery/index'
 				},
 			]
 		}
@@ -192,10 +220,15 @@ export default {
 							});
 							_this.afterSaleNums = res.data.isAfterSale?res.data.isAfterSale:0;
 						}
-					})
+					});
+					
+					//判断是否是店员
+					this.$api.isStoreUser({}, res => {
+						this.isClerk = res.flag;
+					});
 				}
-			})
-			
+			});
+
 		},
 		navigateToHandle (pageUrl) {
 			this.$common.navigateTo(pageUrl)
@@ -207,10 +240,10 @@ export default {
 		goAfterSaleList() {
 			this.$common.navigateTo('../after_sale/list');
 		},
-		// #ifdef H5 
 		//在线客服,只有手机号的，请自己替换为手机号
 		showChat () {
-			let _this = this;
+			// #ifdef H5
+			let _this = this
            	window._AIHECONG('ini', {
 				entId: _this.$config.entId,
 				button: false,
@@ -224,12 +257,28 @@ export default {
 				}
 			})
             window._AIHECONG('showChat');
-			return true;
-        },
-		// #endif
+			// #endif
+			
+			// 拨打电话
+			// #ifdef APP-PLUS
+			if (this.kfmobile) {
+				uni.makePhoneCall({
+					phoneNumber: this.kfmobile,
+					success: () => {
+						// console.log("成功拨打电话")
+					}
+				})
+			} else {
+				this.$common.errorToShow('商户未设置客服手机号')
+			}
+			// #endif
+        }
 	},
 	computed: {
-		
+		// 获取店铺联系人手机号
+		kfmobile () {
+			return this.$store.state.config.shop_mobile || 0
+		}
 	},
 	watch: {
 		

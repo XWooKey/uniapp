@@ -40,7 +40,7 @@
 							:key="key"
 							>
 								<image class="del" src="../../../static/image/del.png" mode="" @click="removeImg(item.id, key)"></image>
-								<image class="" :src="img.url" mode=""></image>
+								<image class="" :src="img.url" mode="" @click="clickImg(img.url)"></image>
 							</view>
 							<view class="upload-img" v-show="isupload[item.id]">
 								<image class="icon" src="../../../static/image/camera.png" mode="" @click="uploadImg(item.id)"></image>
@@ -147,6 +147,13 @@ export default {
 		removeImg (id, key) {
 			this.images[id].splice(key, 1)
 		},
+		// 图片点击放大
+		clickImg (img) {
+			// 预览图片
+			uni.previewImage({
+				urls: img.split()
+			});
+		},
 		// 改变评分
 		changeScore (e) {
 			this.score[e.id] = e.value
@@ -182,6 +189,10 @@ export default {
 							
 							// #ifdef H5
 							beforePage.isReload = true
+							// #endif
+							
+							// #ifdef MP-ALIPAY
+							beforePage.rootVM.isReload = true
 							// #endif
 						}
 						
@@ -245,6 +256,9 @@ export default {
 	color: #999999;
 	font-size: 22upx;
 	border: 2upx solid #E1E1E1;
+	/* #ifdef MP-ALIPAY */
+	border-top: 8upx solid #E1E1E1;
+	/* #endif */
 	border-radius: 4upx;
 	display: inline-block;
 	float: left;

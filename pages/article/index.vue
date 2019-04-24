@@ -15,6 +15,8 @@
 </template>
 
 <script>
+import htmlParser from '@/common/html-parser'
+	
 export default {
 	data () {
 		return {
@@ -45,6 +47,9 @@ export default {
 			this.$api.articleInfo(data, res => {
 				if (res.status) {
 					const info = res.data
+					var htmlString = info.content;
+					info.content = htmlParser(htmlString);
+					
 					info.ctime = this.$common.timeToDate(info.ctime)
 					info.utime = this.$common.timeToDate(info.utime)
 					this.info = info
@@ -60,6 +65,8 @@ export default {
 			this.$api.noticeInfo(data, res => {
 				if (res.status) {
 					const info = res.data
+					var htmlString = info.content;
+					info.content = htmlParser(htmlString);
 					info.ctime = this.$common.timeToDate(info.ctime)
 					info.utime = this.$common.timeToDate(info.utime)
 					this.info = info

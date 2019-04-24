@@ -9,9 +9,9 @@
 								<view class='cell-hd-title'>售后单号：{{item.aftersales_id}}</view>
 							</view>
 							<view class='cell-item-ft'>
-								<text class='cell-ft-text' v-show="item.status == 1">待审核</text>
-								<text class='cell-ft-text' v-show="item.status == 2">审核通过</text>
-								<text class='cell-ft-text' v-show="item.status == 3">审核拒绝</text>
+								<text class='cell-ft-text' v-if="item.status == 1">待审核</text>
+								<text class='cell-ft-text' v-else-if="item.status == 2">审核通过</text>
+								<text class='cell-ft-text' v-else-if="item.status == 3">审核拒绝</text>
 							</view>
 						</view>
 					</view>
@@ -25,21 +25,21 @@
 								</view>
 								<view class='goods-item-c'>
 									<view class='goods-buy'>
-										<view class='goods-salesvolume' v-show="v.addon">{{v.addon}}</view>
+										<view class='goods-salesvolume' v-if="v.addon">{{v.addon}}</view>
 										<view class='goods-num'>× {{v.nums}}</view>
 									</view>
 								</view>
 							</view>
 						</view>
 					</view>
-					<view class='cell-group'>
+					<!-- <view class='cell-group'>
 						<view class='cell-item'>
 							<view class='cell-item-ft goods-num'>
 								<text class='cell-ft-text'>合计<text class="red-price">￥{{item.order.order_amount}}（含运费￥{{item.order.cost_freight}})</text></text>
 								<text class='cell-ft-text'>共计{{item.countnum}}件商品</text>
 							</view>
 						</view>
-					</view>
+					</view> -->
 					<view class='order-list-button'>
 						<button class='btn btn-circle btn-b' @click="showOrder(item.aftersales_id)">查看详情</button>
 					</view>

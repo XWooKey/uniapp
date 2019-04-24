@@ -53,6 +53,11 @@ export const goods = {
 				url = this.$common.builderUrlParams(url, obj)
 			}
 			this.$common.navigateTo(url)
+		},
+		// 团购秒杀详情
+		groupDetail(id, group_id){
+			let scene = encodeURIComponent('id=' + id + '&group_id=' + group_id);
+			this.$common.navigateTo('/pages/goods/index/group?scene=' + scene);
 		}
 	}
 }

@@ -46,7 +46,7 @@
 					@click="taps(index, item)"
 				>
 					<image
-						class="content-image"
+						class="content-image icon"
 						:src="item.active ? item.selectedIconPath : item.iconPath"
 						mode=""
 					></image>

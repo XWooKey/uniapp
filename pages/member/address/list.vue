@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view class="content-top">
+		<view class="content-top" v-if="list.length">
 			<view class="uni-list-cell uni-list-cell-pd" v-for="(item, key) in list" :key="key">
 				<view class='cell-group min-cell-group'>
 					<view class='cell-item'>
@@ -22,6 +22,9 @@
 					</view>
 				</view>
 			</view>
+		</view>
+		<view class="address-none" v-else>
+			<image class="address-none-img" src="../../../static/image/order.png" mode=""></image>
 		</view>
 		<view class="button-bottom">
 			<!-- #ifdef MP-WEIXIN -->
@@ -88,15 +91,20 @@ export default {
 				let pages = getCurrentPages();//当前页
 				let beforePage = pages[pages.length - 2];//上个页面
 				
+				// #ifdef MP-ALIPAY
+				beforePage.rootVM.userShip = data;
+				beforePage.rootVM.params.area_id = data.area_id;
+				// #endif
+				
 				// #ifdef H5
 				beforePage.userShip = data;
-				beforePage.params.area_id = data.area_id
+				beforePage.params.area_id = data.area_id;
 				// #endif
 
-				// #ifdef MP-WEIXIN
+				// #ifdef MP-WEIXIN || APP-PLUS || APP-PLUS-NVUE
 				beforePage.$vm.userShip = data;
-				beforePage.$vm.params.area_id = data.area_id
-				// #endif
+				beforePage.$vm.params.area_id = data.area_id;
+				// #endif 
 				
 				uni.navigateBack({
 					delta: 1
@@ -209,5 +217,13 @@ export default {
 	margin-left: 20upx;
 	color: #999;
 	font-size: 24upx;
+}
+.address-none{
+	text-align: center;
+	padding: 200upx 0;
+}
+.address-none-img{
+	width: 274upx;
+	height: 274upx;
 }
 </style>

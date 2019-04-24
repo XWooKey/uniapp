@@ -58,8 +58,8 @@
 			
 		</view>
 		<view class="button-bottom">
-			<button class="btn btn-square btn-b" hover-class="btn-hover2"  v-show="isSubmit" @click="toCash">确认提现</button>
-			<button class="btn btn-square btn-b" hover-class="btn-hover2"  v-show="!isSubmit" disabled>确认提现</button>
+			<button class="btn btn-square btn-b" hover-class="btn-hover2" v-if="isSubmit" @click="toCash">确认提现</button>
+			<button class="btn btn-square btn-b" hover-class="btn-hover2" v-else-if="!isSubmit" disabled>确认提现</button>
 		</view>
 	</view>
 </template>
@@ -160,18 +160,18 @@ export default {
 	watch: {
 		money () {
 			// 比较用户的输入金额 如果大于可用金额
-            if (this.money === '') {
-                this.isSubmit = false
-            } else if (Number(this.money) > Number(this.user.balance)) {
-                this.isError = true
-                this.isSubmit = false
-            } else if (Number(this.money) < Number(this.tocashMoneyLow)) {
-                this.isError = false
-                this.isSubmit = false
-            } else {
-                this.isError = false
-                this.isSubmit = true
-            }
+			if (this.money === '' || Number(this.money) <= 0) {
+				this.isSubmit = false
+			} else if (Number(this.money) > Number(this.user.balance)) {
+				this.isError = true
+				this.isSubmit = false
+			} else if (Number(this.money) < Number(this.tocashMoneyLow)) {
+				this.isError = false
+				this.isSubmit = false
+			} else {
+				this.isError = false
+				this.isSubmit = true
+			}
 		}
 	}
 }
@@ -217,4 +217,10 @@ export default {
 	min-width: 500upx;
 	padding-left: 20upx;
 }
+/* #ifdef MP-ALIPAY */
+.cell-hd-title input {
+	font-size: 24px;
+	height: 18px;
+}
+/* #endif */
 </style>

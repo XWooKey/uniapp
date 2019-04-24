@@ -7,11 +7,7 @@
 						<view class='cell-hd-title'>银行卡号</view>
 					</view>
 					<view class='cell-item-bd'>
-						<input type="number" class='cell-bd-input' 
-						v-model="cardNumber" 
-						focus 
-						@blur="checkCard"
-						placeholder='请输入银行卡号'></input>
+						<input type="number" class='cell-bd-input' v-model="cardNumber" focus @blur="checkCard()" placeholder='请输入银行卡号'></input>
 					</view>
 				</view>
 				<view class='cell-item'>
@@ -52,11 +48,11 @@
 						<view class='cell-hd-title'>开户行地址</view>
 					</view>
 					<view class='cell-item-bd'>
-						<input :value="pickerValue" @click="showThreePicker" ></input>
-						<area-picker ref="areaPicker" :areaId="areaId" :defaultIndex="defaultIndex"  @onConfirm="onConfirm"></area-picker>
+						<input :value="pickerValue" @focus="showThreePicker"></input>
+						<area-picker ref="areaPicker" :areaId="areaId" :defaultIndex="defaultIndex" @onConfirm="onConfirm"></area-picker>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/ic-pull-down.png'></image>
+						<image class='cell-ft-next icon' src='../../../static/image/ic-pull-down.png' @click="showThreePicker"></image>
 					</view>
 				</view>
 				
@@ -64,8 +60,10 @@
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>设为默认</view>
 					</view>
-					<view class='cell-item-ft'>
-						<label class="radio" ><radio value="1" @click="defaultChange" :checked="checked" color="#333"/></label>
+					<view @click="defaultChange">
+						<view class='cell-item-ft'>
+							<label class="radio"><radio value="1" :checked="checked" color="#333"/></label>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -243,7 +241,32 @@ export default {
 					}
 				})
 			}
+		},
+		// #ifdef MP-ALIPAY
+		// alipay bank
+		aliPayBank() {
+			if(this.cardNumber.length >= 16 && this.cardNumber.length <= 19){
+				let data = {
+					card_code: this.cardNumber
+				}
+				this.$api.getBankCardOrganization(data, res => {
+					if (res.status) {
+						let data = res.data
+						this.bankName = data.name
+						this.cardType = data.type
+						this.bankCode = data.bank_code
+						this.cardTypeName = data.type_name
+					} else {
+						this.$common.errorToShow(res.msg, () => {
+							this.bankCode = this.bankName = this.cardType = this.cardTypeName = ''
+						});
+					}
+				})
+			} else {
+				this.bankCode = this.bankName = this.cardType = this.cardTypeName = ''
+			}
 		}
+		// #endif
 	},
 	onLoad(e) {
 		if(e.ship_id){
@@ -261,7 +284,13 @@ export default {
 			return true;
 		}
 	},
-
+	// #ifdef MP-ALIPAY
+	watch: {
+		cardNumber () {
+			this.$common.throttle(this.aliPayBank, this, 450);
+		}
+	},
+	// #endif
 }
 </script>
 
@@ -284,4 +313,9 @@ export default {
 .button-bottom .btn {
 	width: 50%;
 }
+/* #ifdef MP-ALIPAY */
+input{
+	font-size: 24upx;
+}
+/* #endif */
 </style>

@@ -15,7 +15,7 @@
 			</view>
 		</view>
 		<view class="result fail"
-		v-else
+		v-else-if="Object.keys(orderInfo).length && !orderInfo.payment_time"
 		>
 			<image class="result-img" src="../../../static/image/pastdue.png" mode=""></image>
 			<view class="result-top">

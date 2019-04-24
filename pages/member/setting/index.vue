@@ -72,11 +72,9 @@ export default {
 		// 退出登录
 		logOff () {
 			this.$common.modelShow('退出', '确认退出登录吗?', () => {
+				this.$db.del('userToken');
 				uni.switchTab({
-					url: '/pages/index/index',
-					success: () => {
-						this.$db.del('userToken')
-					}
+					url: '/pages/index/index'
 				})
 			})
 		}

@@ -6,7 +6,7 @@
 					<checkbox-group class="cart-checkbox" @change="checkboxChange">
 						<view class="cart-checkbox-item" v-for="(item, key) in items" :key="key">
 							<label class="uni-list-cell uni-list-cell-pd">
-								<view class="cart-checkbox-c"><checkbox :value='item.id' :checked="item.checked" /></view>
+								<view class="cart-checkbox-c"><checkbox :value='item.id' :checked="item.checked" color="#FF7159"/></view>
 								<view class="img-list-item">
 									<image class="img-list-item-l little-img have-none" :src="item.image_url" mode="aspectFill"></image>
 									<view class="img-list-item-r little-right">
@@ -34,10 +34,23 @@
 						</view>
 						<view class='cell-item-ft'>
 							<view class="uni-form-item uni-column invoice-type">
+								<!-- <radio-group class="uni-list" @change="radioChange">
+									<label class="uni-list-cell uni-list-cell-pd" v-for="(item,index) in type_list" :key="index">
+										<view>
+											<radio :id="item.name" :value="item.name" :checked="item.checked"></radio>
+										</view>
+										<view>
+											<label class="label-2-text" :for="item.name">
+												<text>{{item.value}}</text>
+											</label>
+										</view>
+									</label>
+								</radio-group> -->
+								<!-- #ifndef MP-ALIPAY -->
 								<radio-group class="uni-list" @change="radioChange">
 									<label class="uni-list-cell uni-list-cell-pd" v-for="(item, index) in type_list" :key="index">
 										<view class="invoice-type-icon">
-											<radio :id="item.name" :value="item.value" :checked="item.checked" :disabled="item.disabled"></radio>
+											<radio class="a-radio" :id="item.name" :value="item.value" :checked="item.checked" :disabled="item.disabled"></radio>
 										</view>
 										<view class="invoice-type-c">
 											<label class="label-2-text" :for="item.name">
@@ -46,6 +59,10 @@
 										</view>
 									</label>
 								</radio-group>
+								<!-- #endif -->
+								<!-- #ifdef MP-ALIPAY -->
+								<jhlable></jhlable>
+								<!-- #endif -->
 							</view>
 						</view>
 					</view>
@@ -68,7 +85,7 @@
 						<view class="evaluate-c-b">
 							<view class="goods-img-item" v-for="(item, key) in images" :key="key">
 								<image class="del" src="../../../static/image/del.png" mode="" @click="delImage(item)"></image>
-								<image class="" :src="item.url" mode=""></image>
+								<image class="" :src="item.url" mode="" @click="clickImg(item.url)"></image>
 							</view>
 							<view class="upload-img" v-show="isImage" @click="upImage">
 								<image class="icon" src="../../../static/image/camera.png" mode=""></image>
@@ -96,6 +113,7 @@
 </template>
 
 <script>
+import jhlable from '@/components/jihai-lable.vue'
 export default {
     data() {
         return {
@@ -116,6 +134,7 @@ export default {
 			mode: 'aspectFill',
         }
     },
+	components: { jhlable },
 	computed: {
 		isImage() {
 			let num = this.image_max - this.images.length;
@@ -249,7 +268,12 @@ export default {
 			let num = this.image_max - this.images.length;
 			if(num > 0){
 				this.$api.uploadImage(num, res => {
-					this.images = this.images.concat(res.data);
+					if(res.status){
+						this.images.push(res.data);
+						this.$common.successToShow(res.msg);
+					}else{
+						this.$common.errorToShow(res.msg);
+					}
 				});
 			}
 		},
@@ -263,6 +287,13 @@ export default {
 				}
 			}
 			this.images = newImages;
+		},
+		// 图片点击放大
+		clickImg (img) {
+			// 预览图片
+			uni.previewImage({
+				urls: img.split()
+			});
 		}
     },
 	onLoad(e) {
@@ -354,4 +385,8 @@ export default {
 	top: 0;
 	z-index: 999;
 }
+
+/* #ifdef MP-ALIPAY */
+
+/* #endif */
 </style>

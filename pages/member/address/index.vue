@@ -23,12 +23,14 @@
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>省市区</view>
 					</view>
+
 					<view class='cell-item-bd'>
-						<input :value="pickerValue" @click="showThreePicker" ></input>
-						<area-picker ref="areaPicker" :areaId="areaId" :defaultIndex="defaultIndex"  @onConfirm="onConfirm"></area-picker>
+						<input :value="pickerValue" @focus="showThreePicker"></input>
+						<area-picker ref="areaPicker" :areaId="areaId" :defaultIndex="defaultIndex" @onConfirm="onConfirm"></area-picker>
 					</view>
+					
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/ic-pull-down.png'></image>
+						<image class='cell-ft-next icon' src='../../../static/image/ic-pull-down.png' @click="showThreePicker"></image>
 					</view>
 				</view>
 				
@@ -40,18 +42,20 @@
 						<input type="text" class='cell-bd-input' placeholder='请填写收货详细地址' v-model="address"></input>
 					</view>
 				</view>
-				<view class='cell-item'>
+				<view class='cell-item' @click="defaultChange">
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>设为默认</view>
 					</view>
-					<view class='cell-item-ft'>
-						<label class="radio" ><radio value="1" @click="defaultChange" :checked="checked" color="#FF7159"/></label>
+					<view class='cell-item-ft' >
+						<label class="radio" ><radio value="1" :checked="checked" color="#FF7159"/></label>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="button-bottom">
-			<button class="btn btn-square btn-w" @click="delShip" v-show="id && id != 0" hover-class="btn-hover2">删除</button>
+			
+			<button class="btn btn-square btn-w" @click="delShip" v-if="id && id != 0" hover-class="btn-hover2">删除</button>
+			
 			<button class="btn btn-square btn-b" @click="saveShip" hover-class="btn-hover2">保存</button>
 		</view>
 	</view>
@@ -113,8 +117,27 @@ export default {
 				}
 			});
 		},
-		
-		
+		// 信息验证
+		checkData (data) {
+			if (!data.name) {
+				this.$common.errorToShow('请输入收货人姓名')
+				return false
+			} else if (!data.mobile) {
+				this.$common.errorToShow('请输入收货人手机号')
+				return false
+			} else if (data.mobile.length !== 11) {
+				this.$common.errorToShow('收货人手机号格式不正确')
+				return false
+			} else if (!data.area_id) {
+				this.$common.errorToShow('请选择地区信息')
+				return false
+			} else if (!data.address) {
+				this.$common.errorToShow('请输入收货地址详细信息')
+				return false
+			} else {
+				return true
+			}
+		},
 		//默认
 		defaultChange(){
 			if(this.checked){
@@ -157,7 +180,7 @@ export default {
 		delShip() {
 			this.$api.removeShip({'id': this.id}, res => {
 				if(res.status){
-					this.$common.successToShow('删除成功', function(){
+					this.$common.successToShow(res.msg, function(){
 						uni.navigateBack({
 							delta: 1
 						});
@@ -169,48 +192,46 @@ export default {
 		},
 		//存储收货地址
 		saveShip() {
+			let data = {
+				name: this.name,
+				address: this.address,
+				mobile: this.mobile,
+				is_def: this.is_def,
+				area_id: this.areaId
+			}
+			
 			if(this.id && this.id != 0){
 				//编辑存储
-				let data = {
-					'id': this.id,
-					'name': this.name,
-					'address': this.address,
-					'mobile': this.mobile,
-					'is_def': this.is_def
-				}
+				data.id = this.id
 				
-				data['area_id'] = this.areaId,
-				this.$api.editShip(data, res => {
-					if(res.status){
-						this.$common.successToShow('编辑成功', function(){
-							uni.navigateBack({
-								delta: 1
+				if (this.checkData(data)) {
+					this.$api.editShip(data, res => {
+						if(res.status){
+							this.$common.successToShow(res.msg, function(){
+								uni.navigateBack({
+									delta: 1
+								});
 							});
-						});
-					}else{
-						this.$common.errorToShow(res.msg);
-					}
-				});
+						}else{
+							this.$common.errorToShow(res.msg);
+						}
+					});
+				}
 			}else{
 				//添加
-				let data = {
-					'area_id': this.areaId,
-					'name': this.name,
-					'address': this.address,
-					'mobile': this.mobile,
-					'is_def': this.is_def
-				}
-				this.$api.saveUserShip(data, res => {
-					if(res.status){
-						this.$common.successToShow('添加成功', function(){
-							uni.navigateBack({
-								delta: 1
+				if (this.checkData(data)) {
+					this.$api.saveUserShip(data, res => {
+						if(res.status){
+							this.$common.successToShow(res.msg, function(){
+								uni.navigateBack({
+									delta: 1
+								});
 							});
-						});
-					}else{
-						this.$common.errorToShow(res.msg);
-					}
-				});
+						}else{
+							this.$common.errorToShow(res.msg);
+						}
+					});
+				}
 			}
 		}
 	},
@@ -259,4 +280,9 @@ export default {
 .cell-bd-input{
 	width: 100%;
 }
+/* #ifdef MP-ALIPAY */
+input{
+	font-size: 24upx;
+}
+/* #endif */
 </style>

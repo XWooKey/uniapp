@@ -25,14 +25,17 @@
 				<view class='invite-w-btn' @click="setMyInvite">提交</view>
 			</view>
 			<view class='invite-btn'>
+				<!-- #ifdef MP-WEIXIN -->
 				<button class='share btn' open-type="share"><image src='../../../static/image/ic-wechat.png'></image></button>
-				<button class='share btn' ><image src='../../../static/image/ic-img.png'></image></button>
+				<!-- #endif -->
+				<button class='share btn' @click="createPoster()"><image src='../../../static/image/ic-img.png'></image></button>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+import { baseUrl } from '@/config/config.js'
 export default {
 	data () {
 		return {
@@ -85,6 +88,44 @@ export default {
 				}
 			});
 		},
+		// 生成邀请海报
+		createPoster () {
+			let data = {
+				type: 2
+			}
+			
+			let pages = getCurrentPages()
+			let page = pages[pages.length - 1]
+			
+			// #ifdef H5
+			data.source = 1;
+			data.return_url = baseUrl + 'wap/#/' + page.route;
+			// #endif
+			
+			// #ifdef MP-WEIXIN
+			data.source = 2;
+			data.return_url = page.route;
+			// #endif
+			
+			// #ifdef MP-ALIPAY
+			data.source = 3;
+			data.return_url = page.__proto__.route;
+			// #endif
+			
+			let userToken = this.$db.get('userToken')
+			
+			if (userToken) {
+				data.token = userToken
+			}
+			
+			this.$api.createPoster(data, res => {
+				if (res.status) {
+					this.$common.navigateTo('/pages/share?poster=' + res.data)
+				} else {
+					this.$common.errorToShow(res.msg)
+				}
+			})
+		}
 	},
 	//分享
 	onShareAppMessage() {
@@ -117,7 +158,7 @@ export default {
 				imageUrl: this.imageUrl
 			}
 		}
-	},
+	}
 }	
 </script>
 

@@ -1,6 +1,11 @@
 <template>
-	<view>
-		信息加载中.....
+	<view class="content">
+		<view class="content-c">
+			<image class="load-img" src="../static/image/loading.gif" mode=""></image>
+			<view class="load-text color-9">
+				信息加载中.....
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -19,12 +24,13 @@ export default {
         this.code = this.getUrlParam('code')
         this.state = this.getUrlParam('state')
         this.uuid = this.$db.get('uuid')
+		this.type = options.type
         this.userTrustLogin()
 	},
 	methods: {
 		// 获取url地址参数
 		getUrlParam (paraName) {
-            let url = document.location.toString()
+            let url = window.location.toString()
             let arrObj = url.split('?')
             if (arrObj.length > 1) {
                 let arrPara = arrObj[1].split('&')
@@ -47,20 +53,27 @@ export default {
         },
 		// 第三方登录
         userTrustLogin () {
-            this.$api.trustLogin({
-                code: this.code,
-                type: this.type,
-                state: this.state,
-                uuid: this.uuid
-            }, res => {
+			let data = {
+				code: this.code,
+				type: this.type,
+				state: this.state,
+				uuid: this.uuid
+			}
+            this.$api.trustLogin(data, res => {
                 if (res.status) {
                     if (res.data.is_new) {
-                        this.$common.redirectTo('/pages/register/index?type=bind')
+						//  未绑定手机号 跳转去绑定
+                        this.$common.redirectTo('/pages/login/login/index?type=bind')
                     } else if (res.data) {
+						// 登录成功
                         this.$db.set('userToken', res.data)
-                        this.$common.redirectTo('/pages/member/index/index')
+						uni.switchTab({
+							url: '/pages/member/index/index'
+						})
                     }
-                }
+                } else {
+					this.$common.errorToShow(res.msg)
+				}
             })
         }
 	}
@@ -68,4 +81,22 @@ export default {
 </script>
 
 <style>
+.content{
+	position: relative;
+	height: 80vh;
+}
+.content-c{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+}
+.load-img{
+	width: 100upx;
+	height: 100upx;
+}
+.load-text{
+	font-size: 26upx;
+}
 </style>

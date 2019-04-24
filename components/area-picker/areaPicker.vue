@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<view class="picker-mask" @click="closePicker" catchtouchmove="true" v-show="pickerShow"></view>
-		<view class="picker-content" :class="{'pickerShow':pickerShow}">
+		<view class="picker-mask" @click="closePicker" catchtouchmove="true" v-show="pickerShow"  ></view>
+		<view class="picker-content" :class="{'pickerShow':pickerShow}" >
 			<view class="picker-button">
 				<text @click="closePicker">取消</text>
 				<text @click="confirm">确定</text>

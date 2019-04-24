@@ -117,9 +117,24 @@
 				"navigationBarTitleText": "邀请列表"
 			}
 		},{
+			"path": "pages/member/take_delivery/index",
+			"style": {
+				"navigationBarTitleText": "提货单核销"
+			}
+		},{
+			"path": "pages/member/take_delivery/list",
+			"style": {
+				"navigationBarTitleText": "提货单列表"
+			}
+		},{
 			"path": "pages/goods/index/index",
 			"style": {
 				"navigationBarTitleText": "商品详情"
+			}
+		},{
+			"path": "pages/goods/index/group",
+			"style": {
+				"navigationBarTitleText": "促销详情"
 			}
 		},{
 			"path": "pages/goods/place-order/index",
@@ -130,6 +145,11 @@
 			"path": "pages/goods/place-order/invoice",
 			"style": {
 				"navigationBarTitleText": "发票"
+			}
+		},{
+			"path": "pages/goods/place-order/storelist",
+			"style": {
+				"navigationBarTitleText": "门店列表"
 			}
 		},{
 			"path": "pages/goods/payment/index",
@@ -150,6 +170,11 @@
 			"path": "pages/member/order/orderdetail",
 			"style": {
 				"navigationBarTitleText": "订单详情"
+			}
+		},{
+			"path": "pages/member/order/invitation_group",
+			"style": {
+				"navigationBarTitleText": "邀请拼单"
 			}
 		},{
 			"path": "pages/member/after_sale/index",
@@ -200,6 +225,11 @@
 			"path": "pages/login/login/index1",
 			"style": {
 				"navigationBarTitleText": "登录"
+			}
+		},{
+			"path": "pages/share",
+			"style": {
+				"navigationBarTitleText": "分享"
 			}
 		},{
 			"path": "pages/author",

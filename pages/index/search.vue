@@ -141,7 +141,10 @@ export default {
 	left: 30upx;	
 }
 .search-input {
-	padding: 5px 15px 5px 45px;
+	padding: 10upx 30upx 10upx 90upx;
+}
+.search-input-p{
+	padding: 0 !important;
 }
 .search .btn{
 	width: 18%;

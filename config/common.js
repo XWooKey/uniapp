@@ -27,9 +27,23 @@ function jumpToLogin(method) {
 		// 将当前页面route存vuex中 登录注册后跳转
 		let pages = getCurrentPages();
 		let page = pages[pages.length - 1]
+		// 获取页面参数信息
+		let params = ''
+		// #ifdef H5 || MP-WEIXIN
+		if (page.route.indexOf('pages/goods/index/index') !== -1 || page.route.indexOf('pages/goods/index/group') !== -1) {
+			params = encodeURIComponent(page.query)
+		}
+		// #endif
+
+		// #ifdef MP-ALIPAY
+		if (page.__proto__.route.indexOf('pages/goods/index/index') !== -1 || page.__proto__.route.indexOf('pages/goods/index/group') !== -1) {
+			params = encodeURIComponent(page.rootVM.query)
+		}
+		// #endif
+		
 		store.commit({
 			type: 'redirect',
-			page: '/' + page.route,
+			page: params ? '/' + page.route + '?scene=' + params : '/' + page.route,
 		})
 		
     uni.showToast({
@@ -37,12 +51,12 @@ function jumpToLogin(method) {
       icon: 'success',
       duration: 2000,
       success: function (res) {
-		  // #ifdef H5
+		  // #ifdef H5 || APP-PLUS
 		  uni.navigateTo({
 					url: '/pages/login/login/index1'
 		  })
 		  // #endif
-		  // #ifdef MP-WEIXIN
+		  // #ifdef MP-WEIXIN || MP-ALIPAY	
 			uni.navigateTo({
 					url: '/pages/login/choose/index',
 					animationType: 'pop-in',
@@ -186,80 +200,6 @@ function throttle(fn, context, delay) {
     fn.call(context);
   }, delay);
 }
-//团购/秒杀列表倒计时
-function groupCountDown(that) {
-  var group = that.data.group;
-    var nowTime = new Date().getTime();
-    for (var i = 0; i < group.length; i++){
-      var startTime = group[i].stime * 1000 || [];
-      if (startTime - nowTime>0){
-        group[i].lasttime = '即将开始';
-      }else{
-        var endTime = group[i].etime * 1000 || [];
-        var total_micro_second = endTime - nowTime || [];
-        if (total_micro_second <= 0) {
-          group[i].lasttime = '已经结束';
-        } else {
-          group[i].lasttime = dateformat(total_micro_second)
-        }
-      }
-    }
-    
-    // 渲染倒计时时钟
-    that.setData({
-      group: group
-    });
-    setTimeout(function () {
-      total_micro_second -= 1000;
-      groupCountDown(that);
-    }, 1000)
-  }
-
-//秒杀列表倒计时
-function seckillCountDown(that) {
-  var seckill = that.data.seckill;
-  var nowTime = new Date().getTime();
-  for (var i = 0; i < seckill.length; i++) {
-    var endTime = seckill[i].etime * 1000 || [];
-    var total_micro_second = endTime - nowTime || [];
-    if (total_micro_second <= 0) {
-      seckill[i].lasttime = '已经结束';
-    } else {
-      seckill[i].lasttime = dateformat(total_micro_second)
-    }
-  }
-  // 渲染倒计时时钟
-  that.setData({
-    seckill: seckill
-  });
-  setTimeout(function () {
-    total_micro_second -= 1000;
-    seckillCountDown(that);
-  }, 1000)
-}
-
-//团购/秒杀详情倒计时
-function groupDetailCountDown(that) {
-  var goodsInfo = that.data.goodsInfo;
-  var nowTime = new Date().getTime();
-  var endTime = goodsInfo.etime * 1000 || [];
-    var total_micro_second = endTime - nowTime || [];
-    if (total_micro_second <= 0) {
-      goodsInfo.lasttime = '已经结束';
-    } else {
-      goodsInfo.lasttime = dateformat(total_micro_second)
-    }
-  
-  // 渲染倒计时时钟
-  that.setData({
-    goodsInfo: goodsInfo
-  });
-  setTimeout(function () {
-    total_micro_second -= 1000;
-    groupDetailCountDown(that);
-  }, 1000)
-}
-
 
 // 时间格式化输出，如11:03 25:19 每1s都会调用一次
 function dateformat(micro_second) {
@@ -356,6 +296,7 @@ function redirectTo (url) {
  *  判断是否在微信浏览器 true是
  */
 function isWeiXinBrowser () {
+	 // #ifdef H5
     // window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
     let ua = window.navigator.userAgent.toLowerCase()
     // 通过正则表达式匹配ua中是否含有MicroMessenger字符串
@@ -364,6 +305,11 @@ function isWeiXinBrowser () {
     } else {
         return false
     }
+		 // #endif
+		 
+		 // #ifdef MP
+		 return false;
+		 // #endif
 }
 
 export {
@@ -374,9 +320,6 @@ export {
   /* errorToBack, */
   successToShow,
   throttle,
-  groupCountDown,
-  groupDetailCountDown,
-  seckillCountDown,
   errorToShow,
   time2date,
   isPhoneNumber,
@@ -387,5 +330,6 @@ export {
 	redirectTo,
 	modelShow,
 	builderUrlParams,
-	isWeiXinBrowser
+	isWeiXinBrowser,
+	dateformat
 }

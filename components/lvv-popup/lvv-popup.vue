@@ -60,9 +60,11 @@
       height: 100%;
 			z-index: 99;
       position: absolute;
-      background: rgba(0,0,0,0.5);
-	  
+      background: rgba(0,0,0,0.5);	  
     }
+		.lvv-popupmark.pt,.lvv-popupmark.ht{
+			background: none
+		}
 		.lvv-popupcontent{
 			width: 100%;
 			height: 100%;
@@ -85,7 +87,7 @@
 			animation: showbottom .5s;
 		}
 		.ht{
-			animation: hidetop 0.55s;
+			animation: hidetop 0.5s;
 		}
 		.hl{
 			animation: hideleft 0.55s;
@@ -106,14 +108,16 @@
   }
 	@keyframes showtop{
 	  0% {
+			// top: -0px;
 	    transform: translateY(-100%);
+			// height: 0;
 	  	opacity: 1;
 	  }
-	  50% {
-	  	opacity: 0;
-	  }
 	  100% {
-	    transform: translateY(0);
+			top: 0px;
+			// height: 100%;
+	    transform: translateY(0%);
+			opacity: 1;
 	  }
 	}
 	@keyframes showleft{
@@ -154,13 +158,13 @@
 	}
 	@keyframes hidetop{
 	  0% {
-	    transform: translateY(0);
-	  }
-	  50% {
-	  	opacity: 0;
+	    transform: translateY(0%);
+			// height: 100%;
+			opacity: 1;
 	  }
 	  100% {
 	    transform: translateY(-100%);
+			// height: 0;
 	  	opacity: 1;
 	  }
 	}

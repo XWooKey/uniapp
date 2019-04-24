@@ -123,9 +123,6 @@ export default {
 										}
 									})
 								} 
-							},
-							fail: function (err) {
-								_this.$common.errorToShow('支付失败')
 							}
 						});
 					} else {
