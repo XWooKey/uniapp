@@ -107,9 +107,7 @@ export default {
 						if (res.status) {
 							uni.requestPayment({
 								provider: 'alipay',
-								orderInfo: {
-									tradeNO: res.data.out_trade_no
-								},
+								tradeNO:res.data.trade_no,
 								success: function (e) {
 									if (e.errMsg === 'requestPayment:ok') {
 										_this.$common.successToShow(e.msg, () => {

@@ -110,7 +110,8 @@
 					</view>
 				</view>
 				
-				<view class='cell-item add-title-item right-img' v-if="isOpenPoint === 1">
+				<!-- 商户开启积分 并且用户有积分情况下 -->
+				<view class='cell-item add-title-item right-img' v-if="isOpenPoint === 1 && userPointNums > 0">
 					<view class='cell-item-bd'>
 						<view class="cell-bd-view">
 							积分抵扣
@@ -121,8 +122,8 @@
 					</view>
 					<view class='cell-item-ft' @click="changePointHandle">
 						<label class="radio">
-							<radio value="1" :checked="isUsePoint" color="#FF7159" v-if="userPointNums > 0" />
-							<radio class="radioNo" disabled="true" v-else />
+							<radio value="1" :checked="isUsePoint" color="#FF7159"/>
+							<!-- <radio class="radioNo" disabled="true"/> -->
 						</label>
 					</view>
 				</view>

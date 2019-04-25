@@ -29,7 +29,7 @@ function jumpToLogin(method) {
 		let page = pages[pages.length - 1]
 		// 获取页面参数信息
 		let params = ''
-		// #ifdef H5 || MP-WEIXIN
+		// #ifdef H5 || MP-WEIXIN || APP-PLUS	 || APP-PLUS-NVUE	
 		if (page.route.indexOf('pages/goods/index/index') !== -1 || page.route.indexOf('pages/goods/index/group') !== -1) {
 			params = encodeURIComponent(page.query)
 		}

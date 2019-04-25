@@ -1,12 +1,13 @@
 <template>
 	<view style="width: 100%;height: 300upx;background: #FFFFFF;position: absolute;left:0;bottom: 0;">
 		<view class="share-pop">
-			<view class="share-item" 
-			v-for="(item, index) in providerList"
-			:key="index"
-			@click="clickHandler(item)">
-				<image :src="item.img" mode=""></image>
-				<view class="">{{ item.name }}</view>
+<!-- 			<view class="share-item" @click="share()">
+				<image src="../../../static/image/share-f.png" mode=""></image>
+				<view class="">分享给好友</view>
+			</view> -->
+			<view class="share-item" @click="createPoster()">
+				<image src="../../../static/image/poster.png" mode=""></image>
+				<view class="">生成海报</view>
 			</view>
 		</view>
 		<view class="button-bottom">
@@ -45,53 +46,17 @@ export default {
 			default: ''
 		}
 	},
-	data () {
-		return {
-			shareType: 0,
-			providerList: [] // 分享通道 包含生成海报
-		}
-	},
 	mounted () {
 		/**
 		 * 
 		 * H5端分享两种 (微信浏览器内引导用户去分享, 其他浏览器)
 		 * 
 		 */
-		if (this.$common.isWeiXinBrowser()) {
-			// 微信浏览器里面
-		} else {
-			// 其他浏览器里面
-			this.providerList = [
-				{
-					name: '分享给好友',
-					cate: 'share',
-					id: 'share',
-					img: '../../../static/image/share-f.png',
-					sort: 0
-				},
-				{
-					name: '生成海报',
-					cate: 'poster',
-					id: 'poster',
-					img: '../../../static/image/poster.png',
-					sort: 1
-				}
-			]
-		}
 	},
 	methods: {
 		// 关闭弹出层
 		close () {
 			this.$emit('close')
-		},
-		// 点击操作
-		clickHandler (e) {
-			if (e.cate === 'poster') {
-				this.createPoster()
-			} else {
-				// 去分享
-				this.share(e)
-			}
 		},
 		// 生成海报
 		createPoster () {
@@ -121,8 +86,10 @@ export default {
 			})
 		},
 		// 分享操作
-		share (e) {
+		share () {
+			// h5分享 判断是否是微信浏览器 引导用户完成分享操作
 			
+			// 其他浏览器的分享 
 		}
 	}
 }	

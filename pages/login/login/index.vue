@@ -237,10 +237,18 @@ export default {
 				});
 				return false;
 			}
+			var platform = 2;
+			//1就是h5登陆（h5端和微信公众号端），2就是微信小程序登陆，3是支付宝小程序，4是app，5是pc
+			// #ifdef MP-ALIPAY
+			platform = 3  
+			// #endif
+			// #ifdef APP-PLUS||APP-PLUS-NVUE
+			platform = 4
+			// #endif
 			var data = {
 				mobile: _this.mobile,
 				code: _this.code,
-				platform: 2, //平台id，标识是小程序登陆的
+				platform: platform, //平台id，标识是小程序登陆的
 				user_wx_id: _this.user_wx_id //微信小程序接口存不了session，所以要绑定的id只能传到前台
 			};
 			//有推荐码的话，带上

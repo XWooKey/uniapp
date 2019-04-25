@@ -159,26 +159,52 @@
 			</view>
 		</view>
 		
-		<lvv-popup position="bottom" ref="aaa">
-			<view style="width: 100%;height: 300upx;background: #FFFFFF;position: absolute;left:0;bottom: 0;">
-				<view class="share-pop">
-					<view class="share-item" @click="share()">
-						<image src="../../../static/image/ic-wechat.png" mode=""></image>
-						<view class="">
-							分享给朋友
-						</view>
-					</view>
-					<view class="share-item" @click="createPoster()">
-						<image src="../../../static/image/ic-img.png" mode=""></image>
-						<view class="">
-							生成海报
-						</view>
-					</view>
-				</view>
-				<view class="button-bottom">
-					<button class="btn btn-w btn-square" @click="choseShare()">关闭</button>
-				</view>
-			</view>
+		<lvv-popup position="bottom" ref="share">
+			
+			<!-- #ifdef H5 -->
+			<shareByH5
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByH5>
+			<!-- #endif -->
+		
+			<!-- #ifdef MP-WEIXIN -->
+			<shareByWx
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByWx>
+			<!-- #endif -->
+			
+			<!-- #ifdef MP-ALIPAY -->
+			<shareByAli
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByAli>
+			<!-- #endif -->
+			
+			<!-- #ifdef APP-PLUS -->
+			<shareByApp
+			:goodsId="goodsInfo.id" 
+			:shareImg="goodsInfo.image_url" 
+			:shareTitle="goodsInfo.name" 
+			:shareContent="goodsInfo.brief" 
+			:shareHref="shareHref" 
+			@close="closeShare()"
+			></shareByApp>
+			<!-- #endif -->
+		
 		</lvv-popup>
 		
 		<!-- 弹出层 -->
@@ -257,6 +283,19 @@ import { get } from '@/config/db.js';
 import { baseUrl } from '@/config/config.js'
 import uniCountdown from "@/components/uni-countdown/uni-countdown.vue"
 import spec from '@/components/spec/spec.vue'
+// #ifdef H5
+import shareByH5 from '@/components/share/shareByh5.vue'
+// #endif
+// #ifdef MP-WEIXIN
+import shareByWx from '@/components/share/shareByWx.vue'
+// #endif
+// #ifdef MP-ALIPAY
+import shareByAli from '@/components/share/shareByAli.vue'
+// #endif
+// #ifdef APP-PLUS
+import shareByApp from '@/components/share/shareByApp.vue'
+// #endif
+
 import htmlParser from '@/common/html-parser'
 export default {
 	components: {
@@ -267,7 +306,22 @@ export default {
 		uniLoadMore,
 		uniFab,
 		uniCountdown,
-		spec
+		spec,
+		// #ifdef H5
+		shareByH5,
+		// #endif
+		
+		// #ifdef MP-WEIXIN
+		shareByWx,
+		// #endif
+		
+		// #ifdef MP-ALIPAY
+		shareByAli,
+		// #endif
+		
+		// #ifdef APP-PLUS
+		shareByApp,
+		// #endif
 	},
 	data() {
 		return {
@@ -430,6 +484,17 @@ export default {
 // 		lasttime() {
 // 			return this.goodsInfo.lasttime;
 // 		}
+		shareHref () {
+			let pages = getCurrentPages()
+			let page = pages[pages.length - 1]
+			// #ifdef H5 || MP-WEIXIN || APP-PLUS || APP-PLUS-NVUE
+			return baseUrl + 'wap/#/' + page.route + '?scene=' + this.query;
+			// #endif
+			
+			// #ifdef MP-ALIPAY
+			return baseUrl + 'wap/#/' + page.__proto__.route + '?scene=' + this.query;
+			// #endif
+		}
 	},
 	onReachBottom () {
 		if (this.current === 2 && this.goodsComments.loadStatus === 'more') {
@@ -689,52 +754,10 @@ export default {
         },
 		// 跳转到h5分享页面
 		goShare() {
-			this.$refs.aaa.show();
+			this.$refs.share.show();
 		},
-		choseShare(){
-			this.$refs.aaa.close();
-		},
-		// 生成海报
-		createPoster () {
-			let data = {
-				id: this.goodsId,
-				type: 1
-			}
-			
-			let pages = getCurrentPages()
-			let page = pages[pages.length - 1]
-			
-			// #ifdef H5
-			data.source = 1;
-			data.return_url = baseUrl + 'wap/#/' + page.route;
-			// #endif
-			
-			// #ifdef MP-WEIXIN
-			data.source = 2;
-			data.return_url = page.route;
-			// #endif
-			
-			// #ifdef MP-ALIPAY
-			data.source = 3;
-			data.return_url = page.__proto__.route;
-			// #endif
-
-			let userToken = this.$db.get('userToken')
-			
-			if (userToken) {
-				data.user_id = userToken
-			}
-			
-			console.log(data)
-			
-			this.$api.createPoster(data, res => {
-				if (res.status) {
-					this.choseShare()
-					this.$common.navigateTo('/pages/share?poster=' + res.data)
-				} else {
-					this.$common.errorToShow(res.msg)
-				}
-			})
+		closeShare(){
+			this.$refs.share.close();
 		},
 		// 图片点击放大
 		clickImg (imgs) {
@@ -745,6 +768,7 @@ export default {
 		}
 	},
 	//分享
+	// #ifdef MP-WEIXIN
 	onShareAppMessage() {
 		let userToken = this.$db.get('userToken');
 		if (userToken) {
@@ -775,7 +799,45 @@ export default {
 				path: path
 			}
 		}
+	},
+	// #endif
+	
+	// #ifdef MP-ALIPAY
+	onShareAppMessage () {
+		let userToken = this.$db.get('userToken');
+		if (userToken) {
+			let myInviteCode = this.myShareCode;
+			if (myInviteCode) {
+				let ins = encodeURIComponent('id=' + this.goodsInfo.id + '&invite=' + myInviteCode);
+				let path = '/pages/goods/index/index?scene=' + ins;
+				return {
+					title: this.goodsInfo.name,
+					desc: this.goodsInfo.brief,
+					imageUrl: this.goodsInfo.album[0],
+					path: path
+				}
+			} else {
+				let ins = encodeURIComponent('id=' + this.goodsInfo.id);
+				let path = '/pages/goods/index/index?scene=' + ins;
+				return {
+					title: this.goodsInfo.name,
+					desc: this.goodsInfo.brief,
+					imageUrl: this.goodsInfo.album[0],
+					path: path
+				}
+			}
+		} else {
+			let ins = encodeURIComponent('id=' + this.goodsInfo.id);
+			let path = '/pages/goods/index/index?scene=' + ins;
+			return {
+				title: this.goodsInfo.name,
+				desc: this.goodsInfo.brief,
+				imageUrl: this.goodsInfo.album[0],
+				path: path
+			}
+		}
 	}
+	// #endif
 }
 </script>
 
@@ -1079,10 +1141,10 @@ export default {
 	color: #333;
 	padding: 20upx 0;
 }
-.share-item image{
+/* .share-item image{
 	width: 120upx;
 	height: 120upx;
-}
+} */
 .comment-none{
 	text-align: center;
 	padding: 200upx 0;

@@ -140,11 +140,6 @@ export default {
 				}
 			],
 			utilityMenus: [
-// 				{
-// 					name: '我的优惠券',
-// 					icon: '../../../static/image/ic-me-coupon.png',
-// 					router: '../coupon/index'
-// 				},
 				{
 					name: '我的余额',
 					icon: '../../../static/image/ic-me-balance.png',

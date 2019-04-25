@@ -77,7 +77,13 @@ export default {
 		// 支付方式处理
 		formatPayments (payments) {
 			// 过滤非线上支付方式
-			payments = payments.filter(item => item.is_online === 1)
+			if (this.$common.isWeiXinBrowser()) {
+				// h5支付并且是在微信浏览器内 过滤支付宝支付
+				payments = payments.filter(item => item.is_online === 1 || item.code !== 'alipay')
+			} else {
+				// 其他浏览器内
+				payments = payments.filter(item => item.is_online === 1)
+			}
 
 			// 如果是充值订单 过滤余额支付
 			if (this.type === 2) {
@@ -108,12 +114,12 @@ export default {
 				if (this.type == 1 && this.orderId) {
 					data['params'] = {
 						trade_type: 'WAP',
-						return_url: baseUrl + '/#/pages/goods/payment/result?order_id=' + this.orderId
+						return_url: baseUrl + 'wap/#/pages/goods/payment/result?order_id=' + this.orderId
 					}
 				} else if (this.type == 2 && this.recharge) {
 					data['params'] = {
 						money: this.recharge,
-						return_url: baseUrl + '/#/pages/member/balance/index'
+						return_url: baseUrl + 'wap/#/pages/member/balance/index'
 					}
 				}
 
@@ -202,13 +208,13 @@ export default {
 						if (this.type == 1 && this.orderId) {
 							data['params'] = {
 								trade_type: 'MWEB',
-								return_url: baseUrl + '/#/pages/goods/payment/result?order_id=' + this.orderId
+								return_url: baseUrl + 'wap/#/pages/goods/payment/result?order_id=' + this.orderId
 							}
 						} else if (this.type == 2 && this.recharge) {
 							data['params'] = {
 								trade_type: 'MWEB',
 								money: this.recharge,
-								return_url: baseUrl + '/#/pages/member/balance/index'
+								return_url: baseUrl + 'wap/#/pages/member/balance/index'
 							}
 						}
 						// 微信h5支付

@@ -1,8 +1,9 @@
 <template>
 	<view class="content">
-		<view class="share-top"><img class="share-img" :src="poster" /></view>
+		<view class="share-top"><img class="share-img" :src="poster" mode="widthFix"/></view>
 		<view class="share-bot">
-			<button class="btn btn-b" @click="savePoster()">保存到本地</button>
+			<button class="btn btn-b" v-if="weiXinBrowser">长按图片保存到手机</button>
+			<button class="btn btn-b" @click="savePoster()" v-else>保存到本地</button>
 			<button class="btn btn-w" @click="goBack()">返回</button>
 		</view>
 	</view>
@@ -16,6 +17,11 @@ export default {
 	},
 	onLoad(options) {
 		this.poster = options.poster;
+	},
+	computed: {
+		weiXinBrowser () {
+			return this.$common.isWeiXinBrowser()
+		}
 	},
 	methods: {
 		goBack() {
