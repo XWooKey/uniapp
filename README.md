@@ -56,6 +56,10 @@ Jshop小程序商城，是一款开源的电商系统，包含微信小程序和
 
 ![输入图片说明](https://gitee.com/uploads/images/2019/0426/082533_e2f315f9_8503.jpeg "gh_f9fafa5a7066_344.jpg")
 
+- APP体验二维码
+
+![输入图片说明](https://gitee.com/uploads/images/2019/0426/090201_f6dd1a9b_8503.png "演示app下载地址.png")
+
 #### 项目截图
 ![输入图片说明](https://gitee.com/uploads/images/2019/0404/180847_9615f414_8503.png "未标题-1.png")
 
