@@ -252,9 +252,9 @@ uni-input div div.input-placeholder{
   overflow: hidden;
   color: #333;  
   width: 100%; 
-  min-height: 70upx;
+  min-height: 60upx;
   /* #ifdef MP-ALIPAY */
-  min-height: 56rpx;
+  min-height: 20px;
   /* #endif */
 }
 .grids-goods-name{
@@ -495,6 +495,9 @@ uni-input div div.input-placeholder{
 }
 .margin-cell-group{
 	margin: 20upx 0;
+}
+.bottom-cell-group{
+	margin-bottom: 20upx;
 }
 .min-cell-group{
 	margin-bottom: 1px;

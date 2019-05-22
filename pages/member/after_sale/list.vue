@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="order-list">
-			<view class="goods-detail" v-for="(item, key) in order" :key="key">
+			<view class="goods-detail" v-for="(item, key) in order" :key="key" v-if="item.order && item.order.items">
 				<view class="order-item">
 					<view class='cell-group'>
 						<view class='cell-item'>
@@ -15,7 +15,7 @@
 							</view>
 						</view>
 					</view>
-					<view class='img-list'>
+					<view class='img-list' v-if="item.order && item.order.items">
 						<view class='img-list-item' v-for="(v, k) in item.order.items" :key="k" @click="showOrder(item.aftersales_id)">
 							<image class='img-list-item-l little-img' :src='v.image_url' mode='aspectFill'></image>
 							<view class='img-list-item-r little-right'>
@@ -96,10 +96,12 @@ export default {
 		dataFormat(data) {
 			for (var i = 0; i < data.length; i++) {
 				let countnum = 0
-				for (var j = 0; j < data[i].order.items.length; j++) {
-					countnum += data[i].order.items[j].nums;
+				if(data[i].order && data[i].order.items){
+					for (var j = 0; j < data[i].order.items.length; j++) {
+						countnum += data[i].order.items[j].nums;
+					}
+					data[i].countnum = countnum;
 				}
-				data[i].countnum = countnum;
 			}
 			return data;
 		},

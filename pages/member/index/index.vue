@@ -72,7 +72,7 @@
 			<!-- #endif -->
 			<!-- #ifdef MP-WEIXIN -->
 			<view class='cell-item'>
-				<button class="cell-item-hd " hover-class="none" open-type="contact" bindcontact="showChat">
+				<button class="cell-item-hd " hover-class="none" open-type="contact" bindcontact="showChat"  :session-from="kefupara">
 				  <image src='../../../static/image/me-ic-phone.png'  class='cell-hd-icon'></image>
 				  <view class='cell-hd-title'>联系客服</view>
 				</button>
@@ -115,6 +115,7 @@ export default {
 	data () {
 		return {
 			userInfo: {}, // 用户信息
+			kefupara: '',//客服传递资料
 			afterSaleNums: 0,
 			isClerk: false,
 			orderItems: [
@@ -140,6 +141,11 @@ export default {
 				}
 			],
 			utilityMenus: [
+				{
+					name: '我的优惠券',
+					icon: '../../../static/image/ic-me-coupon.png',
+					router: '../coupon/index'
+				},
 				{
 					name: '我的余额',
 					icon: '../../../static/image/ic-me-balance.png',
@@ -203,6 +209,13 @@ export default {
 			this.$api.userInfo({}, res => {
 				if (res.status) {
 					_this.userInfo = res.data
+					// #ifdef MP-WEIXIN
+					//微信小程序打开客服时，传递用户信息
+					var kefupara = {};
+					kefupara.nickName = res.data.nickname;
+					kefupara.tel = res.data.mobile;
+					_this.kefupara = JSON.stringify(kefupara);
+					// #endif
 					// 获取订单不同状态的数量
 					let data = {
 						ids: '1,2,3,4',
@@ -250,6 +263,12 @@ export default {
 						headHeight: 50
 					}
 				}
+			});
+			//传递客户信息
+			window._AIHECONG('customer',{
+				head : _this.userInfo.avatar,
+				'名称' : _this.userInfo.nickname,
+				'手机' : _this.userInfo.mobile
 			})
             window._AIHECONG('showChat');
 			// #endif

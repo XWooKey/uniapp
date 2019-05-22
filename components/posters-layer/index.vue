@@ -60,7 +60,6 @@ export default {
             newVal.views = newVal.views || [];
             uni.removeStorageSync('CACHE_KEYS')
             this.paintingData = newVal;
-            console.log(newVal);
             this.ctx && this.ctx.clearActions();
             if (!this.isPainting) {
                 if (newVal.width && newVal.height) {

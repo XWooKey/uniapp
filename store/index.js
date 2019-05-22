@@ -7,7 +7,8 @@ const store = new Vuex.Store({
 	state: {
 		config: {}, // 店铺配置信息
 		orderTab: 0, // 选中的订单tab页
-		redirectPage: ''
+		redirectPage: '',
+		uuid:'',//当前客户端
 	},
     mutations: {
 		config (state, payload) {
@@ -24,7 +25,8 @@ const store = new Vuex.Store({
 
 	},
 	getters: {
-		shopConfig: state => state.config
+		shopConfig: state => state.config,
+		uuid: state	=>	state.uuid,
 	}
 })
 

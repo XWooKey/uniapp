@@ -78,7 +78,7 @@
 			
 			<!-- 商品列表信息 -->
 			<view class='img-list'>
-				<view class='img-list-item' v-for="(item, index) in products" :key="index">
+				<view class='img-list-item' v-if="item.is_select == true" v-for="(item, index) in products" :key="index">
 					<image class='img-list-item-l little-img have-none' :src='item.products.image_path' mode='aspectFill'></image>
 					<view class='img-list-item-r little-right'>
 						<view class='little-right-t'>

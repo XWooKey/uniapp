@@ -77,12 +77,9 @@ export default {
 		},
 		// 支付方式处理
 		formatPayments (payments) {
-			// 过滤非线上支付方式
-			payments = payments.filter(item => item.is_online === 1)
-
-			// 如果是充值订单 过滤余额支付
+			// 如果是充值订单 过滤余额支付 过滤非线上支付方式
 			if (this.type === 2) {
-				payments = payments.filter(item => item.code !== 'balancepay')
+				payments = payments.filter(item => item.code !== 'balancepay' || item.is_online === 1)
 			}
 			
 			// 设置logo图片
@@ -190,9 +187,7 @@ export default {
 					/**
 					 * 线下支付
 					 */
-					_this.$common.modelShow('线下支付说明', '请联系客服进行线下支付', () => {
-						_this.$common.redirectTo('/pages/member/order/orderdetail?order_id=' + _this.orderId)
-					}, '订单详情', '继续购物')
+					_this.$common.modelShow('线下支付说明', '请联系客服进行线下支付',() => {}, false, '取消', '确定')
 					break
 				}
 		},

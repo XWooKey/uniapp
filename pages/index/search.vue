@@ -9,7 +9,7 @@
 		</view>
 		<view class="history-c" v-show="keys.length > 0">
 			<view class="history-title">
-				<view class='ht-left'>历史纪录</view>
+				<view class='ht-left'>历史记录</view>
 				<view class='ht-right' @click="deleteKey">清除</view>
 			</view>
 			<view class="history-body">

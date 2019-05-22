@@ -25,6 +25,7 @@
 				</view>
 				<view class='cell-item-ft'>
 					<image class='cell-ft-next icon' src='../../../static/image/location.png'></image>
+					<text class="cell-ft-text color-9">{{item.distance}}</text>
 				</view>
 			</view>
 		</view>

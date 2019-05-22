@@ -5,7 +5,7 @@
 			<view class="invite-w">
 				<view class='invite-w-t'>我的专属邀请码</view>
 					<text class='invite-w-num'>{{code}}</text>
-					<view class='invite-w-detail'>快去分享您的邀请码吧，让更多的好友加入到【吉海商城】，您也可以获得丰厚的奖励！</view>
+					<view class='invite-w-detail'>快去分享您的邀请码吧，让更多的好友加入到【{{appTitle}}】，您也可以获得丰厚的奖励！</view>
 					<view class='invite-w-bot'>
 						<view bindtap='commission' @click="toMoney">
 							<image class='invite-w-bot-ic' src='../../../static/image/ic-earnings.png'></image>
@@ -96,20 +96,20 @@ export default {
 			
 			let pages = getCurrentPages()
 			let page = pages[pages.length - 1]
-			
+			let page_path = '/pages/index/index';
 			// #ifdef H5
 			data.source = 1;
-			data.return_url = baseUrl + 'wap/#/' + page.route;
+			data.return_url = baseUrl + 'wap/#'+page_path;
 			// #endif
 			
 			// #ifdef MP-WEIXIN
 			data.source = 2;
-			data.return_url = page.route;
+			data.return_url = page_path;
 			// #endif
 			
 			// #ifdef MP-ALIPAY
 			data.source = 3;
-			data.return_url = page.__proto__.route;
+			data.return_url = page_path;
 			// #endif
 			
 			let userToken = this.$db.get('userToken')
@@ -117,7 +117,7 @@ export default {
 			if (userToken) {
 				data.token = userToken
 			}
-			
+			console.log(data);
 			this.$api.createPoster(data, res => {
 				if (res.status) {
 					this.$common.navigateTo('/pages/share?poster=' + res.data)

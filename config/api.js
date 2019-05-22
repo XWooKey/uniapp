@@ -113,9 +113,18 @@ const post = (method, data, callback) => {
 						icon: 'none',
 						duration: 2000,
 						complete: function () {
+							 // #ifdef H5 || APP-PLUS
 							uni.navigateTo({
-								url: '/pages/login/login/index'
+									url: '/pages/login/login/index1'
+							})
+							// #endif
+							// #ifdef MP-WEIXIN || MP-ALIPAY	
+							uni.navigateTo({
+									url: '/pages/login/choose/index',
+									animationType: 'pop-in',
+									animationDuration: 200
 							});
+							// #endif
 						}
 					});
 				}
@@ -627,3 +636,6 @@ export const groupInfo = (data, callback) => post('group.getgoodsdetial', data, 
 
 // app更新
 export const appUpdate = (data, callback) => post('appplus.checkversion', data, callback);
+
+// 自定义页面
+export const getPageConfig = (data, callback) => post('pages.getpageconfig', data, callback);

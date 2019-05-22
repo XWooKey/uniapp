@@ -137,7 +137,8 @@
 					</view>
 				</scroll-view>
 				<view class="button-bottom">
-					<button class="btn btn-square" @click="filterNo()">取消</button>
+					<!-- <button class="btn btn-square" @click="filterNo()">重置</button> -->
+					<button class="btn btn-square" @click="toclose()">关闭</button>
 					<button class="btn btn-b btn-square" @click="filterOk()">确定</button>
 				</view>
 			</view>
@@ -259,7 +260,12 @@ export default {
 				}
 			}
 		}
-
+		if(options.cat_id){
+			where.cat_id = options.cat_id
+		}
+		if(options.brand_id){
+			where.brand_id =options.brand_id
+		}
 		this.setSearchData({
 			where: where
 		});
@@ -419,6 +425,19 @@ export default {
 					if (_this.searchData.page == 1 && res.data.list.length == 0) {
 						isEmpty = true;
 					}
+					
+					if(res.data.class_name != ''){
+						uni.setNavigationBarTitle({
+							title: res.data.class_name
+						});
+					}else{
+						if(res.data.where && res.data.where.search_name && res.data.where.search_name != ''){
+							uni.setNavigationBarTitle({
+								title: '商品搜索'
+							});
+						}
+					}
+					
 					_this.goodsList = _this.goodsList.concat(res.data.list);
 					_this.ajaxStatus = false;
 					_this.loading = !isEnd && !isEmpty;
@@ -571,13 +590,10 @@ export default {
 		},
 		//确认筛选
 		filterOk(){
-			let data = {
-				page: 1,
-				where: {}
-			};
+			let data = this.searchData;
 			
 			//获取分类
-			data.where.cat_id = '';
+			// data.where.cat_id = '';
 			for(let i = 0; i < this.cat_list.length; i++){
 				if(this.cat_list[i].isSelect){
 					data.where.cat_id = this.cat_list[i].goods_cat_id;

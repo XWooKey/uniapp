@@ -76,18 +76,14 @@ export default {
 		},
 		// 支付方式处理
 		formatPayments (payments) {
-			// 过滤非线上支付方式
+			// h5支付并且是在微信浏览器内 过滤支付宝支付
 			if (this.$common.isWeiXinBrowser()) {
-				// h5支付并且是在微信浏览器内 过滤支付宝支付
-				payments = payments.filter(item => item.is_online === 1 || item.code !== 'alipay')
-			} else {
-				// 其他浏览器内
-				payments = payments.filter(item => item.is_online === 1)
+				payments = payments.filter(item => item.code !== 'alipay')
 			}
-
-			// 如果是充值订单 过滤余额支付
+			
+			// 如果是充值订单 过滤余额支付 过滤非线上支付方式
 			if (this.type === 2) {
-				payments = payments.filter(item => item.code !== 'balancepay')
+				payments = payments.filter(item => item.code !== 'balancepay' || item.is_online === 1)
 			}
 			
 			// 设置logo图片
@@ -244,9 +240,7 @@ export default {
 					/**
 					 * 线下支付
 					 */
-					this.$common.modelShow('线下支付说明', '请联系客服进行线下支付', () => {
-						this.$common.redirectTo('/pages/member/order/orderdetail?order_id=' + this.orderId)
-					}, '订单详情', '继续购物')
+					this.$common.modelShow('线下支付说明', '请联系客服进行线下支付',() => {}, false, '取消', '确定')
 					break
 				}
 		}

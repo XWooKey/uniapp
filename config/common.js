@@ -123,10 +123,12 @@ function loadToHide() {
 }
 
 // 提示框
-function modelShow (title = '提示', content = '确认执行此操作吗?', callback = () => {}, confirmText = '确定', cancelText = '取消') {
+function modelShow (title = '提示', content = '确认执行此操作吗?',callback = () => {}, showCancel = true,  cancelText = '取消', confirmText = '确定') {
 	uni.showModal({
 			title: title,
 			content: content,
+			showCancel: showCancel,
+			cancelText: cancelText,
 			confirmText: confirmText,
 			cancelText: cancelText,
 			success: function (res) {
@@ -137,7 +139,6 @@ function modelShow (title = '提示', content = '确认执行此操作吗?', cal
 							}, 500)
 					} else if (res.cancel) {
 							// 用户取消操作
-							console.log('用户点击取消');
 					}
 			}
 	});

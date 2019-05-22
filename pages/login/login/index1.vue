@@ -181,11 +181,11 @@ export default {
 		},
 		// 获取第三方登录列表
 		getAuths () {
+			
 			let data = {
 				url: baseUrl + 'wap/#/pages/author',
 				uuid: this.getNonDuplicateID()
 			}
-			
             this.$api.getTrustLogin(data, res => {
                 if (res.status) {
                     this.thirdPartyLogins = res.data
@@ -194,9 +194,10 @@ export default {
 		},
 		// 生成一个用不重复的ID
         getNonDuplicateID () {
-            let uid = Math.random().toString(36).substr(3)
-            this.$db.set('uuid', uid)
-            return uid
+			this.$db.del('uuid')
+            let uuid = Math.random().toString(36).substr(3)
+			this.$db.set('uuid', uuid);
+            return uuid
         },
 		// 第三方登录授权
 		thirdPartyLoginHandle (url) {

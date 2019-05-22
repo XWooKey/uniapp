@@ -71,7 +71,13 @@ export default {
 		},
 		// 支付方式处理
 		formatPayments (payments) {
-			payments = payments.filter(item => item.code !== 'wechatpay' && item.is_online === 1);
+			payments = payments.filter(item => item.code !== 'wechatpay');
+			
+			
+			// 如果是充值订单 过滤余额支付 过滤非线上支付方式
+			if (this.type === 2) {
+				payments = payments.filter(item => item.code !== 'balancepay' || item.is_online === 1)
+			}
 			
 			// 设置logo图片
 			payments.forEach(item => {
@@ -137,9 +143,7 @@ export default {
 					break;
 				case 'offline':
 					//线下支付
-					this.$common.modelShow('线下支付说明', '请联系客服进行线下支付', () => {
-						this.$common.redirectTo('/pages/member/order/orderdetail?order_id=' + this.orderId);
-					}, '订单详情', '继续购物');
+					this.$common.modelShow('线下支付说明', '请联系客服进行线下支付',() => {}, false, '取消', '确定')
 					break;
 			}
 

@@ -76,7 +76,13 @@ export default {
 		},
 		// 支付方式处理
 		formatPayments (payments) {
-			payments = payments.filter(item => item.code !== 'alipay' && item.is_online === 1)
+			// 过滤支付宝支付
+			payments = payments.filter(item => item.code !== 'alipay')
+			
+			// 如果是充值订单 过滤余额支付 过滤非线上支付方式
+			if (this.type === 2) {
+				payments = payments.filter(item => item.code !== 'balancepay' || item.is_online === 1)
+			}
 			
 			// 设置logo图片
 			payments.forEach(item => {
@@ -100,7 +106,6 @@ export default {
 					money: this.recharge
 				}
 			}
-
 			let _this = this
 			switch (code) {
 				case 'wechatpay':
@@ -117,7 +122,7 @@ export default {
 								if (res.errMsg === 'requestPayment:ok') {
 									_this.$common.successToShow(res.msg, () => {
 										if (_this.type == 1) {
-											_this.$common.redirectTo('/pages/goods/payment/result?order_id=' + this.orderId)
+											_this.$common.redirectTo('/pages/goods/payment/result?order_id=' + _this.orderId)
 										} else if (_this.type == 2) {
 											_this.$common.redirectTo('/pages/member/balance/index')
 										}
@@ -147,9 +152,7 @@ export default {
 				/**
 				 * 线下支付
 				 */
-				this.$common.modelShow('线下支付说明', '请联系客服进行线下支付', () => {
-					this.$common.redirectTo('/pages/member/order/orderdetail?order_id=' + this.orderId)
-				}, '订单详情', '继续购物')
+				this.$common.modelShow('线下支付说明', '请联系客服进行线下支付', () => {},false, '取消', '确定')
 				break
 			}
 

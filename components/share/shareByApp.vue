@@ -185,7 +185,6 @@ export default {
 				scene: e.type && e.type === 'WXSenceTimeline' ? 'WXSenceTimeline' : 'WXSceneSession', //WXSceneSession”分享到聊天界面，“WXSenceTimeline”分享到朋友圈，“WXSceneFavorite”分享到微信收藏     
 				type: this.shareType,
 				success: (e) => {
-					console.log(JSON.stringify(e))
 					uni.showModal({
 						content: '分享成功',
 						showCancel:false

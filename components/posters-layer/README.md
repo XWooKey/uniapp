@@ -109,7 +109,6 @@ export default {
             this.postersData = config;
         },
         onSuccessCreatePosters(res) {
-            console.log(res);
             this.posterImg = res;
         },
         onPostersError(res) {}

@@ -1,308 +1,24 @@
 <template>
-	<view class="content" style="padding-top: 104upx;">
-		<!-- 搜索框 -->
-		<view class="search" :class="searchBarOpacity == true ? 'isOpacity' :''">
-			<view class='search-c' @click='goSearch()'>
-				<view class='search-input search-input-p'>
-					<view class="search-input-p-c">
-						请输入关键字搜索
-					</view>
-				</view>
-				<image class='icon search-icon' src='../../static/image/zoom.png'></image>
-			</view>
-		</view>
-
-		<!-- 轮播图 -->
-		<view class='swiper'>
-			<swiper class="swiper-c" :indicator-dots="swiper.indicatorDots" :autoplay="swiper.autoplay" :interval="swiper.interval"
-			 :duration="swiper.duration">
-				<swiper-item class="have-none" v-for="(item, index) in advert.tpl1_slider" :key="index">
-					<image class='' :src="item.img" @click="showSliderInfo(item.type, item.val)"></image>
-				</swiper-item>
-			</swiper>
-		</view>
-
-		<!-- 公告 -->
-		<view class="notice margin-cell-group" v-if="notice.length>0">
-			<view class="notice-icon">
-				<image class="icon news-icon" src="../../static/image/news.png" mode=""></image>
-			</view>
-			<swiper class="notice-c" :indicator-dots="false" :autoplay="true" :interval="3000" :duration="1000" :vertical="true" :circular="true">
-				<swiper-item v-for="item in notice" :key="item.id">
-					<view class="swiper-item" @click="goNotice(item.id)">{{ item.title }}</view>
-				</swiper-item>
-			</swiper>
-		</view>
-
-		<!-- 优惠券 -->
-		<view class="coupon" v-if="coupons.length > 0">
-			<view class="coupon-item" v-for="item in coupons" :key="item.id" @click="receiveCoupon(item.id)">
-				<view class="coupon-i-l">
-					<view class="coupon-i-l-t">
-						<image class="icon" src="../../static/image/element-ic.png" mode=""></image>
-						<text>{{ item.name }}</text>
-					</view>
-					<view class="coupon-i-l-b">
-						{{ item.expression1 + item.expression2 }}
-					</view>
-				</view>
-				<view class="coupon-i-r">
-					<image class="coupon-logo" src="../../static/image/coupon-element.png" mode=""></image>
-				</view>
-			</view>
-		</view>
-		
-		<!-- 广告位 -->
-		<view class="ad" v-if="advert.tpl1_index_banner1 && advert.tpl1_index_banner1.length > 0">
-			<image class="ad-img" v-for="item in advert.tpl1_index_banner1" :key="item.id" :src="item.img" mode="widthFix" @click="showSliderInfo(item.type, item.val)"></image>
-		</view>
-		
-		<!-- 限时秒杀 -->
-		 <view class="img-list margin-cell-group group-buying" v-if="spikeList.length > 0">
-			<view class='cell-item right-img'>
-				<view class='cell-item-hd'>
-					<view class='cell-hd-title'>限时秒杀</view>
-				</view>
-				<view class='cell-item-bd'>
-				</view>
-			</view>
-			<view class='swiper-grids'>
-				<scroll-view class='swiper-list' scroll-x="true">
-					<view class="img-list-item" v-for="(item, key) in spikeList" :key="key">
-						<image class="img-list-item-l medium-img have-none" :src="item.image_url" mode='aspectFill' @click="groupDetail(item.id, item.group_id)"></image>
-						<view class="img-list-item-r medium-right">
-							<view class="goods-name list-goods-name" @click="groupDetail(item.id, item.group_id)">{{item.name}}</view>
-							<view class="goods-item-c">
-								<view class="goods-price red-price">￥{{item.price}}</view>
-								<view class="goods-buy">
-									<view class="goods-salesvolume red-price" v-if="(item.lasttime != '已经结束' || item.lasttime != '即将开始') && item.lasttime">剩余：<uni-countdown :show-day="false" :hour="item.lasttime.hour" :minute="item.lasttime.minute" :second="item.lasttime.second"></uni-countdown></view>
-									<view class="goods-salesvolume red-price" v-if="item.lasttime == '已经结束'">已结束</view>
-									<view class="goods-salesvolume red-price" v-if="item.lasttime == '即将开始'">即将开始</view>
-									<image class="goods-cart" src="../../static/image/ic-car.png" @click="groupDetail(item.id, item.group_id)"></image>
-								</view>
-							</view>
-						</view>
-					</view>
-				</scroll-view>
-			</view>
-		</view>
-		
-		<!-- 精品团购 -->
-		 <view class="img-list margin-cell-group group-buying" v-if="groupList.length > 0">
-			<view class='cell-item right-img'>
-				<view class='cell-item-hd'>
-					<view class='cell-hd-title'>精品团购</view>
-				</view>
-				<view class='cell-item-bd'>
-				</view>
-			</view>
-			<view class='swiper-grids'>
-				<scroll-view class='swiper-list' scroll-x="true">
-					<view class="img-list-item" v-for="(item, key) in groupList" :key="key">
-						<image class="img-list-item-l medium-img have-none" :src="item.image_url" mode='aspectFill' @click="groupDetail(item.id, item.group_id)"></image>
-						<view class="img-list-item-r medium-right">
-							<view class="goods-name list-goods-name" @click="groupDetail(item.id, item.group_id)">{{item.name}}</view>
-							<view class="goods-item-c">
-								<view class="goods-price red-price">￥{{item.price}}</view>
-								<view class="goods-buy">
-									<view class="goods-salesvolume red-price" v-if="(item.lasttime != '已经结束' || item.lasttime != '即将开始') && item.lasttime">剩余：<uni-countdown :show-day="false" :hour="item.lasttime.hour" :minute="item.lasttime.minute" :second="item.lasttime.second"></uni-countdown></view>
-									<view class="goods-salesvolume red-price" v-if="item.lasttime == '已经结束'">已结束</view>
-									<view class="goods-salesvolume red-price" v-if="item.lasttime == '即将开始'">即将开始</view>
-									<image class="goods-cart" src="../../static/image/ic-car.png" @click="groupDetail(item.id, item.group_id)"></image>
-								</view>
-							</view>
-						</view>
-					</view>
-				</scroll-view>
-			</view>
-		</view>
-		
-		<!-- 广告位 -->
-		<view class="ad" v-if="advert.tpl1_index_banner2 && advert.tpl1_index_banner2.length > 0">
-			<image class="ad-img" v-for="item in advert.tpl1_index_banner2" :key="item.id" :src="item.img" mode="widthFix" @click="showSliderInfo(item.type, item.val)"></image>
-		</view>
-		
-		<!-- 热卖商品 -->
-		<view class='img-grids margin-cell-group'>
-			<view class='cell-item right-img'>
-				<view class='cell-item-hd'>
-					<view class='cell-hd-title'>热卖商品</view>
-				</view>
-				<view class='cell-item-bd'>
-				</view>
-				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../static/image/right.png'></image>
-					<text class='cell-ft-text' @click="goodsList({type: 'hot'})">查看更多</text>
-				</view>
-			</view>
-			<view class='swiper-grids'>
-				<scroll-view class='swiper-list' scroll-x="true" v-if="goodsListOfHot.length">
-					<view class='img-grids-item' v-for="item in goodsListOfHot" :key="item.id" @click="goodsDetail(item.id)">
-						<image class='img-grids-item-t have-none' :src='item.image_url' mode='aspectFill'></image>
-						<view class='img-grids-item-b'>
-							<view class='goods-name grids-goods-name'>{{ item.name }}</view>
-							<view class='goods-item-c'>
-								<view class='goods-price red-price'>￥{{ item.price }}</view>
-							</view>
-						</view>
-					</view>
-				</scroll-view>
-				<view v-else-if="!goodsListOfHotAjax && !goodsListOfHot.length">
-					<scroll-view class='swiper-list' scroll-x="true">
-						<view class='img-grids-item'>
-							<image class='img-grids-item-t have-none' src='' mode='aspectFill'></image>
-							<view class='img-grids-item-b'>
-								<view class='goods-name grids-goods-name have-none'></view>
-								<view class='goods-item-c'>
-									<view class='goods-price red-price have-none'></view>
-								</view>
-							</view>
-						</view>
-						<view class='img-grids-item'>
-							<image class='img-grids-item-t have-none' src='' mode='aspectFill'></image>
-							<view class='img-grids-item-b'>
-								<view class='goods-name grids-goods-name have-none'></view>
-								<view class='goods-item-c'>
-									<view class='goods-price red-price have-none'></view>
-								</view>
-							</view>
-						</view>
-						<view class='img-grids-item'>
-							<image class='img-grids-item-t have-none' src='' mode=''></image>
-							<view class='img-grids-item-b'>
-								<view class='goods-name grids-goods-name have-none'></view>
-								<view class='goods-item-c'>
-									<view class='goods-price red-price have-none'></view>
-								</view>
-							</view>
-						</view>
-					</scroll-view>
-				</view>
-				<view v-else="">
-					<scroll-view class='swiper-list' scroll-x="true"></scroll-view>
-				</view>
-			</view>
-		</view>
-
-		<!-- 推荐商品 -->
-		<view class='img-grids margin-cell-group'>
-			<view class='cell-item right-img'>
-				<view class='cell-item-hd'>
-					<view class='cell-hd-title'>推荐商品</view>
-				</view>
-				<view class='cell-item-bd'>
-				</view>
-				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../static/image/right.png'></image>
-					<text class='cell-ft-text' @click="goodsList({type: 'recommend'})">查看更多</text>
-				</view>
-			</view>
-			<view class='img-grids'>
-				<!-- <scroll-view class='swiper-list' scroll-x="true" v-if="goodsListOfRecommend.length"> -->
-					<!-- <view class='img-grids-item' v-for="item in goodsListOfRecommend" :key="item.id" @click="goodsDetail(item.id)">
-						<image class='img-grids-item-t have-none' :src='item.image_url' mode='aspectFill'></image>
-						<view class='img-grids-item-b'>
-							<view class='goods-name grids-goods-name'>{{ item.name }}</view>
-							<view class='goods-item-c'>
-								<view class='goods-price red-price'>￥{{ item.price }}</view>
-							</view>
-						</view>
-					</view> -->
-				<view class="" v-if="goodsListOfRecommend.length">
-					<view class="img-grids-item" v-for="item in goodsListOfRecommend" :key="item.id" @click="goodsDetail(item.id)">
-						<image
-							class="img-grids-item-t have-none"
-							:src="item.image_url"
-							mode='aspectFill'
-						></image>
-						<view class="img-grids-item-b">
-							<view class="goods-name grids-goods-name">
-								{{item.name}}
-							</view>
-							<view class="goods-item-c">
-								<view class="goods-price red-price">￥{{item.price}}</view>
-								<!-- <image class="goods-cart" src="../../static/image/ic-car.png"></image> -->
-							</view>
-						</view>
-					</view>
-				</view>
-
-				<!-- </scroll-view> -->
-				<view v-else-if="!goodsListOfRecommend.length && !goodsListOfRecommendAjax">
-					<!-- <scroll-view class='swiper-list' scroll-x="true"> -->
-						<view class='img-grids-item'>
-							<image class='img-grids-item-t have-none' src='' mode=''></image>
-							<view class='img-grids-item-b'>
-								<view class='goods-name grids-goods-name have-none'></view>
-								<view class='goods-item-c'>
-									<view class='goods-price red-price have-none'></view>
-								</view>
-							</view>
-						</view>
-						<view class='img-grids-item'>
-							<image class='img-grids-item-t have-none' src='' mode=''></image>
-							<view class='img-grids-item-b'>
-								<view class='goods-name grids-goods-name have-none'></view>
-								<view class='goods-item-c'>
-									<view class='goods-price red-price have-none'></view>
-								</view>
-							</view>
-						</view>
-						<view class='img-grids-item'>
-							<image class='img-grids-item-t have-none' src='' mode=''></image>
-							<view class='img-grids-item-b'>
-								<view class='goods-name grids-goods-name have-none'></view>
-								<view class='goods-item-c'>
-									<view class='goods-price red-price have-none'></view>
-								</view>
-							</view>
-						</view>
-					<!-- </scroll-view> -->
-				</view>
-				<view v-else="">
-					<scroll-view class='swiper-list' scroll-x="true"></scroll-view>
-				</view>
-			</view>
-		</view>
-	
-		<!-- 广告位 -->
-		<view class="ad" v-if="advert.tpl1_index_banner3 && advert.tpl1_index_banner3.length > 0">
-			<image class="ad-img" v-for="item in advert.tpl1_index_banner3" :key="item.id" :src="item.img" mode="widthFix" @click="showSliderInfo(item.type, item.val)"></image>
-		</view>
-		
+	<view class="content" style="padding-top: 0upx;">
+		<jshop :data="pageData"></jshop>
 		<jihaiCopyright></jihaiCopyright>
 	</view>
 </template>
-
 <script>
-	import jihaiCopyright from '@/components/jihai-copyright/jihaiCopyright.vue'
-	import uniCountdown from "@/components/uni-countdown/uni-countdown.vue"
+	import jshop from "@/components/jshop/jshop.vue"
+	import jihaiCopyright from "@/components/jihai-copyright/jihaiCopyright.vue"
 	import {
 		goods
 	} from '@/config/mixins.js'
 	export default {
 		mixins: [goods],
-		components:{jihaiCopyright,uniCountdown},
+		components:{jihaiCopyright,jshop},
 		data() {
 			return {
-				swiper: {
-					indicatorDots: true,
-					autoplay: true,
-					interval: 2000,
-					duration: 500,
-				}, // 轮播图属性设置
-				advert: {}, // 首页全部广告
-				notice: [], // 公告列表
-				coupons: [], // 优惠券信息
-				spikeList: [], //秒杀列表
-				groupList: [], //团购列表
-				goodsListOfRecommend: [], // 推荐商品列表
-				goodsListOfRecommendAjax: false,
-				goodsListOfHot: [], // 热卖商品列表
-				goodsListOfHotAjax: false,
 				myShareCode: '', //分享Code
 				imageUrl: '/static/image/share_image.png', //店铺分享图片
-				searchBarOpacity: false
+				pageData:[],
+				pageCode:'mobile_home',//页面布局编码
 			}
 		},
 		computed: {
@@ -323,20 +39,13 @@
 			if (invite != '') {
 				this.$db.set("invitecode", invite);
 			}
-			
-// 			setInterval(res => {
-// 				this.djs--;
-// 			}, 1000);
-
+			//增加页面编码，可自定义编码
+			if(e.page_code){
+				this.pageCode = e.page_code;
+			}
 			this.initData();
 		},
-		// #ifdef MP-WEIXIN
-		onPageScroll: function(e) {
-			// console.log(e);//{scrollTop:99}
-			// e > 50 ? searchBarOpacity = true : searchBarOpacity = false;
-			// console.log(searchBarOpacity)
-		},
-		// #endif
+		
 		mounted() {
 			// #ifdef H5 
 			window.addEventListener('scroll', this.handleScroll)
@@ -359,142 +68,15 @@
 			},
 			// 首页初始化获取数据
 			initData() {
-				// 获取广告轮播图
-// 				this.$api.slider({
-// 					code: 'tpl1_slider'
-// 				}, res => {
-// 					if (res.status == true) {
-// 						this.slider = res.data.list
-// 					}
-// 				})
-				this.$api.advert({
-					codes: 'tpl1_slider,tpl1_index_banner1,tpl1_index_banner2,tpl1_index_banner3'
+				//获取首页配置
+				this.$api.getPageConfig({
+					code:this.pageCode,
 				}, res => {
 					if(res.status == true){
-						this.advert = res.data.list;
+						this.pageData = res.data;
 					}
 				});
-				// 获取公告列表
-				this.$api.notice({}, res => {
-					if (res.status == true) {
-						this.notice = res.data
-					}
-				})
-				// 获取优惠券信息
-				this.$api.couponList({}, res => {
-					if (res.status) {
-						this.coupons = res.data;
-					}
-				})
-				
-				//获取秒杀
-				var spikeData = {
-					type: 4
-				};
-				this.$api.getGroup(spikeData, res => {
-					if(res.status){
-						let spike = res.data;
-						this.spikeList = spike;
-					}
-				});
-				
-				//获取团购
-				var groupData = {
-					type: 3
-				};
-				this.$api.getGroup(groupData, res => {
-					if(res.status){
-						let group = res.data;
-						this.groupList = group;
-					}
-				});
-				
-				// 获取推荐商品
-				let recommend = {
-					where: JSON.stringify({
-						recommend: 1
-					})
-				}
-				this.getGoodsList(recommend, 'recommend');
-
-				// 获取热门商品
-				let hot = {
-					where: JSON.stringify({
-						hot: 1
-					})
-				}
-				this.getGoodsList(hot, 'hot');
-
-				let userToken = this.$db.get("userToken");
-				if (userToken && userToken != '') {
-					// 获取我的分享码
-					this.$api.shareCode({}, res => {
-						if (res.status) {
-							this.myShareCode = res.data;
-						}
-					});
-				}
-
-				this.goodsListOfRecommendAjax = false;
-				this.goodsListOfHotAjax = false;
-				//获取地区信息
-				this.$api.getAreaList({}, res => {
-					if(res.status){
-						this.$db.set("areaList",res.data);
-					}
-				});
-			},
-			// 广告点击查看详情
-			showSliderInfo(type, val) {
-				if (type == 1) {
-					// URL
-					// #ifdef H5
-					window.location.href = val
-					// #endif
-				} else if (type == 2) {
-					// 商品详情
-					this.goodsDetail(val)
-				} else if (type == 3) {
-					// 文章详情
-					this.$common.navigateTo('/pages/article/index?article_id=' + val)
-				} else if (type == 4) {
-					// 文章列表
-					this.$common.navigateTo('/pages/article/list?cid=' + val)
-				}
-			},
-			// 点击公告
-			goNotice(id) {
-				// 文章详情
-				this.$common.navigateTo('/pages/article/index?notice_id=' + id)
-			},
-			// 获取商品列表
-			getGoodsList(data = {}, type = '') {
-				let param = {
-					page: 1,
-					limit: 10
-				}
-				data = Object.assign(data, param)
-
-				this.$api.goodsList(data, res => {
-					if (res.status == true) {
-						type === 'recommend' ? this.goodsListOfRecommend = res.data.list : this.goodsListOfHot = res.data.list;
-						type === 'recommend' ? this.goodsListOfRecommendAjax = true : this.goodsListOfHotAjax = true;
-					}
-				})
-			},
-			// 用户领取优惠券
-			receiveCoupon(couponId) {
-				let data = {
-					promotion_id: couponId
-				}
-				this.$api.getCoupon(data, res => {
-					if (res.status) {
-						this.$common.successToShow(res.msg)
-					} else {
-						this.$common.errorToShow(res.msg)
-					}
-				})
-			},
+			}
 		},
 		onShareAppMessage() {
 			let userToken = this.$db.get('userToken');
@@ -537,111 +119,13 @@
 
 <style>
 	.search {
-		position: fixed;
-
+		/* position: fixed; */
 		/*  #ifdef  H5  */
-		top: 44px;
+		/* top: 44px; */
 		/*  #endif  */
 		/*  #ifndef  H5  */
-		top: 0;
+		/* top: 0; */
 		/*  #endif  */
-	}
-
-	.isOpacity {
-		background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 0));
-		transition: all .5s;
-	}
-
-	.isOpacity .search-input {
-		background-color: rgba(255, 255, 255, .5);
-		transition: all .5s;
-	}
-
-	.swiper {
-		height: 340upx;
-	}
-
-	.notice {
-		padding: 6upx 26upx 6upx 60upx;
-		position: relative;
-		overflow: hidden;
-		background-color: #fff;
-		color: #333;
-	}
-
-	.notice-icon {
-		display: inline-block;
-		height: 40upx;
-		/* float: left; */
-		position: absolute;
-		top: 59%;
-		left: 26upx;
-		transform: translateY(-50%);
-		overflow: hidden;
-	}
-
-	.news-icon {
-		width: 30upx;
-		height: 30upx;
-		float: left;
-	}
-
-	.notice-c {
-		margin-left: 10upx;
-		height: 50upx;
-		line-height: 50upx;
-		width: 630upx;
-		display: inline-block;
-		font-size: 28upx;
-		float: left;
-	}
-
-	.coupon {
-		padding: 0 26upx;
-		background-color: #f8f8f8;
-	}
-
-	.coupon-item {
-		padding: 20upx;
-		margin-bottom: 20upx;
-		background-color: #fff;
-	}
-
-	.coupon-i-l {
-		width: 400upx;
-		display: inline-block;
-	}
-
-	.coupon-i-l-t {
-		font-size: 32upx;
-		position: relative;
-		margin-bottom: 10upx;
-	}
-
-	.coupon-i-l-t .icon {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-	}
-
-	.coupon-i-l-t text {
-		margin-left: 60upx;
-	}
-
-	.coupon-i-l-b {
-		font-size: 24upx;
-		color: #999;
-	}
-
-	.coupon-i-r {
-		width: 258upx;
-		display: inline-block;
-		text-align: center;
-	}
-
-	.coupon-logo {
-		width: 130upx;
-		height: 100upx;
 	}
 
 	.cell-item {
@@ -653,7 +137,7 @@
 		color: #999;
 	}
 
-	.new-goods {
+	/* .new-goods {
 		min-height: 300upx;
 		white-space: nowrap;
 		width: 100%;
@@ -692,44 +176,7 @@
 		display: block;
 		font-size: 26upx;
 		color: #e14d4d;
-	}
+	} */
 	
-	.img-list, .img-grids {
-		background-color: #fff;
-	}
-
-	.search-input-p {
-		color: #888;
-		/* height: 72upx; */
-		/* padding: 0upx 90upx 0upx 30upx; */
-	}
-
-	.ad {
-		width: 100%;
-		margin: 20upx 0;
-		overflow: hidden;
-	}
-	.ad-img{
-		width: 100%;
-		float: left;
-		margin-bottom: 20upx;
-	}
-	.ad-img:last-child{
-		margin-bottom: 0;
-	}
-	.img-grids-item{
-		display: inline-table;
-		margin-top: 0;
-	}
-	.group-buying .img-list-item{
-		min-height: 236upx;
-		padding: 20upx;
-		margin-left: 26upx;
-		margin-bottom: 26upx;
-		display: inline-table;
-		background-color: #f9f9f9;
-	}
-	.swiper-grids .img-list-item:last-child{
-		margin-right: 26upx;
-	}
+	
 </style>
