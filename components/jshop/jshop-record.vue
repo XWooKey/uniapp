@@ -1,7 +1,7 @@
 <template>
 	<view class="adbrathing" 
 	v-show="adbshow" 
-	v-bind:class="['adbrathing'+data.params.align,!hideanimation?'pc':hideanimation?'hc':'']" 
+	v-bind:class="['adbrathing'+data.params.style.align,!hideanimation?'pc':hideanimation?'hc':'']" 
 	:style="{top:data.params.style.top+'%'}" >
 		<view class="adbrathing-c">
 			<view class="adbrathing-l">

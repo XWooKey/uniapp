@@ -15,8 +15,11 @@ export default {
 			required: true,
 		}
 	},
-	onLoad() {
+	created() {
 		this.data.params = htmlParser(this.data.params)
+	},
+	onLoad() {
+		
 	},
 	methods: {
 		

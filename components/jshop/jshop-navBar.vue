@@ -1,9 +1,9 @@
 <template>
-	<view class="imgwindow bottom-cell-group">
-		<view class="imgwindow-list" v-if="data.params.limit == '3' ||data.params.limit == '4' ||data.params.limit == '5'" v-bind:class="'row'+data.params.limit">
-			<view class="imgwindow-item" ref="imgwitem" v-for="(item, index) in data.params.list" :key="index">
-				<image class="imgwindow-item-img" :src="item.image" mode="aspectFill" @click="showSliderInfo(item.linkType, item.linkValue)"></image>
-				<view class="imgwindow-item-text">{{item.text}}</view>
+	<view class="imgnavbar bottom-cell-group">
+		<view class="imgnavbar-list" v-if="data.params.limit == '3' ||data.params.limit == '4' ||data.params.limit == '5'" v-bind:class="'row'+data.params.limit">
+			<view class="imgnavbar-item" ref="imgwitem" v-for="(item, index) in data.params.list" :key="index">
+				<image class="imgnavbar-item-img" :src="item.image" mode="aspectFill" @click="showSliderInfo(item.linkType, item.linkValue)"></image>
+				<view class="imgnavbar-item-text">{{item.text}}</view>
 			</view>
 		</view>
 	</view>
@@ -33,10 +33,23 @@ export default {
 	methods: {
 		showSliderInfo(type, val) {
 			if (type == 1) {
-				// URL
-				// #ifdef H5
-				window.location.href = val
-				// #endif
+				if (val.indexOf('http')!=-1) {
+					// #ifdef H5 
+					window.location.href = val
+					// #endif
+				} else {
+					// #ifdef H5 || APP-PLUS || APP-PLUS-NVUE || MP
+					if(val=='/pages/classify/classify' || val =='/pages/cart/index/index' || val =='/pages/member/index/index'){
+						uni.switchTab({
+							url: val
+						});
+						return;
+					}else{
+						this.$common.navigateTo(val);
+						return ;
+					}
+					// #endif
+				}
 			} else if (type == 2) {
 				// 商品详情
 				this.goodsDetail(val)
@@ -59,28 +72,28 @@ export default {
 </script>
 
 <style>
-.imgwindow{
+.imgnavbar{
 	width: 100%;
 	background-color: #fff;
 }
-.imgwindow-list{
+.imgnavbar-list{
 	overflow: hidden;
 	padding: 24upx 0 0;
 }
 /* 堆积两列 */
-.imgwindow-list .imgwindow-item{
+.imgnavbar-list .imgnavbar-item{
 	height: auto;
 	float: left;
 	padding: 0upx 10upx;
 	margin-bottom: 20upx;
 	text-align: center;
 }
-.imgwindow-list .imgwindow-item image{
+.imgnavbar-list .imgnavbar-item image{
 	width: 90upx;
 	height: 90upx;
 	margin-bottom: 6upx;
 }
-.imgwindow-item-text{
+.imgnavbar-item-text{
 	font-size: 26upx;
 	color: #666;
 	width: 100%;
@@ -88,16 +101,16 @@ export default {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-.imgwindow-list.row3 .imgwindow-item{
+.imgnavbar-list.row3 .imgnavbar-item{
 	width: 33.3%;
 }
-.imgwindow-list.row4 .imgwindow-item{
+.imgnavbar-list.row4 .imgnavbar-item{
 	width: 25%;
 }
-.imgwindow-list.row5 .imgwindow-item{
+.imgnavbar-list.row5 .imgnavbar-item{
 	width: 20%;
 }
-.imgwindow-list.row5 .imgwindow-item .imgwindow-item-text{
+.imgnavbar-list.row5 .imgnavbar-item .imgnavbar-item-text{
 	font-size: 24upx;
 }
 </style>

@@ -37,11 +37,9 @@ export default {
 		showSliderInfo(type, val) {
 			if (type == 1) {
 				if (val.indexOf('http')!=-1) {
-					// URL
-					// #ifdef H5
+					// #ifdef H5 
 					window.location.href = val
 					// #endif
-					
 				} else {
 					// #ifdef H5 || APP-PLUS || APP-PLUS-NVUE || MP
 					if(val=='/pages/classify/classify' || val =='/pages/cart/index/index' || val =='/pages/member/index/index'){

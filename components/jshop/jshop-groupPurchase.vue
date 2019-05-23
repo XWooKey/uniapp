@@ -46,12 +46,22 @@ export default {
 	methods: {
 		showSliderInfo(type, val) {
 			if (type == 1) {
-				if (val.Length >=7 && val.Substring(0, 7) == "http://") {
-					// URL
-					// #ifdef H5
+				if (val.indexOf('http')!=-1) {
+					// #ifdef H5 
 					window.location.href = val
 					// #endif
-				} else if (val.Length >=8 && val.Substring(0, 8) == "https://") {
+				} else {
+					// #ifdef H5 || APP-PLUS || APP-PLUS-NVUE || MP
+					if(val=='/pages/classify/classify' || val =='/pages/cart/index/index' || val =='/pages/member/index/index'){
+						uni.switchTab({
+							url: val
+						});
+						return;
+					}else{
+						this.$common.navigateTo(val);
+						return ;
+					}
+					// #endif
 				}
 			} else if (type == 2) {
 				// 商品详情

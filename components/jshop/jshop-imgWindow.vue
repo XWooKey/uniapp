@@ -32,9 +32,6 @@ export default {
 			padding: '3'
 		}
 	},
-	onLoad(){
-		
-	},
 	mounted(){
 		// #ifdef H5 || APP-PLUS || APP-PLUS-NVUE
 		var view = uni.createSelectorQuery().in(this).select(".imgwindow-item");
@@ -44,9 +41,28 @@ export default {
 		  this.height1 = data.width / 2;
 		}).exec();
 		// #endif
-		// #ifdef MP-WEIXIN || MP-ALIPAY
+		
+		// #ifdef MP-ALIPAY
+		var view = uni.createSelectorQuery().select(".content").boundingClientRect().exec(data => {			  
+		  this.height1 = data[0].width /4;
+		  if(this.data.params.style == '3'){
+			 this.height = data[0].width /3;
+		  } else if (this.data.params.style == '2'){
+			 this.height = data[0].width /2;
+		  }else if (this.data.params.style == '4'){
+			 this.height = data[0].width /4;
+		  } else if (this.data.params.style == '0'){
+			 this.height = data[0].width /2;
+		  } 
+		});
+		// #endif
+					
+		// #ifdef MP-WEIXIN
+		
 		var view = uni.createSelectorQuery().select(".content");
+		
 		view.boundingClientRect(data => {
+			
 			this.height1 = data.width /4;
 			if(this.data.params.style == '3'){
 			   this.height = data.width /3;
@@ -59,16 +75,27 @@ export default {
 			} 
 		}).exec();
 		// #endif
-		
-		
 	},
 	methods: {
 		showSliderInfo(type, val) {
 			if (type == 1) {
-				// URL
-				// #ifdef H5
-				window.location.href = val
-				// #endif
+				if (val.indexOf('http')!=-1) {
+					// #ifdef H5 
+					window.location.href = val
+					// #endif
+				} else {
+					// #ifdef H5 || APP-PLUS || APP-PLUS-NVUE || MP
+					if(val=='/pages/classify/classify' || val =='/pages/cart/index/index' || val =='/pages/member/index/index'){
+						uni.switchTab({
+							url: val
+						});
+						return;
+					}else{
+						this.$common.navigateTo(val);
+						return ;
+					}
+					// #endif
+				}
 			} else if (type == 2) {
 				// 商品详情
 				this.goodsDetail(val)
