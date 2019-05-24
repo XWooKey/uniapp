@@ -76,6 +76,13 @@
 						this.pageData = res.data;
 					}
 				});
+				
+				//获取地区信息
+				this.$api.getAreaList({}, res => {
+					if(res.status){
+						this.$db.set("areaList",res.data);
+					}
+				});
 			}
 		},
 		onShareAppMessage() {
