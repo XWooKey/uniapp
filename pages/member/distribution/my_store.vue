@@ -25,11 +25,12 @@
 								<text class='member-item-text'>二维码</text>
 							</button>
 							<!-- #endif -->
+							<!-- #ifndef MP-WEIXIN -->
 							<button class='share btn' @click="createPoster()">
 								<image class='member-item-icon' src='../../../static/image/qr_code.png'></image>
 								<text class='member-item-text'>二维码</text>
 							</button>
-						  
+							<!-- #endif -->
 							
 						</view>
 					</view>
@@ -174,14 +175,29 @@ export default{
 		// this.slideTop();
 	},
 	mounted() {
-		window.addEventListener('scroll', this.handleScroll)
+		// window.addEventListener('scroll', this.handleScroll)
 	},
 	updated() {
+		// #ifndef MP-WEIXIN
 		// 获取上半部分的整体高度
 		this.$nextTick(() => {
 			let h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight; //浏览器高度
 			this.top_height = this.$refs.myStore.$el.clientHeight;
 		})
+		// #endif
+	},
+	onPageScroll(){
+		var _this = this;
+		// #ifdef MP-WEIXIN
+		const query = wx.createSelectorQuery().in(this)
+		  query.select('.scroll-Y').boundingClientRect(function(res){
+			if(res.top>0){
+				_this.scrollY = false;
+			}else{
+				_this.scrollY = true;
+			}
+		  }).exec()
+		// #endif
 	},
 	methods: {
 		// 滑动整个页面到下半部分停止
