@@ -25,7 +25,7 @@ export default {
 	name: "jshoparticleclassify",
 	props: {
 		data:{
-			type: Object,
+			// type: Array,
 			required: true,
 		}
 	},
@@ -39,21 +39,21 @@ export default {
 </script>
 
 <style>
-.cell-title-img{
+.index-article .cell-title-img{
 	width: 160upx;
 	height: 160upx;
 	float: right;
 }
-.cell-title-img image{
+.index-article .cell-title-img image{
 	width: 100%;
 	height: 100%;
 }
-.cell-item-bd{
+.index-article .cell-item-bd{
 	padding-right: 0;
 	vertical-align: top;
 	position: relative;
 }
-.article-title{
+.index-article .article-title{
 	font-size: 28upx;
 	color: #333;
 	width: 100%;
@@ -63,7 +63,7 @@ export default {
     -webkit-line-clamp: 2;
     overflow: hidden;
 }
-.article-time{
+.index-article .article-time{
 	font-size: 24upx;
 	color: #999;
 	display: inline-block;

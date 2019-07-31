@@ -16,7 +16,7 @@
 		name: "jshopnotice",
 		props: {
 			data:{
-				type: Object,
+				// type: Object,
 				required: true,
 			}
 		},

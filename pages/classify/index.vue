@@ -3,7 +3,7 @@
 		<!-- 搜索框 -->
 		<view class="search">
 			<view class="search-c" @click="goSearch">
-				<view class="search-input search-input-p">
+				<view class="search-input search-input-p" v-bind:class="$store.state.searchStyle">
 					<view class="search-input-p-c">
 					{{ searchKey }}
 					</view>
@@ -16,7 +16,10 @@
 		<view class="screen">
 			<view class="screen-item" @click="comprehensive">
 				<text class="screen-item-text">综合</text>
-				<!-- <view class='screen-item-icon'><image></image></view> -->
+				<view class='screen-item-icon'>
+					<image v-if="searchData.order.key == 'sort' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="../../static/image/bottom-black.png"></image>
+					<image v-else class="screen-item-icon-img" src="../../static/image/bottom-gray.png" ></image>
+				</view>
 			</view>
 			<view class="screen-item" @click="priceSort">
 				<text class="screen-item-text">价格</text>
@@ -392,8 +395,7 @@ export default {
 		onPullDownRefresh: function() {},
 		//跳转到商品详情页面
 		goodsDetail: function(id) {
-			let ins = encodeURIComponent('id='+id);
-			let url = '/pages/goods/index/index?scene=' + ins;
+			let url = '/pages/goods/index/index?id=' + id;
 			this.$common.navigateTo(url);
 		},
 		//取得商品数据
@@ -686,7 +688,11 @@ export default {
 
 <style>
 .search{
-	position: relative;
+	position: fixed;
+	z-index: 997;
+	/*  #ifdef  H5  */
+	top: 44px;
+	/*  #endif  */
 }
 .screen {
 	width: 100%;
@@ -694,7 +700,14 @@ export default {
 	overflow: hidden;
 	margin-bottom: 2upx;
 	background-color: #fff;
-	position: relative;
+	position: fixed;
+	/*  #ifdef  H5  */
+	top: calc(44px + 104upx);
+	/*  #endif  */
+	/*  #ifndef H5 */
+	top: 104upx;
+	/*  #endif  */
+	
 	z-index: 997;
 }
 .screen-item {
@@ -740,6 +753,9 @@ export default {
 	top: 50%;
 	transform: translateY(-50%);
 }
+.img-grids{
+	padding-bottom: 26upx;
+}
 .img-grids-item {
 	margin-bottom: 0;
 }
@@ -753,6 +769,8 @@ export default {
 	/*  #ifndef H5 */
 	height:calc(100vh - 186upx);
 	/*  #endif  */
+	position: fixed;
+	bottom: 0;
 }
 .search-input-p{
 	color: #888;
@@ -836,4 +854,10 @@ export default {
 
 }
 /* #endif */
+.square{
+	border-radius: 0;
+}
+.radius{
+	border-radius: 12upx;
+}
 </style>

@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { baseUrl } from '@/config/config.js'
+import { apiBaseUrl } from '@/config/config.js'
 export default {
 	props: {
 		// 商品id
@@ -48,6 +48,21 @@ export default {
 		shareHref: {
 			type: String,
 			default: ''
+		},
+		//分享类型
+		shareType:{
+			type:Number,
+			default:1
+		},
+		//拼团id
+		groupId:{
+			type:Number,
+			default:0
+		},
+		//拼团的团队id
+		teamId:{
+			type:Number,
+			default:0
 		}
 	},
 	data () {
@@ -68,7 +83,9 @@ export default {
 		createPoster () {
 			let data = {
 				id: this.goodsId,
-				type: 1
+				type: this.shareType,
+				group_id :this.groupId,
+				team_id :this.teamId,
 			}
 			
 			let pages = getCurrentPages()

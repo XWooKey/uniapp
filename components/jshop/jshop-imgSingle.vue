@@ -1,7 +1,12 @@
 <template>
-	<!-- 广告位 -->
-	<view class="ad bottom-cell-group" v-if="data.params.list && data.params.list.length > 0">
-		<image class="ad-img" v-for="item in data.params.list" :key="item.id" :src="item.image" mode="widthFix" @click="showSliderInfo(item.linkType, item.linkValue)"></image>
+	<!-- 单图 -->
+	<view class="ad jshop-imgsingle" v-if="data.params.list && data.params.list.length > 0">
+		<view class="" v-for="item in data.params.list" :key="item.id">
+			<image class="ad-img" :src="item.image" mode="widthFix" @click="showSliderInfo(item.linkType, item.linkValue)"></image>
+			<view class="imgup-btn" v-if="item.buttonText != ''" @click="showSliderInfo(item.linkType, item.linkValue)">
+				<button class="btn btn-fillet" :style="{background:item.buttonColor,color:item.textColor}">{{item.buttonText}}</button>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -10,7 +15,7 @@ export default {
 	name: "jshopimgsingle",
 	props: {
 		data:{
-			type: Object,
+			// type: Object,
 			required: true,
 		}
 	},
@@ -47,8 +52,8 @@ export default {
 		},
 		//跳转到商品详情页面
 		goodsDetail: function(id) {
-			let ins = encodeURIComponent('id='+id);
-			let url = '/pages/goods/index/index?scene=' + ins;
+			// let ins = encodeURIComponent('id='+id);
+			let url = '/pages/goods/index/index?id=' + id;
 			this.$common.navigateTo(url);
 		},
 	},
@@ -56,7 +61,7 @@ export default {
 </script>
 
 <style>
-.ad {
+/* .ad {
 	width: 100%;
 	overflow: hidden;
 }
@@ -67,5 +72,31 @@ export default {
 }
 .ad-img:last-child{
 	margin-bottom: 0;
+} */
+.jshop-imgsingle.ad {
+	width: 100%;
+	overflow: hidden;
+	position: relative;
+}
+.jshop-imgsingle .ad-img{
+	width: 100%;
+	float: left;
+	position: relative;
+	z-index: 667;
+	/* margin-bottom: 20upx; */
+}
+.jshop-imgsingle .ad-img:last-child{
+	margin-bottom: 0;
+}
+.jshop-imgsingle .imgup-btn{
+	position: absolute;
+	z-index: 668;
+	bottom: 80upx;
+	left: 40upx;
+}
+.jshop-imgsingle .imgup-btn .btn{	
+	line-height: 2;
+	font-size: 28upx;
+	padding: 0 50upx;
 }
 </style>

@@ -22,7 +22,7 @@ export default {
 	name: "jshopcoupon",
 	props: {
 		data:{
-			type: Object,
+			// type: Array,
 			required: true,
 		}
 	},

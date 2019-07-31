@@ -1,31 +1,31 @@
 <template>
 	<view class="content">
 		<view class="result succsee"
-		v-if="orderInfo.pay_status === 2 && orderInfo.payment_time > 0"
+		v-if="status && paymentInfo.status === 2"
 		>
 			<image class="result-img" src="../../../static/image/win.png" mode=""></image>
 			<view class="result-top">
 				支付成功
 			</view>
 			<view class="result-mid red-price">
-				{{ this.$common.formatMoney(orderInfo.payed) }}
+				{{ paymentInfo.money }}
 			</view>
 			<view class="result-bot">
-				<button class="btn btn-g" @click="orderDetail(orderInfo.order_id)">查看详情</button>
+				<button class="btn btn-g" @click="orderDetail()">查看详情</button>
 			</view>
 		</view>
 		<view class="result fail"
-		v-else-if="Object.keys(orderInfo).length && !orderInfo.payment_time"
+		v-else-if="status && paymentInfo.status === 1"
 		>
 			<image class="result-img" src="../../../static/image/pastdue.png" mode=""></image>
 			<view class="result-top">
 				支付失败
 			</view>
 			<view class="result-mid red-price">
-				{{ this.$common.formatMoney(orderInfo.payed) }}
+				{{ paymentInfo.money }}
 			</view>
 			<view class="result-bot">
-				<button class="btn btn-g">查看原因</button>
+				<button class="btn btn-g" @click="orderDetail()">查看详情</button>
 			</view>
 		</view>
 	</view>
@@ -35,35 +35,66 @@
 export default {
 	data () {
 		return {
+			paymentId: 0,
+			paymentInfo: {}, // 支付单详情
 			orderId: 0,
-			orderInfo: {} // 订单详情
+			status:false
 		}
 	},
 	onLoad (options) {
-		this.orderId = options.order_id
+		this.paymentId = options.id
 	},
 	mounted () {
-		this.getOrderInfo()
+		this.getPaymentInfo()
 	},
 	methods: {
-		getOrderInfo () {
+		getPaymentInfo () {
 			let data = {
-				order_id: this.orderId
+				payment_id: this.paymentId
 			}
-			
-			this.$api.orderDetail(data, res => {
+
+			this.$api.paymentInfo(data, res => {
 				if (res.status) {
-					this.orderInfo = res.data
+					let info = res.data
+					if (info.payment_code === 'alipay') {
+						info.payment_name = '支付宝支付'
+					} else if (info.payment_code === 'wechatpay')
+					{
+						info.payment_name = '微信支付'
+					} else if (info.payment_code === 'balancepay')
+					{
+						info.payment_name = '余额支付'
+					}
+					
+					// 获取订单号
+					if (info.rel.length) {
+						for (let i = 0; i < info.rel.length; i ++ ) {
+							if (info.rel[i].source_id) {
+								this.orderId = info.rel[i].source_id
+								break;
+							}
+						}
+					}
+					this.status = true;
+					this.paymentInfo = info
 				} else {
 					this.$common.errorToShow(res.msg)
 				}
 			})
 		},
-		orderDetail (orderId) {
-			this.$common.redirectTo('/pages/member/order/orderdetail?order_id=' + orderId)
+		orderDetail () {
+			if (this.orderId && this.paymentInfo.type === 1) {
+				this.$common.redirectTo('/pages/member/order/orderdetail?order_id=' + this.orderId)
+			} else if (this.paymentInfo.type === 2) {
+				this.$common.redirectTo('/pages/member/balance/details')
+			} else if (this.paymentInfo.type === 5 || this.paymentInfo.type === 6) {
+				uni.switchTab({
+					url:'/pages/index/index'
+				});
+			}
 		}
 	}
-}	
+}
 </script>
 
 <style>
@@ -76,12 +107,18 @@ export default {
 	height: 140upx;
 	margin-bottom: 20upx;
 }
+.result-num{
+	color: #666;
+	font-size: 30upx;
+	margin-bottom: 20upx;
+}
 .result-top{
 	color: #666;
 	font-size: 30upx;
+	margin-bottom: 20upx;
 }
 .result-mid{
-	
+	margin-bottom: 60upx;
 }
 .result-bot .btn{
 	margin-top: 40upx;

@@ -1,6 +1,6 @@
 {
     "name" : "Jshop云商",
-    "appid" : "__UNI__DC94EA4",
+    "appid" : "__UNI__60F611E",
     "description" : "Jshop云商小程序商城",
     "versionName" : "2.0",
     "versionCode" : 15,
@@ -47,59 +47,28 @@
             "sdkConfigs" : {
                 "payment" : {
                     "weixin" : {
-                        "appid" : "wxf62e2f29f15741af"
+                        "appid" : ""
                     },
                     "alipay" : {
                         "scheme" : ""
                     }
                 }
-            },
-            "icons" : {
-                "ios" : {
-                    "iphone" : {
-                        "app@2x" : "unpackage/res/icons/120x120.png",
-                        "app@3x" : "unpackage/res/icons/180x180.png",
-                        "notification@2x" : "unpackage/res/icons/40x40.png",
-                        "notification@3x" : "unpackage/res/icons/60x60.png",
-                        "settings@2x" : "unpackage/res/icons/58x58.png",
-                        "settings@3x" : "unpackage/res/icons/87x87.png",
-                        "spotlight@2x" : "unpackage/res/icons/80x80.png",
-                        "spotlight@3x" : "unpackage/res/icons/120x120.png"
-                    },
-                    "appstore" : "C:/Users/Administrator/Desktop/d9192684-829f-4a6f-82db-7c65225a7af0.png",
-                    "ipad" : {
-                        "app" : "unpackage/res/icons/76x76.png",
-                        "app@2x" : "unpackage/res/icons/152x152.png",
-                        "notification" : "unpackage/res/icons/20x20.png",
-                        "notification@2x" : "unpackage/res/icons/40x40.png",
-                        "proapp@2x" : "unpackage/res/icons/167x167.png",
-                        "settings" : "unpackage/res/icons/29x29.png",
-                        "settings@2x" : "unpackage/res/icons/58x58.png",
-                        "spotlight" : "unpackage/res/icons/40x40.png",
-                        "spotlight@2x" : "unpackage/res/icons/80x80.png"
-                    }
-                },
-                "android" : {
-                    "hdpi" : "unpackage/res/icons/72x72.png",
-                    "ldpi" : "unpackage/res/icons/48x48.png",
-                    "mdpi" : "unpackage/res/icons/48x48.png",
-                    "xhdpi" : "unpackage/res/icons/96x96.png",
-                    "xxhdpi" : "unpackage/res/icons/144x144.png",
-                    "xxxhdpi" : "unpackage/res/icons/192x192.png"
-                }
             }
+        },
+        "splashscreen" : {
+            "waiting" : true
         }
     },
     /* SDK配置 */
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        /* 小程序特有相关 */
-        "appid" : "wxaec38ca2e5cdc46a",
+        "appid" : "",
         "setting" : {
-            "urlCheck" : false,
+            "urlCheck" : true,
             "postcss" : true,
-            "minified" : true
+            "minified" : true,
+            "es6" : true
         },
         "permission" : {
             "scope.userLocation" : {
@@ -109,11 +78,14 @@
     },
     "h5" : {
         "title" : "Jshop云商",
-        "disableHostCheck" : true,
         "domain" : "https://demo.jihainet.com",
         "router" : {
             "base" : "/wap/"
         },
-        "template" : "index.html"
+        "template" : "index.html",
+        "devServer" : {
+            "port" : 8080,
+            "disableHostCheck" : true
+        }
     }
 }

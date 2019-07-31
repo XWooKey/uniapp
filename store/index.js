@@ -9,6 +9,7 @@ const store = new Vuex.Store({
 		orderTab: 0, // 选中的订单tab页
 		redirectPage: '',
 		uuid:'',//当前客户端
+		searchStyle: ''
 	},
     mutations: {
 		config (state, payload) {
@@ -19,6 +20,9 @@ const store = new Vuex.Store({
 		},
 		redirect (state, payload) {
 			state.redirectPage = payload.page
+		},
+		searchStyle (state, style) {
+			state.searchStyle = style
 		}
 	},
 	actions: {

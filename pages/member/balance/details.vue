@@ -119,7 +119,7 @@ export default {
     },
 	watch: {
 		index () {
-			this.balances()
+			this.balances();
 		}
 	}
 }

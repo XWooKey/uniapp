@@ -2,124 +2,110 @@
 	<view class="content" style="padding-top: 0upx;">
 		<jshop :data="pageData"></jshop>
 		<jihaiCopyright></jihaiCopyright>
+		<red-bag v-if="redBagShow" @click="handleGet"></red-bag>
 	</view>
 </template>
 <script>
-	import jshop from "@/components/jshop/jshop.vue"
-	import jihaiCopyright from "@/components/jihai-copyright/jihaiCopyright.vue"
+	import jshop from '@/components/jshop/jshop.vue'
+	import jihaiCopyright from '@/components/jihai-copyright/jihaiCopyright.vue'
+	import uniCountdown from '@/components/uni-countdown/uni-countdown.vue'
+	import redBag from '@/components/red-bag/index'
 	import {
 		goods
 	} from '@/config/mixins.js'
+	import {
+		goBack
+	} from '@/config/mixins.js'
 	export default {
 		mixins: [goods],
-		components:{jihaiCopyright,jshop},
+		components: {
+			jihaiCopyright,
+			jshop,
+			uniCountdown,
+			redBag
+		},
 		data() {
 			return {
 				myShareCode: '', //分享Code
 				imageUrl: '/static/image/share_image.png', //店铺分享图片
-				pageData:[],
-				pageCode:'mobile_home',//页面布局编码
+				pageData: [],
+				pageCode: 'mobile_home', //页面布局编码
+				pintuan: [], //拼团列表,
+				redBagShow: false, //红包
 			}
 		},
 		computed: {
-			appTitle(){
-				return this.$store.state.config.shop_name;
+			appTitle() {
+				return this.$store.state.config.shop_name
 			}
 		},
 		onLoad(e) {
-			let scene = decodeURIComponent(e.scene);
-			let arr1 = scene.split('&');
-			let invite = '';
-			for (var i = 0; i < arr1.length; i++) {
-				let key = arr1[i].split("=")[0];
-				if (key == 'invite') {
-					invite = arr1[i].split("=")[1];
-				}
-			}
-			if (invite != '') {
-				this.$db.set("invitecode", invite);
-			}
-			//增加页面编码，可自定义编码
-			if(e.page_code){
-				this.pageCode = e.page_code;
-			}
-			this.initData();
-		},
-		
-		mounted() {
-			// #ifdef H5 
-			window.addEventListener('scroll', this.handleScroll)
-			// #endif
+			this.initData()
+			// this.getPintuan();
 		},
 		methods: {
-			handleScroll() {
-				var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-				// console.log(scrollTop)
-				// var offsetTop = document.querySelector('#searchBar').offsetTop
-				scrollTop > 50 ? this.searchBarOpacity = true : this.searchBarOpacity = false
-			},
+			//领取红包
+			handleGet() {},
 			destroyed() {
 				window.removeEventListener('scroll', this.handleScroll)
 			},
 			goSearch() {
 				uni.navigateTo({
 					url: './search'
-				});
+				})
 			},
 			// 首页初始化获取数据
 			initData() {
 				//获取首页配置
 				this.$api.getPageConfig({
-					code:this.pageCode,
-				}, res => {
-					if(res.status == true){
-						this.pageData = res.data;
+						code: this.pageCode
+					},
+					res => {
+						if (res.status == true) {
+							this.pageData = res.data.items;
+							uni.setNavigationBarTitle({
+								title: res.data.name
+							});
+							//隐藏loading
+							setTimeout(() => {
+								this.showLoad = false;
+							}, 600);
+						}
 					}
-				});
+				);
 				
-				//获取地区信息
-				this.$api.getAreaList({}, res => {
-					if(res.status){
-						this.$db.set("areaList",res.data);
-					}
-				});
-			}
-		},
-		onShareAppMessage() {
-			let userToken = this.$db.get('userToken');
-			if (userToken) {
-				let myInviteCode = this.myShareCode;
-				if (myInviteCode) {
-					//缓存里面有邀请码
-					let ins = encodeURIComponent('invite=' + myInviteCode);
-					let path = '/pages/index/index?scene=' + ins;
-					return {
-						title: this.appTitle,
-						path: path,
-						imageUrl: this.imageUrl
-					}
-				} else {
-					let path = '/pages/index/index';
-					return {
-						title: this.appTitle,
-						path: path,
-						imageUrl: this.imageUrl
-					}
-				}
-			} else {
-				//用户没有登录
-				let path = '/pages/index/index';
-				return {
-					title: this.appTitle,
-					path: path,
-					imageUrl: this.imageUrl
+				this.getMyShareCode();
+			},
+			getMyShareCode() {
+				let userToken = this.$db.get("userToken");
+				if (userToken && userToken != '') {
+					// 获取我的分享码
+					this.$api.shareCode({}, res => {
+						if (res.status) {
+							this.myShareCode = res.data ? res.data : '';
+						}
+					});
 				}
 			}
 		},
 		onPullDownRefresh() {
-			this.initData();
+			this.initData()
 			//this.$db.del('all_cat');
-			uni.stopPullDownRefresh();
+			uni.stopPullDownRefresh()
+		},
+		//分享
+		onShareAppMessage() {
+			let myInviteCode = this.myShareCode ? this.myShareCode : '';
+			let ins = encodeURIComponent('type=1&invite=' + myInviteCode);
+			let path = '/pages/share/jump?scene=' + ins;
+			return {
+				title: this.$store.state.config.share_title,
+				// #ifdef MP-ALIPAY
+				desc: this.$store.state.config.share_desc,
+				// #endif
+				imageUrl: this.$store.state.config.share_image,
+				path: path
+			}
 		}
 	}
 </script>
@@ -184,6 +170,4 @@
 		font-size: 26upx;
 		color: #e14d4d;
 	} */
-	
-	
 </style>

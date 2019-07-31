@@ -58,7 +58,7 @@
 			
 		</view>
 		<view class="button-bottom">
-			<button class="btn btn-square btn-b" hover-class="btn-hover2" v-if="isSubmit" @click="toCash">确认提现</button>
+			<button class="btn btn-square btn-b" hover-class="btn-hover2" v-if="isSubmit" @click="toCash" :disabled='submitStatus' :loading='submitStatus'>确认提现</button>
 			<button class="btn btn-square btn-b" hover-class="btn-hover2" v-else-if="!isSubmit" disabled>确认提现</button>
 		</view>
 	</view>
@@ -72,7 +72,8 @@ export default {
 			user: {}, // 用户信息
 			isError: false, // 当提现金额大于可用余额 显示错误提示
             isSubmit: false, // 提现点击
-			money: '' // 用户输入的提现金额
+			money: '', // 用户输入的提现金额
+			submitStatus: false
 		}
 	},
 	onLoad () {
@@ -136,18 +137,21 @@ export default {
             } else if (Number(this.money) === 0) {
 				this.$common.errorToShow('提现金额不能为0')
             } else {
+				this.submitStatus = true;
                 this.$api.userToCash({
                     money: this.money,
                     cardId: this.cardInfo.id
                 }, res => {
                     if (res.status) {
 						this.$common.successToShow(res.msg, () => {
+							this.submitStatus = false;
 							uni.navigateBack({
 								delta: 1
-							})
+							});
 						})
                     } else {
-						this.$common.errorToShow(res.msg)
+						this.$common.errorToShow(res.msg);
+						this.submitStatus = false;
 					}
                 })
             }

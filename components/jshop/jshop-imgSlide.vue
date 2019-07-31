@@ -3,7 +3,7 @@
 		<swiper class="swiper-c" :indicator-dots="swiper.indicatorDots" :autoplay="swiper.autoplay" :interval="data.params.duration"
 		 :duration="swiper.duration">
 			<swiper-item class="have-none" v-for="(item, index) in data.params.list" :key="index">
-				<image class='' :src="item.image" @click="showSliderInfo(item.linkType, item.linkValue)"></image>1111
+				<image class='' :src="item.image" @click="showSliderInfo(item.linkType, item.linkValue)" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 	</view>
@@ -14,7 +14,7 @@ export default {
 	name: "jshopimgSlide",
 	props: {
 		data:{
-			type: Object,
+			// type: Object,
 			required: true,
 		}
 	},
@@ -62,12 +62,14 @@ export default {
 			} else if (type == 4) {
 				// 文章列表
 				this.$common.navigateTo('/pages/article/list?cid=' + val)
+			}else if(type==5){
+				//智能表单 
+				this.$common.navigateTo('/pages/form/detail/form?id='+val)
 			}
 		},
 		//跳转到商品详情页面
 		goodsDetail: function(id) {
-			let ins = encodeURIComponent('id='+id);
-			let url = '/pages/goods/index/index?scene=' + ins;
+			let url = '/pages/goods/index/index?id=' + id;
 			this.$common.navigateTo(url);
 		},
 	}

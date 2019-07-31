@@ -1,5 +1,6 @@
 body{
   background-color: #f8f8f8;
+  font-size: 28upx;
 }
 view{
   box-sizing: border-box;
@@ -92,8 +93,14 @@ uni-input div div.input-placeholder{
 .have-none{
   background-color: #f3f3f3;
 }
+.color-o{
+	color: #FF7159 !important;
+}
 .color-f{
 	color: #fff !important;
+}
+.color-d{
+	color: #ddd !important;
 }
 .color-3{
 	color: #333 !important;
@@ -103,6 +110,33 @@ uni-input div div.input-placeholder{
 }
 .color-9{
 	color: #999 !important;
+}
+.fsz24{
+	font-size: 24upx !important;
+}
+.fsz26{
+	font-size: 26upx !important;
+}
+.fsz28{
+	font-size: 28upx !important;
+}
+.fsz30{
+	font-size: 30upx !important;
+}
+.fsz32{
+	font-size: 32upx !important;
+}
+.fsz34{
+	font-size: 34upx !important;
+}
+.fsz36{
+	font-size: 36upx !important;
+}
+.fsz38{
+	font-size: 38upx !important;
+}
+.fsz50{
+	font-size: 50upx !important;
 }
 .search{
   width: 100%;
@@ -143,7 +177,7 @@ uni-input div div.input-placeholder{
   top: 50%;
   right: 30upx;
   transform: translateY(-50%);
-	z-index: 999;
+	z-index: 99;
 }
 .swiper-c{
   height: 100%;
@@ -156,7 +190,7 @@ uni-input div div.input-placeholder{
   display: inline-block;
   box-sizing: border-box;
   border-radius: 0;
-  font-size: 30upx;
+  font-size: 28upx;
 	transform: scale(1);
 	transition: all .5s;
 }
@@ -190,6 +224,9 @@ uni-input div div.input-placeholder{
   min-width: 150upx;
   border: none !important;
 }
+.btn-fillet{
+	border-radius: 50upx;
+}
 .btn-c{
 	background-color: #f7f7f7;
 }
@@ -208,6 +245,11 @@ uni-input div div.input-placeholder{
   background-color: #333;
   color: #fff;
 }
+.btn-o{
+  border: 2upx solid #FF7159;
+  background-color: #FF7159;
+  color: #fff;
+}
 .btn-half{
 	width: 50%;
 }
@@ -217,6 +259,12 @@ uni-input div div.input-placeholder{
 .img-grids{
   overflow: hidden;
 	/* padding-bottom: 26upx; */
+}
+.img-grids .goods-name{
+	height: 72upx;
+}
+.column3.img-grids .goods-name{
+	height: 68upx;
 }
 .img-grids-item{
   width: 336upx;
@@ -252,7 +300,7 @@ uni-input div div.input-placeholder{
   overflow: hidden;
   color: #333;  
   width: 100%; 
-  min-height: 60upx;
+  /* height: 72upx; */
   /* #ifdef MP-ALIPAY */
   min-height: 20px;
   /* #endif */
@@ -277,6 +325,9 @@ uni-input div div.input-placeholder{
 }
 .img-list{
 
+}
+.img-list .goods-name{
+	min-height: 74upx;
 }
 .img-list-item{
   padding: 30upx 26upx;
@@ -303,8 +354,8 @@ uni-input div div.input-placeholder{
   font-size: 28upx;
 }
 .img-list-item .goods-item-c{
-  /* position: absolute;
-  bottom: 10upx; */
+  position: absolute;
+  /* bottom: 0; */
   width: 100%;
 	margin-top: 0;
 }
@@ -538,13 +589,15 @@ uni-input div div.input-placeholder{
 }
 .member-grid{
   padding: 20upx 26upx;
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 100%;
+  display: flex;
 }
 .member-item{
-  width: 20%;
-  float: left;
-  display: inline-block;
+  /* width: 20%; */
+  flex: 1;
+  /* float: left; */
+  /* display: inline-block; */
   text-align: center;
   position: relative;
 }

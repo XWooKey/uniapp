@@ -14,7 +14,7 @@ export default {
 	name: "jshopnavbar",
 	props: {
 		data:{
-			type: Object,
+			// type: Object,
 			required: true,
 		}
 	},
@@ -63,8 +63,7 @@ export default {
 		},
 		//跳转到商品详情页面
 		goodsDetail: function(id) {
-			let ins = encodeURIComponent('id='+id);
-			let url = '/pages/goods/index/index?scene=' + ins;
+			let url = '/pages/goods/index/index?id=' + id;
 			this.$common.navigateTo(url);
 		},
 	}

@@ -179,15 +179,14 @@ export default {
 	name: "jshopgoods",
 	props: {
 		data:{
-			type: Object,
+			// type: Array,
 			required: true,
 		}
 	},
 	methods: {
 		//跳转到商品详情页面
 		goodsDetail: function(id) {
-			let ins = encodeURIComponent('id='+id);
-			let url = '/pages/goods/index/index?scene=' + ins;
+			let url = '/pages/goods/index/index?id=' + id;
 			this.$common.navigateTo(url);
 		},
 	},
@@ -228,6 +227,7 @@ export default {
 }
 .column3 .grids-goods-name{
 	font-size: 24upx;
+	height: 68upx;
 }
 .column3 .img-grids-item-b{
 	padding: 0 8upx 8upx;
@@ -245,15 +245,15 @@ export default {
 .slide3 .grids-goods-name{
 	font-size: 24upx;
 }
-.img-grids-item{
+.index-goods .img-grids-item{
 	display: inline-block;
 	margin-top: 0;
 }
-.img-list-item{
+.index-goods .img-list-item{
 	padding: 0upx 26upx;
 	margin-bottom: 14upx;
 }
-.img-list{
+.index-goods .img-list{
 	padding-bottom: 10upx;
 }
 </style>

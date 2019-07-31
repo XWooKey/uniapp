@@ -339,4 +339,7 @@ export default {
 	width: 274upx;
 	height: 274upx;
 }
+.goods-name{
+	min-height: 74upx;
+}
 </style>

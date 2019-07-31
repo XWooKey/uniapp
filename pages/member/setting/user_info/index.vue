@@ -55,7 +55,7 @@
 			</view>
 		</view>
 		<view class="button-bottom">
-			<button class="btn btn-square btn-b"  hover-class="btn-hover2" @click="submitHandler()">保存</button>
+			<button class="btn btn-square btn-b"  hover-class="btn-hover2" @click="submitHandler()" :disabled='submitStatus' :loading='submitStatus'>保存</button>
 		</view>
 	</view>
 </template>
@@ -72,7 +72,8 @@ export default {
 			mobile: '',
 			date: '1990-01-01',
 			birthday: '请选择',
-			sex: 0
+			sex: 0,
+			submitStatus: false
         }
     },
     computed: {
@@ -131,9 +132,11 @@ export default {
 		},
 		// 保存资料
 		submitHandler() {
+			this.submitStatus = true;
 			let sex = this.sex +1;
 			if(this.birthday == '请选择'){
 				this.$common.successToShow('请选择出生日期');
+				this.submitStatus = false;
 				return false;
 			}else{
 				this.$api.editInfo({
@@ -142,6 +145,7 @@ export default {
 						nickname: this.nickname
 					}, res => {
 						this.$common.successToShow(res.msg, result => {
+							this.submitStatus = false;
 							uni.navigateBack({
 								delta: 1
 							});

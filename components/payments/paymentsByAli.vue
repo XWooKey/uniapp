@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { baseUrl } from '@/config/config.js';
+import { apiBaseUrl } from '@/config/config.js';
 export default {
 	props: {
 		// 如果是商品订单此参数必须
@@ -92,19 +92,25 @@ export default {
 				payment_code: code,
 				payment_type: this.type
 			}
-			
-			data['ids'] = this.type == 1 ? this.orderId : this.uid;
+			data['ids'] = (this.type == 1 || 5 || 6) ? this.orderId : this.uid
 			
 			// 判断订单支付类型
 			if (this.type == 2 && this.recharge) {
 				data['params'] = {
-					money: this.recharge
+					money: this.recharge,
+					trade_type: 'JSAPI'
+				}
+			} else if ((this.type == 5 || this.type == 6) && this.recharge) {
+				data['params'] = {
+					trade_type: 'JSAPI',
+					formid: this.orderId
+				}
+			}else {
+				data['params'] = {
+					trade_type: 'JSAPI'
 				}
 			}
 			
-			data.params = {
-				trade_type: 'JSAPI'
-			}
 			
 			let _this = this;
 			switch (code) {
@@ -116,12 +122,8 @@ export default {
 								tradeNO:res.data.trade_no,
 								success: function (e) {
 									if (e.errMsg === 'requestPayment:ok') {
-										_this.$common.successToShow(e.msg, () => {
-											if (_this.type == 1) {
-												_this.$common.redirectTo('/pages/goods/payment/result?order_id=' + _this.orderId);
-											} else if (_this.type == 2) {
-												_this.$common.redirectTo('/pages/member/balance/index');
-											}
+										_this.$common.successToShow(res.msg, () => {
+											_this.$common.redirectTo('/pages/goods/payment/result?id=' + res.data.payment_id);
 										});
 									}
 								}
@@ -135,7 +137,7 @@ export default {
 					//用户余额支付
 					this.$api.pay(data, res => {
 						if (res.status) {
-							this.$common.redirectTo('/pages/goods/payment/result?order_id=' + this.orderId);
+							this.$common.redirectTo('/pages/goods/payment/result?id=' + res.data.payment_id);
 						} else {
 							this.$common.errorToShow(res.msg);
 						}

@@ -3,7 +3,7 @@
 		<view class='search'>
 			<view class='search-c'>
 				<image class='icon search-icon' src='../../static/image/zoom.png'></image>
-				<input class='search-input' placeholder-class='search-input-p' placeholder='请输入关键字搜索' v-model="key" focus :auto-focus="focus" :fixed="focus"></input>
+				<input v-bind:class="$store.state.searchStyle" class='search-input' placeholder-class='search-input-p' placeholder='请输入关键字搜索' v-model="key" focus :auto-focus="focus" :fixed="focus"></input>
 			</view>
 			<button class="btn btn-g" @click="search" hover-class="btn-hover2">搜索</button>
 		</view>
@@ -18,7 +18,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="history-c" v-show="recommend.length > 0">
+		<view class="history-c" v-show="recommend && recommend.length > 0">
 			<view class="history-title">
 				<view class='ht-left'>搜索发现</view>
 			</view>
@@ -38,31 +38,15 @@ export default {
 			keys: [],
 			key: '',
 			navType: 'toNav',
-			recommend: [],
 			focus: true,
 		}
 	},
-	computed: {},
+	computed: {
+		recommend() {
+			return this.$store.state.config.recommend_keys
+		}
+	},
 	methods: {
-		//获取推荐
-// 		getRecommend() {
-// 			let key = this.$db.get('recommend_key');
-// 			if (key) {
-// 				//有缓存
-// 				this.recommend = key;
-// 			} else {
-// 				//重新获取
-// 				this.$api.getRecommendKeys(res => {
-// 					if (res.status) {
-// 						//用来展示
-// 						this.recommend = res.data;
-// 						//缓存数据
-// 						this.$db.set('recommend_key', res.data);
-// 					}
-// 				});
-// 			}
-// 		},
-		
 		//搜索
 		search: function () {
 			let keys = this.key;
@@ -119,8 +103,6 @@ export default {
 		this.keys = this.$db.get('search_key');
         this.key = this.$db.get('search_term');
 		this.focus = true;
-		this.recommend = this.$store.state.config.recommend_keys;
-        //this.getRecommend();
 	},
 	//页面卸载触发
 	onUnload() {
@@ -186,5 +168,11 @@ export default {
 	margin-bottom: 14upx;
 	font-size: 26upx;
 	padding: 10upx 20upx;
+}
+.square{
+	border-radius: 0;
+}
+.radius{
+	border-radius: 12upx;
 }
 </style>

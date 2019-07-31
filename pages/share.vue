@@ -107,7 +107,7 @@ export default {
 					})
 				},
 				fail() {
-					console.log('授权失败')
+					//console.log('授权失败')
 				}
 			})
 			// #endif

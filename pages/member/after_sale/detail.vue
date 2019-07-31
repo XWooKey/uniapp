@@ -122,7 +122,7 @@
 			</view>
 		</view>
 		<view class="button-bottom" v-show="status == 2 && reship_status == 1">
-			<button class="btn btn-b" @click="submitBtn">提交</button>
+			<button class="btn btn-b" @click="submitBtn" :disabled='submitStatus' :loading='submitStatus'>提交</button>
 		</view>
 		<view class="button-bottom" v-show="(order_status == 1 && status == 3) || (order_status == 1 && status == 2 && refund_status != 1 && refund_status != 0) || (order_status == 1 && status == 2 && reship_status == 3)">
 			<button class="btn btn-b" @click="repeat">再次申请售后</button>
@@ -156,13 +156,16 @@ export default {
 			mode: 'aspectFill',
 			order_id: '', //订单号
 			order_status: '', //订单状态
+			submitStatus: false
         }
     },
 	methods: {
 		//提交按钮
 		submitBtn() {
+			this.submitStatus = true;
 			if (this.logino == '') {
 				this.$common.errorToShow('请输入退货快递信息');
+				this.submitStatus = false;
 				return false;
 			}
 			let data = {
@@ -172,13 +175,15 @@ export default {
 			};
 			this.$api.sendShip(data, res => {
 				if (res.status) {
-					this.$common.successToShow('提交成功', function(){
+					this.$common.successToShow('提交成功', ress => {
+						this.submitStatus = false;
 						uni.navigateBack({
 							delta: 1
 						});
 					});
 				} else {
 					this.$common.errorToShow(res.msg);
+					this.submitStatus = false;
 				}
 			});
 		},

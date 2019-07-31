@@ -2,15 +2,14 @@
 	<!-- 团购秒杀 -->
 	<view class="img-list bottom-cell-group group-buying" v-if="data.params.list.length > 0">
 		<view class='cell-item right-img'>
-			<view class='cell-item-hd'>
-				<view class='cell-hd-title'>{{data.params.title}}</view>
-			</view>
-			<view class='cell-item-bd'>
+			<view class='cell-item-hd group-title'>
+				{{data.params.title}}
+				<!-- <view class='cell-hd-title'></view> -->
 			</view>
 		</view>
 		<view class='swiper-grids'>
 			<scroll-view class='swiper-list' scroll-x="true">
-				<view class="img-list-item" v-for="(item, key) in data.params.list" :key="key">
+				<view class="img-list-item" v-if="item.goods !== 'undefined' && item.goods" v-for="(item, key) in data.params.list" :key="key">
 					<image class="img-list-item-l medium-img have-none" :src="item.goods.image_url" mode='aspectFill' @click="groupDetail(item.goods.id, item.goods.group_id)"></image>
 					<view class="img-list-item-r medium-right">
 						<view class="goods-name list-goods-name" @click="groupDetail(item.goods.id, item.goods.group_id)">{{item.goods.name}}</view>
@@ -39,8 +38,8 @@ export default {
 	name: "jshopgrouppurchase",
 	props: {
 		data:{
-			type: Object,
-			required: true,
+			// type: Array,
+			required: false,
 		}
 	},
 	methods: {
@@ -76,8 +75,7 @@ export default {
 		},
 		//跳转到商品详情页面
 		// goodsDetail: function(id) {
-		// 	let ins = encodeURIComponent('id='+id);
-		// 	let url = '/pages/goods/index/index?scene=' + ins;
+		// 	let url = '/pages/goods/index/index?id=' + id;
 		// 	this.$common.navigateTo(url);
 		// },
 	},
@@ -101,5 +99,15 @@ export default {
 }
 .swiper-grids .img-list-item:last-child{
 	margin-right: 26upx;
+}
+
+/* .group-buying .goods-name{
+	min-height: 74upx;
+} */
+.group-buying .group-title{
+	width: 100%;
+	overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

@@ -26,7 +26,7 @@
 				v-if="item.is_default === 2"
 				@click="setDefault(item.id)"
 				>
-					<button class="btn btn-w">设为默认</button>
+					<button class="btn btn-w" :disabled='submitStatus' :loading='submitStatus'>设为默认</button>
 				</view>
 				<view class="del-card" 
 				v-if="mold"
@@ -38,7 +38,7 @@
 				v-else
 				@click="removeCard(item.id)"
 				>
-					<button class="btn btn-b">删除</button>
+					<button class="btn btn-b" :disabled='delSubmitStatus' :loading='delSubmitStatus'>删除</button>
 				</view>
 			</view>
 		</view>
@@ -56,7 +56,9 @@ export default {
 	data () {
 		return {
 			mold: '',
-			cards: [] // 我的银行卡列表
+			cards: [] ,// 我的银行卡列表
+			submitStatus: false,
+			delSubmitStatus: false
 		}
 	},
 	onLoad (options) {
@@ -78,33 +80,39 @@ export default {
 		},
 		// 删除银行卡
 		removeCard (cardId) {
-			this.$common.modelShow('提示', '确定删除该银行卡?', () => {
+			this.$common.modelShow('提示', '确定删除该银行卡?', res => {
+				this.delSubmitStatus = true;
 				let data = {
 					id: cardId
 				}
 				this.$api.removeBankCard(data, res => {
 					if (res.status) {
-						this.$common.successToShow(res.msg, () => {
-							this.getBankCards()
+						this.$common.successToShow(res.msg, ress => {
+							this.delSubmitStatus = false;
+							this.getBankCards();
 						})
 					} else {
-						this.$common.errorToShow(res.msg)
+						this.$common.errorToShow(res.msg);
+						this.delSubmitStatus = false;
 					}
 				})
 			})
 		},
 		// 设置默认卡
 		setDefault (id) {
+			this.submitStatus = true;
 			let data = {
 				id: id
 			}
 			this.$api.setDefaultBankCard(data, res => {
 				if (res.status) {
-					this.$common.successToShow(res.msg, () => {
-						this.getBankCards()
+					this.$common.successToShow(res.msg, ress => {
+						this.submitStatus = false;
+						this.getBankCards();
 					})
 				} else {
-					this.$common.errorToShow(res.msg)
+					this.$common.errorToShow(res.msg);
+					this.submitStatus = false;
 				}
 			})
 		},

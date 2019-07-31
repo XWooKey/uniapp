@@ -11,28 +11,55 @@
 				</view>
 				<button class="btn btn-g" hover-class="btn-hover2" @click="search">查询</button>
 			</view>
-			<view class="img-list">
-				<view v-for="(item, key) in goodsList" :key="key">
-					<view class="img-list-item">
-						<image class="img-list-item-l" :src="item.image_url" mode='aspectFill'></image>
-						<view class="img-list-item-r">
-							<view class="goods-name list-goods-name">{{item.name}}</view>
-							<view class="goods-item-c">
-								<view class="goods-buy">
-									<view class="goods-salesvolume">规格：{{item.addon}}</view>
-									<view class="goods-salesvolume">数量：{{item.nums}}</view>
-									<view class="goods-salesvolume">SN码：{{item.sn}}</view>
-									<view class="goods-salesvolume">BN码：{{item.bn}}</view>
+			<view v-if="allData.length">
+				<checkbox-group @change="checkboxChange">
+					<view class="img-list">
+						
+						<view class="img-list-c" v-for="(item, index) in allData" :key="index">
+							<view class="img-list-title">
+								<view class="ilt-left">
+									<text class="color-6">订单号:</text><text class="color-9">{{ item.order_id }}</text>
+								</view>
+								<view class="ilt-right  color-9">
+									{{ item.status_name }}
+								</view>
+							</view>
+							<view class="img-list-bot">
+								<label class="uni-list-cell uni-list-cell-pd">
+									<view v-if="!item.disabled" class="img-list-checkbox">
+										<checkbox color="#FF7159" :value="item.id" :checked="item.checked" :disabled="item.disabled" v-if="item.disabled" class="checkboxNo"/>
+										<checkbox color="#FF7159" :value="item.id" :checked="item.checked" :disabled="item.disabled" v-else/>
+									</view>
+								</label>
+								<view class="img-list-right">
+									<view class="img-list-content" v-for="(i, key) in item.goods" :key="key">
+										<view class="img-list-item">
+											<image class="img-list-item-l" :src="i.image_url" mode='aspectFill'></image>
+											<view class="img-list-item-r">
+												<view class="goods-name list-goods-name">{{i.name}}</view>
+												<view class="goods-item-c">
+													<view class="goods-buy">
+														<view class="goods-salesvolume">规格：{{i.addon}}</view>
+														<view class="goods-salesvolume">数量：{{i.nums}}</view>
+														<view class="goods-salesvolume">SN码：{{i.sn}}</view>
+														<view class="goods-salesvolume">BN码：{{i.bn}}</view>
+													</view>
+												</view>
+											</view>
+										</view>
+									</view>
 								</view>
 							</view>
 						</view>
+						
 					</view>
-				</view>
+				</checkbox-group>
 			</view>
 		</view>
-		<view class="button-bottom" v-if="allData.status == 1 || allData.status == 2">
-			<button class="btn btn-b btn-square" @click="write" v-if="allData.status == 1">确认核销</button>
-			<button class="btn btn-b btn-square completed" v-else-if="allData.status == 2">已核销</button>
+		
+		<view class="button-bottom" v-if="allData.length">
+			<button class="btn btn-b btn-square" @click="write" v-if="checkedIds.length">确认核销</button>
+			<button class="btn btn-b btn-square completed" v-else>请选择待核销订单</button>
 		</view>
 	</view>
 </template>
@@ -41,12 +68,10 @@
 	export default {
 		data(){
 			return {
-				key: '',
-				goodsList: [],
-				lading_id: false,
+				key: '', // 筛选条件
 				isgo: false,
 				isgotext: '确认核销',
-				allData: {}
+				allData: [] // 提货单列表
 			}
 		},
 		onLoad(e){
@@ -55,7 +80,31 @@
 			}
 			this.getLadingInfo();
 		},
+		computed: {
+			// 获取选中的提货单id
+			checkedIds () {
+				let ids = []
+				this.allData.forEach(item => {
+					// 判断不是禁用状态 并且是选中状态 并且是未核销状态
+					if (!item.disabled && item.checked && item.status === 1) {
+						ids.push(item.id)
+					}
+				})
+				return ids
+			},
+		},
 		methods: {
+			// 多选框点击事件处理
+			checkboxChange (e) {
+                var values = e.detail.value;
+				this.allData.forEach(item => {
+					if (values.includes(item.id)) {
+						item.checked = true
+					} else {
+						item.checked = false
+					}
+				})
+            },
 			//获取提货单详情
 			getLadingInfo() {
 				if(this.key){
@@ -64,9 +113,10 @@
 					}
 					this.$api.ladingInfo(data, e => {
 						if (e.status) {
-							this.isGoWrite(e.data);
+							this.allData = this.formatData(e.data);
 						} else {
-							this.$common.modelShow('提货单不存在或你无权查看', '该提货单不存在或不属于你管辖的店铺，你无法查看该提货单详情。', function(){});
+							this.allData = []; // 清空数据
+							this.$common.modelShow('提示', e.msg, function(){});
 						}
 					});
 				}
@@ -95,25 +145,45 @@
 				}
 				this.isgo = isgo;
 			},
-	
+			// 数据转化
+			formatData (data){
+				data.forEach (item => {
+					if (item.status === 2) {
+						// 已提货
+						this.$set(item, 'checked', false)
+						this.$set(item, 'disabled', true)
+					} else {
+						// 未提货
+						this.$set(item, 'checked', true)
+						this.$set(item, 'disabled', false)
+					}
+				})
+				return data
+			},
 			//去核销
 			write() {
 				let _this = this;
-				if(this.isgo){
-					this.$common.modelShow('提示', '您确认核销吗？', function(res){
-						//去核销
-						let data = {
-							lading_id: _this.lading_id
+				this.$common.modelShow('提示', '您确认核销吗？', function(res){
+					//去核销
+					let data = {
+						lading_ids: _this.checkedIds.join()
+					}
+					_this.$api.ladingExec(data, res => {
+						if(res.status) {
+							_this.$common.successToShow(res.msg, _this.afterChangeDataStatus())
 						}
-						_this.$api.ladingExec(data, res => {
-							if(res.status) {
-								_this.allData.status = 2;
-							}else{
-								_this.allData.status = 1;
-							}
-						});
 					});
-				}
+				});
+			},
+			// 核销完成后更改数据状态
+			afterChangeDataStatus () {
+				this.allData.forEach(item => {
+					if (this.checkedIds.indexOf(item.id) > -1) {
+						item.status = 2
+						item.checked = false
+						item.disabled = true
+					}
+				})
 			}
 		}
 	}
@@ -170,5 +240,42 @@
 .completed{
 	background-color: #d9d9d9;
 	color: #4e4e4e;
+}
+.img-list-bot{
+	background-color: #fff;
+	display: flex;
+	padding: 30upx 26upx;
+}
+.img-list-title{
+	padding: 26upx 26upx 0;
+	background-color: #fff;
+	font-size: 28upx;
+	overflow: hidden;
+}
+.ilt-left{
+	float: left;
+}
+.ilt-right{
+	float: right;
+}
+.img-list-checkbox{
+	/* display: inline-block; */
+	position: relative;
+	height: 100%;
+}
+.img-list-checkbox uni-checkbox{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.img-list-right{
+	/* display: inline-block; */
+	margin-left: 60upx;
+}
+.img-list-item{
+	padding: 0;
+}
+.img-list-item-r{
+	width: 360upx;
 }
 </style>

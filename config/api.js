@@ -1,4 +1,4 @@
-import { baseUrl } from './config.js';
+import { apiBaseUrl } from './config.js';
 import * as common from './common.js' //引入common
 import * as db from './db.js' //引入common
 // 需要登陆的，都写到这里，否则就是不需要登陆的接口
@@ -70,13 +70,18 @@ const methodsToken = [
     'store.storeladinglist',
     'store.ladinginfo',
     'store.lading',
-    'store.ladingdel'
+	'store.ladingdel',
+	'distribution_center-api-info',
+	'distribution_center-api-applydistribution',
+	'distribution_center-api-setstore',
+	'distribution_center-api-myorder',
+	'pintuan.pintuanteam'
 ];
 
 const post = (method, data, callback) => {
-	uni.showLoading({
-		title: '加载中'
-	});
+	// uni.showLoading({
+	// 	title: '加载中'
+	// });
 
 	// 判断token是否存在
 	if (methodsToken.indexOf(method) >= 0) {
@@ -93,7 +98,7 @@ const post = (method, data, callback) => {
 	data.method = method;
 	
 	uni.request({
-		url: baseUrl+'api.html',
+		url: apiBaseUrl+'api.html',
 		data: data,
 		header: {
 			'Accept': 'application/json',
@@ -102,7 +107,7 @@ const post = (method, data, callback) => {
 		},
 		method: 'POST',
 		success: (response) => {
-			uni.hideLoading();
+			//uni.hideLoading();
 			const result = response.data
 			if (!result.status) {
 				// 登录信息过期或者未登录
@@ -111,20 +116,93 @@ const post = (method, data, callback) => {
 					uni.showToast({
 						title: result.msg,
 						icon: 'none',
-						duration: 2000,
+						duration: 1000,
 						complete: function () {
-							 // #ifdef H5 || APP-PLUS
-							uni.navigateTo({
+							setTimeout(function() {
+								uni.hideToast();
+								// #ifdef H5 || APP-PLUS
+								uni.navigateTo({
 									url: '/pages/login/login/index1'
-							})
-							// #endif
-							// #ifdef MP-WEIXIN || MP-ALIPAY	
-							uni.navigateTo({
+								})
+								// #endif
+								// #ifdef MP-WEIXIN || MP-ALIPAY	
+								uni.navigateTo({
 									url: '/pages/login/choose/index',
 									animationType: 'pop-in',
 									animationDuration: 200
-							});
-							// #endif
+								});
+								// #endif
+							}, 1000)
+						}
+					});
+				}
+			}
+			callback(result);
+		},
+		
+		fail: (error) => {
+			//uni.hideLoading();
+			if (error && error.response) {
+				showError(error.response);
+			}
+		},
+	});
+	
+}
+
+//插件post
+const pluginsPost = (method, data, callback) => {
+	uni.showLoading({
+		title: '加载中'
+	});
+
+	// 判断token是否存在
+	if (methodsToken.indexOf(method) >= 0) {
+		// 获取用户token
+		let userToken = db.get("userToken");
+		if (!userToken) {
+			common.jumpToLogin();
+			return false;
+		} else {
+			data.token = userToken;
+		}
+	}
+	uni.request({
+		url: apiBaseUrl+'plugins/'+method+'.html',
+		data: data,
+		header: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json',
+			// 'Content-Type': 'application/x-www-form-urlencoded', //自定义请求头信息
+		},
+		method: 'POST',
+		success: (response) => {
+			//uni.hideLoading();
+			const result = response.data
+			if (!result.status) {
+				// 登录信息过期或者未登录
+				if (result.data === 14007 || result.data === 14006) {
+					db.del("userToken");
+					uni.showToast({
+						title: result.msg,
+						icon: 'none',
+						duration: 1000,
+						complete: function () {
+							setTimeout(function() {
+								uni.hideToast();
+								// #ifdef H5 || APP-PLUS
+								uni.navigateTo({
+									url: '/pages/login/login/index1'
+								})
+								// #endif
+								// #ifdef MP-WEIXIN || MP-ALIPAY	
+								uni.navigateTo({
+									url: '/pages/login/choose/index',
+									animationType: 'pop-in',
+									animationDuration: 200
+								});
+								// #endif
+							},1000);
 						}
 					});
 				}
@@ -132,11 +210,16 @@ const post = (method, data, callback) => {
 			callback(result);
 		},
 		fail: (error) => {
-			uni.hideLoading();
+			//uni.hideLoading();
 			if (error && error.response) {
 				showError(error.response);
 			}
 		},
+		complete: () => {
+			setTimeout(function () {
+				uni.hideLoading();
+			}, 250);
+		}
 	});
 	
 }
@@ -153,9 +236,11 @@ const get = (url, callback) => {
 		},
 		method: 'GET',
 		success: (response) => {
+			//uni.hideLoading();
 			callback(response.data);
 		},
 		fail: (error) => {
+			//uni.hideLoading();
 			if (error && error.response) {
 				showError(error.response);
 			}
@@ -212,7 +297,12 @@ const showError = error => {
 	uni.showToast({
 		title: errorMsg,
 		icon: 'none',
-		duration: 2000
+		duration: 1000,
+		complete: function () {
+			setTimeout(function() {
+				uni.hideToast();
+			},1000);
+		}
 	});
 }
 
@@ -225,7 +315,7 @@ export const uploadFiles = (callback) => {
 			});
 			const tempFilePaths = chooseImageRes.tempFilePaths;
 			const uploadTask = uni.uploadFile({
-				url: baseUrl + 'api.html', //仅为示例，非真实的接口地址
+				url: apiBaseUrl + 'api.html', //仅为示例，非真实的接口地址
 				filePath: tempFilePaths[0],
 				fileType: 'image',
 				name: 'file',
@@ -238,7 +328,7 @@ export const uploadFiles = (callback) => {
 						'upfile': tempFilePaths[0]
 				},
 				success: (uploadFileRes) => {
-						callback(JSON.parse(uploadFileRes.data));
+					callback(JSON.parse(uploadFileRes.data));
 				},
 				fail: (error) => {
 					if (error && error.response) {
@@ -276,7 +366,7 @@ export const uploadImage = (num, callback) => {
 			let tempFilePaths = res.tempFilePaths
 			for (var i = 0; i < tempFilePaths.length; i++) {
 				uni.uploadFile({
-					url: baseUrl + 'api.html',
+					url: apiBaseUrl + 'api.html',
 					filePath: tempFilePaths[i],
 					fileType: 'image',
 					name: 'file',
@@ -308,7 +398,7 @@ export const uploadImage = (num, callback) => {
 }
 
 // 获取店铺配置
-export const shopConfig = (callback) => get(baseUrl + '/api/common/jshopconf', callback);
+export const shopConfig = (callback) => get(apiBaseUrl + 'api/common/jshopconf', callback);
 
 // 用户注册
 export const reg = (data, callback) => post('user.reg', data, callback);
@@ -556,14 +646,12 @@ export const userToCash = (data, callback) => post('user.cash', data, callback);
 // 用户提现列表
 export const cashList = (data, callback) => post('user.cashlist', data, callback);
 
-// 获取授权登录方式
-export const getTrustLogin = (data, callback) => post('user.gettrustlogin', data, callback);
 
 // 绑定授权登录
 export const trustBind = (data, callback) => post('user.trustbind', data, callback);
 
 // 获取用户信息
-export const trustLogin = (data, callback) => post('user.trustcallback', data, callback);
+// export const trustLogin = (data, callback) => post('user.trustcallback', data, callback);
 
 // 判断用户下单可以使用多少积分
 export const usablePoint = (data, callback) => post('user.getuserpoint', data, callback);
@@ -634,8 +722,54 @@ export const getGroup = (data, callback) => post('group.getlist', data, callback
 // 获取秒杀团购详情
 export const groupInfo = (data, callback) => post('group.getgoodsdetial', data, callback);
 
-// app更新
-export const appUpdate = (data, callback) => post('appplus.checkversion', data, callback);
-
 // 自定义页面
 export const getPageConfig = (data, callback) => post('pages.getpageconfig', data, callback);
+
+//万能表单
+export const getFormDetial = (data, callback) => post('form.getformdetial', data, callback);
+
+//提交表单
+export const addSubmitForm = (data, callback) => post('form.addsubmit', data, callback); 
+
+//公众号授权获取openid
+export const getOpenId = (data, callback) => post('user.officiallogin', data, callback); 
+// 获取授权登录方式
+export const getTrustLogin = (data, callback) => post('user.gettrustlogin', data, callback);
+
+// APP信任登录
+export const appTrustLogin = (data, callback) => post('user.uniapplogin', data, callback);
+
+// 获取分销商进度状态
+export const getDistributioninfo = (data, callback) => pluginsPost('distribution_center-api-info', data, callback);
+
+// 申请分销商
+export const applyDistribution = (data, callback) => pluginsPost('distribution_center-api-applydistribution', data, callback);
+
+// 店铺设置
+export const setStore = (data, callback) => pluginsPost('distribution_center-api-setstore', data, callback);
+
+//我的分销订单
+export const getStoreInfo = (data, callback) => pluginsPost('distribution_center-api-getstoreinfo', data, callback);
+
+//我的分销订单
+export const getDistributionOrder = (data, callback) => pluginsPost('distribution_center-api-myorder', data, callback);
+
+// 拼团列表
+export const pintuanList = (data, callback) => post('pintuan.list', data, callback);
+
+// 拼团商品详情
+export const pintuanGoodsInfo = (data, callback) => post('pintuan.goodsinfo', data, callback);
+
+// 拼团货品详情
+export const pintuanProductInfo = (data, callback) => post('pintuan.productinfo', data, callback);
+
+//微信图文消息
+export const messageDetail = (data, callback) => post('articles.getweixinmessage', data, callback);
+
+//获取APP版本
+export const getAppVersion = (data, callback) => pluginsPost('app-api-checkVersion', data, callback);
+
+
+//获取APP版本
+export const getOrderPintuanTeamInfo = (data, callback) => post('pintuan.pintuanteam', data, callback);
+

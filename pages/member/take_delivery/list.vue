@@ -19,14 +19,9 @@
 								<view class='cell-hd-title'>订单编号：{{item.order_id}}</view>
 							</view>
 							<view class='cell-item-ft'>
-								<text class='cell-ft-text' v-if="item.order_info.status == 1 && item.order_info.pay_status == 1">待付款</text>
-								<text class='cell-ft-text' v-else-if="item.order_info.status == 1 && item.order_info.pay_status == 2 && item.order_info.ship_status == 1">待发货</text>
-								<text class='cell-ft-text' v-else-if="item.order_info.status == 1 && item.order_info.pay_status == 2 && item.order_info.ship_status == 3 && item.order_info.confirm == 1">待收货</text>
-								<text class='cell-ft-text' v-else-if="item.order_info.status == 1 && item.order_info.pay_status == 2 && item.order_info.ship_status == 3 && item.order_info.confirm == 2 && item.order_info.is_comment == 1">待评价</text>
-								<text class='cell-ft-text' v-else-if="item.order_info.status == 1 && item.order_info.pay_status == 2 && item.order_info.ship_status == 3 && item.order_info.confirm == 2 && item.order_info.is_comment == 2">已评价</text>
-								<text class='cell-ft-text' v-else-if="item.order_info.status == 2">已完成</text>
-								<text class='cell-ft-text' v-else-if="item.order_info.status == 3">已取消</text>
-								<text class='cell-ft-text' v-else>未知状态</text>
+<!-- 								<text class='cell-ft-text' v-if="item.status == 1">待提货</text>
+								<text class='cell-ft-text' v-else-if="item.status === 2">已提货</text>
+								<text class='cell-ft-text' v-else>未知状态</text> -->
 							</view>
 						</view>
 					</view>
@@ -49,7 +44,7 @@
 					</view>
 					<view class='order-list-button'>
 						<button class='btn btn-circle btn-g' hover-class="btn-hover" v-if="item.status == 2" @click="ladingDel(item.id)">删除</button>
-						<button class='btn btn-circle btn-w' hover-class="btn-hover" v-if="item.status == 1 && item.order_info.pay_status == 2 && item.order_info.ship_status == 3" @click="ladingWrite(item.id)">提货单核销</button>
+						<button class='btn btn-circle btn-w' hover-class="btn-hover" v-if="item.status == 1" @click="ladingWrite(item.id)">提货单核销</button>
 					</view>
 				</view>
 			</view>

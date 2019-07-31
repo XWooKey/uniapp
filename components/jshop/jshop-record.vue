@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import { baseUrl } from '@/config/config.js';
+import { apiBaseUrl } from '@/config/config.js';
 export default {
 	name: "jshoprecord",
 	props: {
 		data:{
-			type: Object,
+			// type: Object,
 			required: true,
 		},
 		//记录显示的位置类型
@@ -77,7 +77,7 @@ export default {
 				method:'pages.getrecod',
 			};
 			uni.request({
-				url: baseUrl+'api.html',
+				url: apiBaseUrl+'api.html',
 				data: data,
 				header: {
 					'Accept': 'application/json',

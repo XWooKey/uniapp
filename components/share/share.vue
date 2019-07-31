@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import { baseUrl } from '@/config/config.js'	
+import { apiBaseUrl } from '@/config/config.js'	
 export default {
 	props: {
 		// 商品id
@@ -204,7 +204,7 @@ export default {
 				});
 			},
 			fail: (e) => {
-				console.log('获取分享通道失败', e)
+				// console.log('获取分享通道失败', e)
 			}
 		});
 		// #endif
@@ -235,7 +235,7 @@ export default {
 			
 			// #ifdef H5
 			data.source = 1;
-			data.return_url = baseUrl + 'wap/#/' + page.route;
+			data.return_url = apiBaseUrl + 'wap/#/pages/share/jump';
 			// #endif
 			
 			// #ifdef MP-WEIXIN
@@ -300,7 +300,7 @@ export default {
 					})
 				},
 				complete:function(){
-					console.log('分享操作结束!')
+					// console.log('分享操作结束!')
 				}
 			}
 			

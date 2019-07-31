@@ -7,11 +7,10 @@
 <script>
 import htmlParser from '@/common/html-parser'
 export default {
-	components: {htmlParser},
 	name: "jshoptextarea",
 	props: {
 		data:{
-			type: Object,
+			// type: Object,
 			required: true,
 		}
 	},

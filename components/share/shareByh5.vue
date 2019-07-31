@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { baseUrl } from '@/config/config.js'	
+import { apiBaseUrl } from '@/config/config.js'	
 export default {
 	props: {
 		// 商品id
@@ -44,6 +44,21 @@ export default {
 		shareHref: {
 			type: String,
 			default: ''
+		},
+		//分享类型
+		shareType:{
+			type:Number,
+			default:1
+		},
+		//拼团id
+		groupId:{
+			type:Number,
+			default:0
+		},
+		//拼团的团队id
+		teamId:{
+			type:Number,
+			default:0
 		}
 	},
 	mounted () {
@@ -62,15 +77,17 @@ export default {
 		createPoster () {
 			let data = {
 				id: this.goodsId,
-				type: 1
-			}
+				type: this.shareType,
+				group_id :this.groupId,
+				team_id :this.teamId,
+			}	
 			
 			let pages = getCurrentPages()
 			let page = pages[pages.length - 1]
 			
 			data.source = 1;
-			data.return_url = baseUrl + 'wap/#/' + page.route;
-			
+			data.return_url = apiBaseUrl + 'wap/#/pages/share/jump';
+
 			let userToken = this.$db.get('userToken')
 			if (userToken) {
 				data.token = userToken

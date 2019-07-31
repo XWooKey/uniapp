@@ -54,9 +54,9 @@
 		</view>
 		<view class="button-bottom">
 			
-			<button class="btn btn-square btn-w" @click="delShip" v-if="id && id != 0" hover-class="btn-hover2">删除</button>
+			<button class="btn btn-square btn-w" @click="delShip" v-if="id && id != 0" hover-class="btn-hover2" :disabled='submitStatus' :loading='submitStatus'>删除</button>
 			
-			<button class="btn btn-square btn-b" @click="saveShip" hover-class="btn-hover2">保存</button>
+			<button class="btn btn-square btn-b" @click="saveShip" hover-class="btn-hover2" :disabled='submitStatus' :loading='submitStatus'>保存</button>
 		</view>
 	</view>
 
@@ -73,8 +73,8 @@ export default {
 			id: 0,
 			name: '',
 			mobile: '',
-			region: ['河南省', '郑州市', '中原区'],
-			areaId: 410102,
+			region: ['北京市', '北京市', '东城区'],
+			areaId: 110101,
 			address: '',
 			is_def: 2,
 			multiArray: [
@@ -85,7 +85,8 @@ export default {
 			multiIndex: [110000, 110100, 110101],
 			checked: false,
 			pickerValue: '',
-			defaultIndex: [0, 0, 0]
+			defaultIndex: [0, 0, 0],
+			submitStatus: false
 		}
 	},
 	computed: {},
@@ -178,20 +179,24 @@ export default {
 		},
 		//删除地址
 		delShip() {
+			this.submitStatus = true;
 			this.$api.removeShip({'id': this.id}, res => {
 				if(res.status){
-					this.$common.successToShow(res.msg, function(){
+					this.$common.successToShow(res.msg, ress => {
+						this.submitStatus = false;
 						uni.navigateBack({
 							delta: 1
 						});
 					});
 				}else{
 					this.$common.errorToShow(res.msg);
+					this.submitStatus = false;
 				}
 			});
 		},
 		//存储收货地址
 		saveShip() {
+			this.submitStatus = true;
 			let data = {
 				name: this.name,
 				address: this.address,
@@ -207,13 +212,15 @@ export default {
 				if (this.checkData(data)) {
 					this.$api.editShip(data, res => {
 						if(res.status){
-							this.$common.successToShow(res.msg, function(){
+							this.$common.successToShow(res.msg, ress => {
+								this.submitStatus = false;
 								uni.navigateBack({
 									delta: 1
 								});
 							});
 						}else{
 							this.$common.errorToShow(res.msg);
+							this.submitStatus = false;
 						}
 					});
 				}
@@ -222,13 +229,15 @@ export default {
 				if (this.checkData(data)) {
 					this.$api.saveUserShip(data, res => {
 						if(res.status){
-							this.$common.successToShow(res.msg, function(){
+							this.$common.successToShow(res.msg, ress => {
+								this.submitStatus = false;
 								uni.navigateBack({
 									delta: 1
 								});
 							});
 						}else{
 							this.$common.errorToShow(res.msg);
+							this.submitStatus = false;
 						}
 					});
 				}

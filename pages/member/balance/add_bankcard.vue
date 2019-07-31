@@ -70,7 +70,7 @@
 		</view>
 		<view class="button-bottom">
 			<!-- <button class="btn btn-square btn-w" @click="delShip" v-show="id && id != 0" hover-class="btn-hover2">删除</button> -->
-			<button class="btn btn-square btn-b" @click="addCard" hover-class="btn-hover2">保存</button>
+			<button class="btn btn-square btn-b" @click="addCard" hover-class="btn-hover2" :disabled='submitStatus' :loading='submitStatus'>保存</button>
 		</view>
 	</view>
 
@@ -92,13 +92,14 @@ export default {
 			cardNumber: '', // 银行卡号
 			name: '',	// 开户人姓名
 			mobile: '',	// 
-			region: ['河南省', '郑州市', '中原区'],
-			areaId: 410102,
+			region: ['北京市', '北京市', '东城区'],
+			areaId: 110101,
 			address: '',
 			is_def: 2,
 			checked: false,
 			pickerValue: '',
-			defaultIndex: [0, 0, 0]
+			defaultIndex: [0, 0, 0],
+			submitStatus: false
 		}
 	},
 	computed: {},
@@ -218,6 +219,7 @@ export default {
             } else if (!this.accountBank) {
 				this.$common.errorToShow('请输入开户银行信息')
             } else {
+				this.submitStatus = true;
 				let data = {
 					bankName: this.bankName,
                     areaId: this.areaId,
@@ -231,13 +233,15 @@ export default {
 				
 				this.$api.addBankCard(data, res => {
 					if (res.status) {
-						this.$common.successToShow(res.msg, () => {
+						this.$common.successToShow(res.msg, ress => {
+							this.submitStatus = false;
 							uni.navigateBack({
 								delta: 1
-							})
+							});
 						})
 					} else {
-						this.$common.errorToShow(res.msg)
+						this.$common.errorToShow(res.msg);
+						this.submitStatus = false;
 					}
 				})
 			}

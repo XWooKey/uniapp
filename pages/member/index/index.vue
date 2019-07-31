@@ -1,22 +1,42 @@
 <template>
 	<view class="content">
-		
+
 		<!-- 用户头像header -->
 		<view class='member-top'>
 			<image class='bg-img' src='../../../static/image/member-bg.png'></image>
 			<view class='member-top-c'>
-				<image class='user-head-img' mode="aspectFill" :src='userInfo.avatar'></image>
-				<view class='user-name'>{{ userInfo.nickname }}</view>
+				<template v-if="hasLogin">
+					<image class='user-head-img' mode="aspectFill" :src='userInfo.avatar'></image>
+					<view class='user-name'>{{ userInfo.nickname }}</view>
+					<view class="fz12 grade" v-if="userInfo.grade_name">
+						{{userInfo.grade_name}}
+					</view>
+				</template>
+				<template v-else>
+					<!-- #ifdef H5 || APP-PLUS -->
+					<image class='user-head-img' mode="aspectFill" :src='$store.state.config.shop_logo'></image>
+					<view class="login-btn" @click="toLogin">
+						登录/注册
+					</view>
+					<!-- #endif -->
+					<!-- #ifdef MP-WEIXIN -->
+					<view class="user-head-img">
+						<open-data type="userAvatarUrl"></open-data>
+					</view>
+
+					<view @click="getAuth">
+						<button class="login-btn" open-type="getUserInfo" @getuserinfo="getUserInfo" hover-class="btn-hover">授权登录</button>
+					</view>
+					<!-- #endif -->
+				</template>
+
 			</view>
 		</view>
 		<!-- 用户头像header end -->
-		
-		
+
 		<!-- 订单列表信息 -->
 		<view class='cell-group'>
-			<view class='cell-item right-img' 
-			@click="orderNavigateHandle('../order/orderlist')"
-			>
+			<view class='cell-item right-img' @click="orderNavigateHandle('../order/orderlist')">
 				<view class='cell-item-hd'>
 					<view class='cell-hd-title'>我的订单</view>
 				</view>
@@ -24,8 +44,8 @@
 					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
 				</view>
 			</view>
-		</view> 
-		
+		</view>
+
 		<view class='member-grid'>
 			<view class='member-item' v-for="(item, index) in orderItems" :key="index" @click="orderNavigateHandle('../order/orderlist', index + 1)">
 				<view class="badge color-f" v-if="item.nums">{{ item.nums }}</view>
@@ -39,17 +59,12 @@
 			</view>
 		</view>
 		<!-- 订单列表end -->
-		
+
 		<!-- 其他功能菜单 -->
 		<view class='cell-group margin-cell-group right-img'>
-			
-			<view class='cell-item'
-			v-for="(item, index) in utilityMenus"
-			:key="index"
-			>
-				<view class='cell-item-hd' 
-				@click="navigateToHandle(item.router)"
-				>
+
+			<view class='cell-item' v-for="(item, index) in utilityMenus" :key="index">
+				<view class='cell-item-hd' @click="navigateToHandle(item.router)">
 					<image class='cell-hd-icon' :src='item.icon'></image>
 					<view class='cell-hd-title'>{{ item.name }}</view>
 				</view>
@@ -59,9 +74,7 @@
 			</view>
 			<!-- #ifdef H5 || APP-PLUS -->
 			<view class='cell-item'>
-				<view class='cell-item-hd' 
-				@click="showChat()"	
-				>
+				<view class='cell-item-hd' @click="showChat()">
 					<image class='cell-hd-icon' src='../../../static/image/me-ic-phone.png'></image>
 					<view class='cell-hd-title'>联系客服</view>
 				</view>
@@ -72,9 +85,9 @@
 			<!-- #endif -->
 			<!-- #ifdef MP-WEIXIN -->
 			<view class='cell-item'>
-				<button class="cell-item-hd " hover-class="none" open-type="contact" bindcontact="showChat"  :session-from="kefupara">
-				  <image src='../../../static/image/me-ic-phone.png'  class='cell-hd-icon'></image>
-				  <view class='cell-hd-title'>联系客服</view>
+				<button class="cell-item-hd " hover-class="none" open-type="contact" bindcontact="showChat" :session-from="kefupara">
+					<image src='../../../static/image/me-ic-phone.png' class='cell-hd-icon'></image>
+					<view class='cell-hd-title'>联系客服</view>
 				</button>
 				<view class='cell-item-ft'>
 					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
@@ -83,14 +96,15 @@
 			<!-- #endif -->
 			<!-- #ifdef MP-ALIPAY -->
 			<view class='cell-item'>
-			<contact-button icon="../../../static/image/kefu2.png" size="170rpx*76rpx" tnt-inst-id="WKPKUZXG" scene="SCE00040186" class="cell-item-hd " hover-class="none" />
-			<view class='cell-item-ft'>
-				<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
-			</view>
+				<contact-button icon="../../../static/image/kefu2.png" size="170rpx*76rpx" tnt-inst-id="WKPKUZXG" scene="SCE00040186"
+				 class="cell-item-hd " hover-class="none" />
+				<view class='cell-item-ft'>
+					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+				</view>
 			</view>
 			<!-- #endif -->
 		</view>
-		
+
 		<view class='cell-group margin-cell-group right-img' v-if="isClerk">
 			<view class='cell-item' v-for="(item, index) in clerk" :key="index">
 				<view class='cell-item-hd' @click="navigateToHandle(item.router)">
@@ -109,246 +123,375 @@
 
 
 <script>
-import jihaiCopyright from '@/components/jihai-copyright/jihaiCopyright.vue'
-export default {
-	components: { jihaiCopyright },
-	data () {
-		return {
-			userInfo: {}, // 用户信息
-			kefupara: '',//客服传递资料
-			afterSaleNums: 0,
-			isClerk: false,
-			orderItems: [
-				{
-					name: '待付款',
-					icon: '../../../static/image/me-ic-obligation.png',
-					nums: 0,
-				},
-				{
-					name: '待发货',
-					icon: '../../../static/image/me-ic-sendout.png',
-					nums: 0,
-				},
-				{
-					name: '待收货',
-					icon: '../../../static/image/me-ic-receiving.png',
-					nums: 0,
-				},
-				{
-					name: '待评价',
-					icon: '../../../static/image/me-ic-evaluate.png',
-					nums: 0,
-				}
-			],
-			utilityMenus: [
-				{
-					name: '我的优惠券',
-					icon: '../../../static/image/ic-me-coupon.png',
-					router: '../coupon/index'
-				},
-				{
-					name: '我的余额',
-					icon: '../../../static/image/ic-me-balance.png',
-					router: '../balance/index'
-				},
-				{
-					name: '我的积分',
-					icon: '../../../static/image/ic-me-balance.png',
-					router: '../integral/index'
-				},
-				{
-					name: '地址管理',
-					icon: '../../../static/image/me-ic-site.png',
-					router: '../address/list'
-				},
-				{
-					name: '我的收藏',
-					icon: '../../../static/image/ic-me-collect.png',
-					router: '../collection/index'
-				},
-				{
-					name: '我的足迹',
-					icon: '../../../static/image/ic-me-track.png',
-					router: '../history/index'
-				},
-				{
-					name: '邀请好友',
-					icon: '../../../static/image/ic-me-invite.png',
-					router: '../invite/index'
-				},
-				{
-					name: '系统设置',
-					icon: '../../../static/image/me-ic-set.png',
-					router: '../setting/index'
-				},
-			],
-			'clerk': [
-				{
-					name: '提货单列表',
-					icon: '../../../static/image/me-ic-phone.png',
-					router: '../take_delivery/list'
-				},
-				{
-					name: '提货单核销',
-					icon: '../../../static/image/me-ic-about.png',
-					router: '../take_delivery/index'
-				},
-			]
-		}
-	},
-	onLoad () {
-		
-	},
-	onShow () {
-		this.initData()
-	},
-	methods: {
-		initData () {
-			// 获取用户信息
-			var _this = this;
-			this.$api.userInfo({}, res => {
-				if (res.status) {
-					_this.userInfo = res.data
-					// #ifdef MP-WEIXIN
-					//微信小程序打开客服时，传递用户信息
-					var kefupara = {};
-					kefupara.nickName = res.data.nickname;
-					kefupara.tel = res.data.mobile;
-					_this.kefupara = JSON.stringify(kefupara);
-					// #endif
-					// 获取订单不同状态的数量
-					let data = {
-						ids: '1,2,3,4',
-						isAfterSale: true
+	import jihaiCopyright from '@/components/jihai-copyright/jihaiCopyright.vue'
+	import {
+		checkLogin
+	} from '@/config/mixins.js'
+	export default {
+		components: {
+			jihaiCopyright
+		},
+		mixins: [checkLogin],
+		data() {
+			return {
+				open_id: '',
+				hasLogin: false,
+				userInfo: {}, // 用户信息
+				kefupara: '', //客服传递资料
+				afterSaleNums: 0,
+				isClerk: false,
+				orderItems: [{
+						name: '待付款',
+						icon: '../../../static/image/me-ic-obligation.png',
+						nums: 0
+					},
+					{
+						name: '待发货',
+						icon: '../../../static/image/me-ic-sendout.png',
+						nums: 0
+					},
+					{
+						name: '待收货',
+						icon: '../../../static/image/me-ic-receiving.png',
+						nums: 0
+					},
+					{
+						name: '待评价',
+						icon: '../../../static/image/me-ic-evaluate.png',
+						nums: 0
 					}
-					_this.$api.getOrderStatusSum(data, res => {
-						if (res.status) {
-							_this.orderItems.forEach((item, key) => {
-								item.nums = res.data[key + 1];
-							});
-							_this.afterSaleNums = res.data.isAfterSale?res.data.isAfterSale:0;
+				],
+				utilityMenus: {
+					distribution:{
+						name: '分销中心',
+						icon: '../../../static/image/distribution.png',
+						router: '../distribution/user'
+					},
+					coupon:{
+						name: '我的优惠券',
+						icon: '../../../static/image/ic-me-coupon.png',
+						router: '../coupon/index'
+					},
+					balance:{
+						name: '我的余额',
+						icon: '../../../static/image/ic-me-balance.png',
+						router: '../balance/index'
+					},
+					integral:{
+						name: '我的积分',
+						icon: '../../../static/image/integral.png',
+						router: '../integral/index'
+					},
+					address:{
+						name: '地址管理',
+						icon: '../../../static/image/me-ic-site.png',
+						router: '../address/list'
+					},
+					collection:{
+						name: '我的收藏',
+						icon: '../../../static/image/ic-me-collect.png',
+						router: '../collection/index'
+					},
+					history:{
+						name: '我的足迹',
+						icon: '../../../static/image/ic-me-track.png',
+						router: '../history/index'
+					},
+					invite:{
+						name: '邀请好友',
+						icon: '../../../static/image/ic-me-invite.png',
+						router: '../invite/index'
+					},
+					setting:{
+						name: '系统设置',
+						icon: '../../../static/image/me-ic-set.png',
+						router: '../setting/index'
+					}
+				},
+				clerk: [{
+						name: '提货单列表',
+						icon: '../../../static/image/me-ic-phone.png',
+						router: '../take_delivery/list'
+					},
+					{
+						name: '提货单核销',
+						icon: '../../../static/image/me-ic-about.png',
+						router: '../take_delivery/index'
+					}
+				]
+			}
+		},
+		onShow() {
+			this.initData()
+		},
+		methods: {
+			getUserInfo(e) {
+				let _this = this
+				//return false;
+				if (e.detail.errMsg == 'getUserInfo:fail auth deny') {
+					_this.$common.errorToShow('未授权')
+				} else {
+					var data = {
+						open_id: _this.open_id,
+						iv: e.detail.iv,
+						edata: e.detail.encryptedData,
+						signature: e.detail.signature
+					}
+					//有推荐码的话，带上
+					var invitecode = _this.$db.get('invitecode')
+					if (invitecode) {
+						data.invitecode = invitecode
+					}
+					_this.toWxLogin(data)
+				}
+			},
+			getWxCode() {
+				let that = this
+				uni.login({
+					scopes: 'auth_user',
+					success: function(res) {
+						if (res.code) {
+							that.wxLoginStep1(res.code)
+						} else {
+							this.$common.errorToShow('未取得code')
 						}
-					});
-					
-					//判断是否是店员
-					this.$api.isStoreUser({}, res => {
-						this.isClerk = res.flag;
-					});
-				}
-			});
-
-		},
-		navigateToHandle (pageUrl) {
-			this.$common.navigateTo(pageUrl)
-		},
-		orderNavigateHandle (url, tab = 0) {
-			this.$store.commit('orderTab', tab)
-			this.$common.navigateTo(url)
-		},
-		goAfterSaleList() {
-			this.$common.navigateTo('../after_sale/list');
-		},
-		//在线客服,只有手机号的，请自己替换为手机号
-		showChat () {
-			// #ifdef H5
-			let _this = this
-           	window._AIHECONG('ini', {
-				entId: _this.$config.entId,
-				button: false,
-				appearance: {
-					panelMobile: {
-						tone: '#FF7159',
-						sideMargin: 30,
-						ratio: 'part',
-						headHeight: 50
-					}
-				}
-			});
-			//传递客户信息
-			window._AIHECONG('customer',{
-				head : _this.userInfo.avatar,
-				'名称' : _this.userInfo.nickname,
-				'手机' : _this.userInfo.mobile
-			})
-            window._AIHECONG('showChat');
-			// #endif
-			
-			// 拨打电话
-			// #ifdef APP-PLUS
-			if (this.kfmobile) {
-				uni.makePhoneCall({
-					phoneNumber: this.kfmobile,
-					success: () => {
-						// console.log("成功拨打电话")
+					},
+					fail: function(res) {
+						this.$common.errorToShow('用户授权失败wx.login')
 					}
 				})
-			} else {
-				this.$common.errorToShow('商户未设置客服手机号')
+			},
+			wxLoginStep1(code) {
+				this.$api.login1({
+					code
+				}, res => {
+					if (res.status) {
+						this.open_id = res.data
+					} else {
+						this.$common.errorToShow(res.msg, function() {
+							uni.navigateBack({
+								delta: 1
+							})
+						})
+					}
+				})
+			},
+
+			toWxLogin(data) {
+				let _this = this
+				_this.$api.login2(data, function(res) {
+					if (res.status) {
+						//判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
+						if (typeof res.data.token == 'undefined') {
+							uni.redirectTo({
+								url: '/pages/login/login/index?user_wx_id=' + res.data.user_wx_id
+							})
+						} else {
+							_this.$db.set('userToken', res.data.token)
+							_this.initData()
+						}
+					} else {
+						_this.$common.errorToShow('登录失败，请重试')
+					}
+				})
+			},
+			toLogin() {
+				this.$common.navigateTo('../../login/login/index1')
+			},
+			initData() {
+				// 获取用户信息
+				var _this = this
+				//判断是开启分销还是原始推广
+				if(this.$store.state.config.open_distribution){
+					delete this.utilityMenus.invite;
+				}else{
+					delete this.utilityMenus.distribution;
+				}
+				if (this.$db.get('userToken')) {
+					this.hasLogin = true
+					this.$api.userInfo({}, res => {
+						if (res.status) {
+							_this.userInfo = res.data
+							// #ifdef MP-WEIXIN
+							//微信小程序打开客服时，传递用户信息
+							var kefupara = {}
+							kefupara.nickName = res.data.nickname
+							kefupara.tel = res.data.mobile
+							_this.kefupara = JSON.stringify(kefupara)
+							// #endif
+							// 获取订单不同状态的数量
+							let data = {
+								ids: '1,2,3,4',
+								isAfterSale: true
+							}
+							_this.$api.getOrderStatusSum(data, res => {
+								if (res.status) {
+									_this.orderItems.forEach((item, key) => {
+										item.nums = res.data[key + 1]
+									})
+									_this.afterSaleNums = res.data.isAfterSale ?
+										res.data.isAfterSale :
+										0
+								}
+							})
+							//判断是否是店员
+							this.$api.isStoreUser({}, res => {
+								this.isClerk = res.flag
+							})
+						}
+					})
+				} else {
+					this.hasLogin = false
+					// #ifdef MP-WEIXIN
+					this.getWxCode()
+					// #endif
+				}
+			},
+			navigateToHandle(pageUrl) {
+				if (!this.hasLogin) {
+					return this.checkIsLogin()
+				}
+				this.$common.navigateTo(pageUrl)
+			},
+			orderNavigateHandle(url, tab = 0) {
+				if (!this.hasLogin) {
+					return this.checkIsLogin()
+				}
+				this.$store.commit('orderTab', tab)
+				this.$common.navigateTo(url)
+			},
+			goAfterSaleList() {
+				if (!this.hasLogin) {
+					return this.checkIsLogin()
+				}
+				this.$common.navigateTo('../after_sale/list')
+			},
+			//在线客服,只有手机号的，请自己替换为手机号
+			showChat() {
+				// #ifdef H5
+				let _this = this
+				window._AIHECONG('ini', {
+					entId: _this.$store.state.config.ent_id,
+					button: false,
+					appearance: {
+						panelMobile: {
+							tone: '#FF7159',
+							sideMargin: 30,
+							ratio: 'part',
+							headHeight: 50
+						}
+					}
+				})
+				//传递客户信息
+				window._AIHECONG('customer', {
+					head: _this.userInfo.avatar,
+					名称: _this.userInfo.nickname,
+					手机: _this.userInfo.mobile
+				})
+				window._AIHECONG('showChat')
+				// #endif
+
+				// 拨打电话
+				// #ifdef APP-PLUS
+				if (this.kfmobile) {
+					uni.makePhoneCall({
+						phoneNumber: this.kfmobile,
+						success: () => {
+							// console.log("成功拨打电话")
+						}
+					})
+				} else {
+					this.$common.errorToShow('商户未设置客服手机号')
+				}
+				// #endif
 			}
-			// #endif
-        }
-	},
-	computed: {
-		// 获取店铺联系人手机号
-		kfmobile () {
-			return this.$store.state.config.shop_mobile || 0
-		}
-	},
-	watch: {
-		
+		},
+		computed: {
+			// 获取店铺联系人手机号
+			kfmobile() {
+				return this.$store.state.config.shop_mobile || 0
+			}
+		},
+		watch: {}
 	}
-}	
 </script>
 
 
 <style>
-.member-top{
-  position: relative;
-  width: 100%;
-  height: 340upx;
-}
-.bg-img{
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-.member-top-c{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  text-align: center;
-}
-.user-head-img{
-  width: 160upx;
-  height: 160upx;
-  border-radius: 50%;
-  background-color: rgba(255,255,255,.7);
-}
-.user-name{
-  font-size: 30upx;
-  color: #fff;
-}
-.member-grid{
-  background-color: #fff;
-  border-top: 2upx solid #eee;
-  padding: 20upx 0;
-}
-.margin-cell-group{
-  margin: 20upx 0;
-  color: #666666;
-}
-.badge{
-	left: 80upx;
-	top: -6upx;
-}
-button.cell-item-hd{
-	background-color: #fff;
-	padding: 0;
-	line-height: 1.4;
-	color: #333;
-}
-button.cell-item-hd:after{
-	border: none;
-}
+	.member-top {
+		position: relative;
+		width: 100%;
+		height: 340upx;
+	}
+
+	.bg-img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+
+	.member-top-c {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		text-align: center;
+	}
+
+	.user-head-img {
+		display: block;
+		width: 160upx;
+		height: 160upx;
+		border-radius: 50%;
+		overflow: hidden;
+		background-color: rgba(255, 255, 255, 0.7);
+		margin-bottom: 16upx;
+	}
+
+	.user-name {
+		font-size: 30upx;
+		color: #fff;
+		margin-bottom: 16upx;
+	}
+
+	.grade {
+		color: #FFF;
+	}
+
+	.member-grid {
+		background-color: #fff;
+		border-top: 2upx solid #eee;
+		padding: 20upx 0;
+	}
+
+	.margin-cell-group {
+		margin: 20upx 0;
+		color: #666666;
+	}
+
+	.badge {
+		left: 80upx;
+		top: -6upx;
+	}
+
+	button.cell-item-hd {
+		background-color: #fff;
+		padding: 0;
+		line-height: 1.4;
+		color: #333;
+	}
+
+	button.cell-item-hd:after {
+		border: none;
+	}
+
+	.login-btn {
+		color: #fff;
+		width: 160upx;
+		height: 50upx;
+		line-height: 50upx;
+		border-radius: 25upx;
+		background: #ff7159;
+		font-size: 12px;
+	}
 </style>

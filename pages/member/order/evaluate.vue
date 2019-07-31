@@ -55,7 +55,7 @@
 		</view>
 
 		<view class="button-bottom">
-			<button class="btn btn-square btn-b" hover-class="btn-hover" @click="toEvaluate">提交评论</button>
+			<button class="btn btn-square btn-b" hover-class="btn-hover" @click="toEvaluate" :disabled='submitStatus' :loading='submitStatus'>提交评论</button>
 		</view>
 		
 	</view>
@@ -75,7 +75,8 @@ export default {
             score: [], // 商品评价
             textarea: [], // 商品评价信息
             isupload: [], // 启/禁用 图片上传按钮
-			rate: 5
+			rate: 5,
+			submitStatus: false
 		}
 	},
 	onLoad (options) {
@@ -160,6 +161,7 @@ export default {
 		},
 		// 提交评价
 		toEvaluate () {
+			this.submitStatus = true;
 			let items = {}
 			
 			this.images.forEach((item, key) => {
@@ -177,7 +179,7 @@ export default {
 
 			this.$api.orderEvaluate(data, res => {
                 if (res.status) {
-                    this.$common.successToShow(res.msg, () => {
+                    this.$common.successToShow(res.msg, ress => {
 						// 更改订单列表页的订单状态
 						let pages = getCurrentPages(); // 当前页
 						let beforePage = pages[pages.length - 2]; // 上个页面
@@ -195,13 +197,14 @@ export default {
 							beforePage.rootVM.isReload = true
 							// #endif
 						}
-						
+						this.submitStatus = false;
 						uni.navigateBack({
 							delta: 1
 						})
 					})
                 } else {
 					this.$common.errorToShow(res.msg)
+					this.submitStatus = false;
 				}
             })
 		}

@@ -1,31 +1,29 @@
 <template>
-	<view class='cell-group payment-method'>
-		<view class='cell-item add-title-item'
-		v-for="item in payments"
-		:key="item.code"
-		@click="toPayHandler(item.code)"
-		v-if="!(type == 2 && item.code == 'balancepay')"
-		>
-			<view class='cell-item-hd'>
-				<image class='cell-hd-icon' :src='item.icon'></image>
-			</view>
-			<view class='cell-item-bd'>
-				<view class="cell-bd-view">
-					<text class="cell-bd-text">{{ item.name }}</text>
+	<view class='cell-group payment-method payment-wx'>
+		<form class='cell-item add-title-item' v-for="item in payments" :key="item.code" @submit="toPayHandler" report-submit="true" v-if="!(type == 2 && item.code == 'balancepay')">
+			<input name="code" :value="item.code" class="no-show">
+			<button class="btn" form-type="submit">
+				<view class='cell-item-hd'>
+					<image class='cell-hd-icon' :src='item.icon'></image>
 				</view>
-				<view class="cell-bd-view">
-					<text class="cell-bd-text address">{{ item.memo }}</text>
+				<view class='cell-item-bd'>
+					<view class="cell-bd-view">
+						<text class="cell-bd-text">{{ item.name }}</text>
+					</view>
+					<view class="cell-bd-view">
+						<text class="cell-bd-text address">{{ item.memo }}</text>
+					</view>
 				</view>
-			</view>
-			<view class='cell-item-ft'>
-				<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
-			</view>
-		</view>
+				<view class='cell-item-ft'>
+					<image class='cell-ft-next icon' src='../../static/image/right.png'></image>
+				</view>
+			</button>
+		</form>
 	</view>
 </template>
 
 <script>
-import { baseUrl } from '@/config/config.js'
+import { apiBaseUrl } from '@/config/config.js'
 export default {
 	props: {
 		// 如果是商品订单此参数必须
@@ -92,18 +90,27 @@ export default {
 			return payments
 		},
 		// 用户点击支付方式处理
-		toPayHandler (code) {
+		toPayHandler (e) {
+			let code = e.target.value.code;
+			let formId = e.detail.formId;
+			
 			let data = {
 				payment_code: code,
-				payment_type: this.type
+				payment_type: this.type,
+				params: {
+					formid: formId
+				}
 			}
-			
-			data['ids'] = this.type == 1 ? this.orderId : this.uid
+			data['ids'] = (this.type == 1 || 5 || 6) ? this.orderId : this.uid
 			
 			// 判断订单支付类型
 			if (this.type == 2 && this.recharge) {
 				data['params'] = {
 					money: this.recharge
+				}
+			}else if ((this.type == 5 || this.type == 6) && this.recharge) {
+				data['params'] = {
+					formid: this.orderId
 				}
 			}
 			let _this = this
@@ -118,16 +125,12 @@ export default {
 							package: res.data.package,
 							signType: res.data.signType,
 							paySign: res.data.paySign,
-							success: function (res) {
-								if (res.errMsg === 'requestPayment:ok') {
+							success: function (e) {
+								if (e.errMsg === 'requestPayment:ok') {
 									_this.$common.successToShow(res.msg, () => {
-										if (_this.type == 1) {
-											_this.$common.redirectTo('/pages/goods/payment/result?order_id=' + _this.orderId)
-										} else if (_this.type == 2) {
-											_this.$common.redirectTo('/pages/member/balance/index')
-										}
+										_this.$common.redirectTo('/pages/goods/payment/result?id=' + res.data.payment_id)
 									})
-								} 
+								}
 							}
 						});
 					} else {
@@ -142,7 +145,7 @@ export default {
 				 */
 				this.$api.pay(data, res => {
 					if (res.status) {
-						this.$common.redirectTo('/pages/goods/payment/result?order_id=' + this.orderId)
+						this.$common.redirectTo('/pages/goods/payment/result?id=' + res.data.payment_id)
 					} else {
 						this.$common.errorToShow(res.msg)
 					}
@@ -181,5 +184,20 @@ export default {
 .payment-method .address{
 	font-size: 24upx;
 	color: #999;
-}	
+}
+.no-show{
+	display: none;
+}
+.payment-wx .btn{
+	background-color: #fff;
+	line-height:1.7;
+	padding: 0;
+	width: 724upx;
+	position: relative;
+    overflow: hidden;
+	float: left;
+}
+.payment-wx .btn .cell-item-hd{
+	min-width: 100upx;
+}
 </style>

@@ -1,10 +1,13 @@
-//export const baseUrl = 'https://demo.jihainet.com/';//注意最后斜杠
-export const baseUrl = 'http://www.b2c.com/'
-export const entId = '10519';//客服ID
-export const aboutArticleId = '2';//关于我们文章id
-export const paymentType = { //支付单类型
-	order: 1,    //订单
-    recharge: 2, //充值
-    form_order: 5, //表单付款码
-    form_pay: 6 //表单订单
-};
+export const apiBaseUrl = 'http://www.b2c.com/'
+// export const apiBaseUrl = 'https://demo.jihainet.com/'
+export const entId = '11292';//客服ID
+// #ifdef H5
+export const baseUrl = process.env.NODE_ENV === 'development'?window.location.origin+'/':apiBaseUrl
+// #endif
+export const paymentType = {
+  //支付单类型
+  order: 1, //订单
+  recharge: 2, //充值
+  form_order: 5, //表单付款码
+  form_pay: 6 //表单订单
+}

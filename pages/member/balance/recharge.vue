@@ -15,7 +15,7 @@
 						<view class='cell-hd-title'>充值金额</view>
 					</view>
 					<view class='cell-item-bd'>
-						<input class='cell-bd-input' placeholder='请输入要充值的金额' v-model="money" focus type="number"></input>
+						<input class='cell-bd-input' placeholder='请输入要充值的金额' v-model="money" focus type="digit"></input>
 					</view>
 				</view>
 			</view>

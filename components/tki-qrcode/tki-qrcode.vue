@@ -87,7 +87,12 @@ export default {
 				uni.showToast({
 					title: '二维码内容不能为空',
 					icon: 'none',
-					duration: 2000
+					duration: 1000,
+					complete: function () {
+						setTimeout(function() {
+							uni.hideToast();
+						},1000);
+					}
 				});
 			}
 		},
@@ -104,7 +109,12 @@ export default {
 						uni.showToast({
 							title: '二维码保存成功',
 							icon: 'success',
-							duration: 2000
+							duration: 1000,
+							complete: function () {
+								setTimeout(function() {
+									uni.hideToast();
+								},1000);
+							}
 						});
 					}
 				});

@@ -106,7 +106,7 @@
 				</view>
 			</view>
 			<view class="button-bottom">
-				<button class="btn btn-b btn-square" formType="submit">提交</button>
+				<button class="btn btn-b btn-square" formType="submit" :disabled='submitStatus' :loading='submitStatus'>提交</button>
 			</view>
 		</form>
 	</view>
@@ -132,6 +132,7 @@ export default {
 			image_max: 5,    //用于前台判断上传图片按钮是否显示
 			refund_input_noedit: true,
 			mode: 'aspectFill',
+			submitStatus: false
         }
     },
 	components: { jhlable },
@@ -221,6 +222,7 @@ export default {
 
 		//提交
 		submit(e) {
+			this.submitStatus = true;
 			let images = [];
 			for(var i = 0; i<this.images.length; i++) {
 				images = images.concat(this.images[i].image_id);
@@ -230,10 +232,12 @@ export default {
 			let reg = /^[0-9]+(.[0-9]{1,2})?$/;
 			if (!reg.test(this.refund)) {
 				this.$common.errorToShow('请输入正确金额');
+				this.submitStatus = false;
 				return false;
 			} else {
 				if (this.refund > this.refund_show) {
 					this.$common.errorToShow('退款金额过大');
+					this.submitStatus = false;
 					return false;
 				} 
 			}
@@ -252,13 +256,15 @@ export default {
 			// #endif
 			this.$api.addAfterSales(data, res => {
 				if(res.status){
-					this.$common.successToShow('提交成功', function(){
+					this.$common.successToShow('提交成功', ress => {
+						this.submitStatus = false;
 						uni.navigateBack({
 							delta: 1
 						});
 					});
 				}else{
 					this.$common.errorToShow(res.msg);
+					this.submitStatus = false;
 				}
 			});
 		},

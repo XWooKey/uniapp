@@ -59,7 +59,8 @@ export default {
 		articleList () {
 			let data = {
 				page: this.page,
-				limit: this.limit
+				limit: this.limit,
+				type_id:this.cid
 			}
 			
 			this.loadStatus = 'loading'
@@ -67,10 +68,6 @@ export default {
 			this.$api.articleList(data, res => {
 				if (res.status) {
 					const _list = res.data.list
-					
-					_list.forEach(item => {
-						item.ctime = this.$common.timeToDate(item.ctime)
-					})
 					
 					this.list = [...this.list, ..._list]
 					

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { baseUrl } from '@/config/config.js'
+import { apiBaseUrl } from '@/config/config.js'
 export default {
 	props: {
 		// 如果是商品订单此参数必须
@@ -97,8 +97,13 @@ export default {
 				payment_type: _this.type
 			}
 			
-			data['ids'] = _this.type == 1 ? _this.orderId : _this.uid
-			
+			data['ids'] = (this.type == 1 || 5 || 6) ? this.orderId : this.uid
+			 if ((this.type == 5 || this.type == 6) && this.recharge) {
+				data['params'] = {
+					trade_type: 'APP',
+					formid: this.orderId
+				}
+			}
 			switch (code) {
 				case 'alipay':
 				/**
@@ -122,7 +127,7 @@ export default {
 							orderInfo: res.data.data,
 							success: function(res){
 								_this.$common.successToShow('支付成功', () => {
-									_this.redirectHandler()
+									_this.redirectHandler(res.data.payment_id)
 								})
 							}
 						});
@@ -161,7 +166,7 @@ export default {
 								},
 								success: function(res){
 									_this.$common.successToShow('支付成功', () => {
-										_this.redirectHandler()
+										_this.redirectHandler(res.data.payment_id)
 									})
 								}
 							});
@@ -177,7 +182,7 @@ export default {
 					 */
 					_this.$api.pay(data, res => {
 						if (res.status) {
-							_this.redirectHandler()
+							_this.redirectHandler(res.data.payment_id)
 						} else {
 							_this.$common.errorToShow(res.msg)
 						}
@@ -192,14 +197,8 @@ export default {
 				}
 		},
 		// 支付成功后跳转操作
-		redirectHandler () {
-			if (this.type == 1 && this.orderId) {
-				this.$common.redirectTo('/pages/goods/payment/result?order_id=' + this.orderId)
-			} else if (this.type == 2 && this.recharge) {
-				uni.navigateBack({
-					delta: 2
-				})
-			}
+		redirectHandler (paymentId) {
+			this.$common.redirectTo('/pages/goods/payment/result?id=' + paymentId)
 		}
 	}
 	

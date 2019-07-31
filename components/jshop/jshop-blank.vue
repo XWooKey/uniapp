@@ -7,7 +7,7 @@ export default {
 	name: "jshopblank",
 	props: {
 		data:{
-			type: Object,
+			// type: Array,
 			required: true,
 		}
 	},
