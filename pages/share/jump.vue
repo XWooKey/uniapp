@@ -7,8 +7,9 @@
 			return {};
 		},
 		onLoad(e) {
-			let scene = decodeURIComponent(e.scene)
-			let arr1 = scene.split('&')
+			let url = this.$common.shareParameterEncode(e.scene);
+			let arr1 = url.split('&');
+			
 			let type = '',
 				invite = '',
 				page_code = '',
@@ -37,11 +38,11 @@
 				if (key == 'group_id') {
 					group_id = arr1[i].split('=')[1]
 				}
-				if (key == 'tid') {//拼团参团id
+				if (key == 'team_id') {//拼团参团id
 					team_id = arr1[i].split('=')[1]
 				}
 			}
-	
+			
 			this.saveInviteCode(invite); //存储邀请码
 			switch (type) {
 				case '1': //首页

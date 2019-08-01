@@ -92,7 +92,7 @@ export default {
 			let page = pages[pages.length - 1]
 			
 			data.source = 3;
-			data.return_url = page.__proto__.route;
+			data.return_url = 'pages/share/jump';//page.__proto__.route;
 			
 			let userToken = this.$db.get('userToken')
 			if (userToken) {

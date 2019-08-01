@@ -445,7 +445,7 @@
 		border-radius: 50%;
 		overflow: hidden;
 		background-color: rgba(255, 255, 255, 0.7);
-		margin-bottom: 16upx;
+		margin: 0 auto 16upx;
 	}
 
 	.user-name {

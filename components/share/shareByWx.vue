@@ -95,7 +95,7 @@ export default {
 			let page = pages[pages.length - 1]
 			
 			data.source = 2;
-			data.return_url = page.route;
+			data.return_url = 'pages/share/jump';//page.route;
 			
 			let userToken = this.$db.get('userToken')
 			if (userToken) {

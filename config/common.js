@@ -421,6 +421,17 @@ function moneySub(value1,value2){
 	return res>0?res:0;
 }
 
+
+/**
+ * 分享URL解压缩
+ * @param {Object} url
+ */
+function shareParameterEncode(url){
+	let urlArray = url.split('-');
+    let newUrl = 'type=' + urlArray[0] + '&invite=' + urlArray[1] + '&id=' + urlArray[2] + '&team_id=' + urlArray[3];
+    return newUrl;
+}
+
 export {
   deepCopy,
   jumpToLogin,
@@ -444,5 +455,6 @@ export {
   getQueryString,
   timeToDateObj,
   moneySum,
-  moneySub
+  moneySub,
+  shareParameterEncode
 }

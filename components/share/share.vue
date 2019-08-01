@@ -240,12 +240,12 @@ export default {
 			
 			// #ifdef MP-WEIXIN
 			data.source = 2;
-			data.return_url = page.route;
+			data.return_url = 'pages/share/jump'; //page.route;
 			// #endif
 			
 			// #ifdef MP-ALIPAY
 			data.source = 3;
-			data.return_url = page.__proto__.route;
+			data.return_url = 'pages/share/jump';//page.__proto__.route;
 			// #endif
 			
 			let userToken = this.$db.get('userToken')
