@@ -51,9 +51,12 @@ export default {
     },
 	onLoad:function() {
 		var _this = this;
-		_this.$api.getDistributioninfo({check_condition:false}, function(res) {
+		_this.$api.getDistributioninfo({check_condition:true}, function(res) {
 			if (res.status) {
-				if(res.data.verify==1){//审核通过
+				if(res.data.need_apply && res.data.condition_status ==false){
+					_this.$common.redirectTo('/pages/member/distribution/index');
+				}
+				if(res.data.verify == 1){//审核通过
 					_this.$common.redirectTo('/pages/member/distribution/user');
 				}
 				_this.info = res.data;

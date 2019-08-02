@@ -3,7 +3,9 @@
 		<view class="content-top">
 			<view class="dist-head">
 				<view class="dist-head-top">
-					<view class="dht-margin color-f fsz34">已达标</view>
+					<view class="dht-margin color-f fsz34" v-if="condition.condition_status">已达标</view>
+					<view class="dht-margin color-f fsz34" v-if="!condition.condition_status">未达标</view>
+					
 					<cmd-progress class="dht-margin" :percent="condition.condition_progress" :stroke-width="23" stroke-color="linear-gradient(to right, #ef32d9, #89fffd)"></cmd-progress>
 					<!-- <view class="dht-mid color-d fsz28">
 						您消费金额<text class="color-f">62</text>（元）
@@ -58,7 +60,7 @@ export default {
 				if(_this.condition.hasOwnProperty('verify') || _this.condition.hasOwnProperty('condition_status') ){
 					if(_this.condition.verify==1 || (!_this.condition.need_apply && _this.condition_status)){
 						_this.$common.redirectTo('/pages/member/distribution/user');
-					}else{
+					}else if(_this.condition.condition_status){
 						_this.$common.redirectTo('/pages/member/distribution/apply_state');//待审核
 					}
 				}

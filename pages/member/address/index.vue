@@ -120,6 +120,7 @@ export default {
 		},
 		// 信息验证
 		checkData (data) {
+			this.submitStatus = false;
 			if (!data.name) {
 				this.$common.errorToShow('请输入收货人姓名')
 				return false
@@ -174,6 +175,7 @@ export default {
 					}
 				}else{
 					this.$common.errorToShow('获取收货地址信息出现问题');
+					this.submitStatus = false;
 				}
 			});
 		},
