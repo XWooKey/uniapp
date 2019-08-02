@@ -170,7 +170,7 @@
 								<view class='f-m-r-item'>
 									<view class='upload-img-list'>
 										<view class='upload-img-bd'>
-											<view class='upload-img' v-for="(pic_item, i) in item.pics" :key="index">
+											<view class='upload-img' v-for="(pic_item, i) in item.pics" :key="i">
 												<image @click='pic_del(item,index,i)' :data-index="i" class='del-img' src='../../../static/image/del.png'></image>
 												<image class='upload-camera' :src="pic_item.src" mode='aspectFit'></image>
 												<input type='text' hidden='hidden' :name="item.id+'_'+i" v-model="pic_item.image_id"></input>
@@ -887,7 +887,8 @@
 
 	.ib-item-left {
 		display: inline-block;
-		width: 150rpx;
+		min-width: 150rpx;
+		max-width: 600rpx;
 		font-size: 28rpx;
 		color: #333;
 
@@ -896,7 +897,8 @@
 	}
 
 	.ib-item-right {
-		width: 600rpx;
+		min-width: 600rpx;
+		max-width: 690rpx;
 		display: inline-block;
 		color: #666;
 		font-size: 28rpx;
@@ -1095,6 +1097,7 @@
 		position: absolute;
 		right: 0;
 		top: 0;
+		z-index: 99;
 	}
 
 	.ib-item-textarea {
