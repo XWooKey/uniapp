@@ -1,5 +1,5 @@
 <template>
-	<view class='cell-group bottom-cell-group' v-if="data.params.list.length > 0">
+	<view class='index-article cell-group bottom-cell-group' v-if="data.params.list.length > 0">
 		<view class='cell-item'
 		v-for="item in data.params.list"
 		:key="item.id"
@@ -13,6 +13,7 @@
 					{{ item.ctime }}
 				</view>
 			</view>
+		
 			<view class="cell-title-img">
 				<image :src="item.cover" mode="aspectFill"></image>
 			</view>
@@ -32,7 +33,7 @@ export default {
 	methods: {
 		// 查看文章详情
 		articleDetail (articleId) {
-			this.$common.navigateTo('/pages/article/index?article_id=' + articleId)
+			this.$common.navigateTo('/pages/article/index?id=' + articleId+'&id_type=1')
 		}
 	}
 }

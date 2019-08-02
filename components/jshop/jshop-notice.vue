@@ -24,7 +24,7 @@
 			// 点击公告
 			goNotice(id) {
 				// 文章详情
-				this.$common.navigateTo('/pages/article/index?notice_id=' + id)
+				this.$common.navigateTo('/pages/article/index?id=' + id+'&id_type=2')
 			},
 		},
 	}
