@@ -103,7 +103,7 @@
 			</view>
 			
 			<!-- 团购拼单 -->
-			<view class="cell-group margin-cell-group" v-if="teamCount">
+			<view class="cell-group margin-cell-group" v-if="pintuanRecord.length>0">
 				
 				<view class='cell-item right-img'>
 					<view class='cell-item-hd'>
@@ -173,7 +173,7 @@
 					</swiper>
 				</view>
 			</view>
-			<view class="cell-group margin-cell-group" v-else>
+			<view class="cell-group margin-cell-group" v-else="">
 				<view class='cell-item right-img'>
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>暂无开团信息</view>
@@ -241,10 +241,10 @@
 		</view>
 		
 		<lvv-popup position="bottom" ref="pintuanpop">
-			<view class="ig-top">
+			<view class="ig-top" v-if="teamInfo.list.length>0">
 				<view class="ig-top-t">
 					<view class="">
-						剩余时间：<uni-countdown :day="team_time.day" :hour="team_time.hour" :minute="team_time.minute" :second="team_time.second"></uni-countdown>
+						剩余时间：<uni-countdown :day="teamInfo.team_time.day" :hour="teamInfo.team_time.hour" :minute="teamInfo.team_time.minute" :second="teamInfo.team_time.second"></uni-countdown>
 					</view>
 				</view>
 				<view class="ig-top-m">
@@ -259,7 +259,7 @@
 						还差<text class="red-price">{{ teamInfo.team_nums }}</text>人，赶快拼单吧
 					</view>
 					<view class="igtb-mid">
-						<button class="btn" @click="goShare()">参与拼团</button>
+						<button class="btn" @click="toshow(2,teamInfo.id)">参与拼团</button>
 					</view>
 				</view>
 			</view>
@@ -446,7 +446,7 @@
 				current: 0, // init tab位
 				goodsId: 0, // 商品id
 				groupId: 0, // 团购ID
-				goodsInfo:  {
+				goodsInfo: {
 					pintuan_rule:{
 						pintuan_start_status:1
 					}
@@ -507,7 +507,7 @@
 				discount_amount:0,//拼团优惠金额
 				price:0,
 				teamCount: 0, //已经有多少人拼团
-				pintuanRecord: {}, //拼团列表
+				pintuanRecord: [], //拼团列表
 				remainder_time: { 
 					day: 0,
 					hour: false,
@@ -516,13 +516,16 @@
 				}, //拼团倒计时
 				groupHeight: 'groupHeight',
 				teamId: 0,//去参团的teamid
-				teamInfo: {},
-				team_time: { 
-					day: 0,
-					hour: 0,
-					minute: 0,
-					second: 0
-				}, //被邀请拼团倒计时
+				teamInfo: {
+					list:[],
+					team_time: { 
+						day: 0,
+						hour: 0,
+						minute: 0,
+						second: 0
+					}, //被邀请拼团倒计时
+				},
+				
 			}
 		},
 		onLoad(e) {
@@ -549,9 +552,7 @@
 			this.getMyShareCode();
 		},
 		onReady(){
-			if (this.teamId && this.teamId !=0 && this.teamId !=''){
-				this.pintuanShow();
-			}
+			
 		},
 		computed: {
 			
@@ -662,8 +663,6 @@
 							_this.pintuanRecord = new_data;
 							// console.log(new_data);
 							_this.teamCount = info.pintuan_record_nums;
-							
-							
 							// 判断如果登录用户添加商品浏览足迹
 							if (userToken) {
 								_this.goodsBrowsing();
@@ -690,8 +689,9 @@
 							rule_id: res.data.rule_id,
 							status: res.data.status
 						};
-						this.team_time = this.$common.timeToDateObj(res.data.close_time / 1000);
-						console.log(this.team_time)
+						let timestamp = Date.parse(new Date())/1000;
+						this.teamInfo.team_time = this.$common.timeToDateObj(res.data.close_time - timestamp);
+						this.pintuanShow();
 					} else {
 						this.$common.errorToShow(res.msg)
 					}
@@ -936,6 +936,7 @@
 			let myInviteCode = this.myShareCode ? this.myShareCode : '';
 			let ins = this.$common.shareParameterDecode('type=5&id=' + this.goodsId + '&invite=' + myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
+			console.log(path);
 			return {
 				title: this.goodsInfo.name,
 				// #ifdef MP-ALIPAY
