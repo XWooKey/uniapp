@@ -691,7 +691,11 @@
 						};
 						let timestamp = Date.parse(new Date())/1000;
 						this.teamInfo.team_time = this.$common.timeToDateObj(res.data.close_time - timestamp);
-						this.pintuanShow();
+						if(res.data.status == 1){
+							this.pintuanShow();
+						}else{
+							this.teamId = 0;
+						}
 					} else {
 						this.$common.errorToShow(res.msg)
 					}
