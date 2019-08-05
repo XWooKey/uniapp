@@ -211,7 +211,7 @@
 			}
 			let timestamp = Date.parse(new Date())/1000;
 			this.lasttime = this.$common.timeToDateObj(options.close_time-timestamp);
-			//this.getMyShareCode();
+			this.getMyShareCode();
 		},
 		computed: {
 			shareHref() {
@@ -325,22 +325,22 @@
 			}
 		},
 		//分享
-		// todo::传值问题不知道穿什么值等开发完以后再传值
-		// onShareAppMessage() {
-			// let myInviteCode = this.myShareCode ? this.myShareCode : '';
-			// let teamId = this.teamInfo.list[0].team_id;
-			// let ruleId = this.teamInfo.list[0].rule_id;
-			// let ins = encodeURIComponent('type=7&id=' + this.goodsInfo.goods_id + '&group_id=' + ruleId + '&team_id=' + teamId + '&invite=' + myInviteCode);
-			// let path = '/pages/share/jump?scene=' + ins;
-			// return {
-			// 	title: this.goodsInfo.name,
-			// 	// #ifdef MP-ALIPAY
-			// 	desc: this.goodsInfo.brief,
-			// 	// #endif
-			// 	imageUrl: this.goodsInfo.image_url,
-			// 	path: path
-			// }
-		// }
+		onShareAppMessage() {
+			 let myInviteCode = this.myShareCode ? this.myShareCode : '';
+			 let teamId = this.teamInfo.list[0].team_id;
+			 let ins = this.$common.shareParameterDecode('type=5&invite=' + myInviteCode+'&id='+ this.goodsInfo.goods_id +'&team_id=' + teamId );
+			
+			 let path = '/pages/share/jump?scene=' + ins;
+			  console.log(path);
+			 return {
+			 	title: this.goodsInfo.name,
+			 	// #ifdef MP-ALIPAY
+			 	desc: this.goodsInfo.brief,
+			 	// #endif
+			 	imageUrl: this.goodsInfo.image_url,
+			 	path: path
+			 }
+		 }
 	}
 </script>
 
