@@ -7,7 +7,7 @@
 						<view class='cell-hd-title'>名称</view>
 					</view>
 					<view class='cell-item-bd'>
-						<input class='cell-bd-input' placeholder='' v-model="store_name"></input>
+						<input class='cell-bd-input' placeholder='请输入店铺名称' v-model="store_name"></input>
 					</view>
 				</view>
 				<view class='cell-item user-head'>
@@ -157,10 +157,8 @@ export default {
 		var _this = this;
 		_this.$api.getDistributioninfo({check_condition:false}, function(res) {
 			if (res.status) {
-				// console.log(res);
 				_this.store_name = res.data.store_name;
 				_this.store_desc = res.data.store_desc;
-				
 				_this.store_logo = res.data.store_logo;
 				if( res.data.store_logo){
 					_this.logo = res.data.store_logo_src;

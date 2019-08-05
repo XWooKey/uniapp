@@ -6,7 +6,7 @@
 				{{data.params.title}}
 			</view>
 		</view>
-		<view class='swiper-grids'>
+		<view class='swiper-grids' >
 			<scroll-view class='swiper-list' scroll-x="true">
 				<view class="img-list-item" v-if="item.goods_id !== 'undefined' && item.goods_id" v-for="(item, key) in data.params.list" :key="key">
 					<image class="img-list-item-l medium-img have-none" :src="item.goods_image" mode='aspectFill' @click="pintuanDetail(item.goods_id)"></image>
@@ -15,9 +15,9 @@
 						<view class="goods-item-c">
 							<view class="goods-price red-price">￥{{item.pintuan_price}}</view>
 							<view class="goods-buy">
-								<view class="goods-salesvolume red-price" v-if="(item.lasttime != '已经结束' || item.lasttime != '即将开始') && item.lasttime">剩余：<uni-countdown :show-day="false" :hour="item.lasttime.hour" :minute="item.lasttime.minute" :second="item.lasttime.second"></uni-countdown></view>
-								<view class="goods-salesvolume red-price" v-if="item.lasttime == '已经结束'">已结束</view>
-								<view class="goods-salesvolume red-price" v-if="item.lasttime == '即将开始'">即将开始</view>
+								<view class="goods-salesvolume red-price" v-if="(item.pintuan_start_status == 1) && item.lasttime">剩余：<uni-countdown :show-day="false" :hour="item.lasttime.hour" :minute="item.lasttime.minute" :second="item.lasttime.second"></uni-countdown></view>
+								<view class="goods-salesvolume red-price" v-if="item.pintuan_start_status == 3">已结束</view>
+								<view class="goods-salesvolume red-price" v-if="item.pintuan_start_status == 2">即将开团</view>
 								
 								<image class="goods-cart" src="../../static/image/ic-car.png" @click="pintuanDetail(item.goods.id)"></image>
 							</view>

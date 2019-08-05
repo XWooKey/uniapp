@@ -707,7 +707,7 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.myShareCode ? this.myShareCode : '';
-			let ins = encodeURIComponent('type=6&id=' + this.goodsId + '&group_id=' + this.groupId + '&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=6&id=' + this.goodsId + '&group_id=' + this.groupId + '&invite=' + myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.goodsInfo.name,

@@ -11,7 +11,7 @@
 					<view class="user-head-img-tip" v-if="item.id == item.team_id">拼主</view>
 					<image class="user-head-img cell-hd-icon have-none" :src='item.user_avatar' mode=""></image>
 				</view>
-				<view class=".user-head-img-c uhihn" v-if="teamInfo.team_nums" v-for="n in teamInfo.team_nums" :key="n"><text>?</text></view>
+				<view class="user-head-img-c uhihn" v-if="teamInfo.team_nums" v-for="n in teamInfo.team_nums" :key="n"><text>?</text></view>
 			</view>
 			<view class="ig-top-b">
 				<view class="igtb-top">
@@ -67,7 +67,7 @@
 					<view class='cell-hd-title'>拼单时间</view>
 				</view>
 				<view class='cell-item-ft'>
-					<text class="cell-ft-text">{{ payment_time }}</text>
+					<text class="cell-ft-text">{{ orderInfo.ctime }}</text>
 				</view>
 			</view>
 			<view class='cell-item'>
@@ -171,8 +171,7 @@
 				userToken: 0,
 				time: 0,
 				order_id:'',//订单号
-				orderInfo:{},
-				payment_time:'',//拼单时间
+				orderInfo:{}
 			}
 		},
 		onLoad(options) {
@@ -205,7 +204,7 @@
 				this.teamInfo = teamInfo;
 				this.orderInfo = orderInfo;
 				this.goodsInfo = orderInfo.items[0];
-				this.payment_time = orderInfo.payment_time;
+				
 			}else{
 				this.orderDetail();
 				this.getTeam();
@@ -265,9 +264,14 @@
 			    _this.$api.orderDetail(data, function(res) {
 			        if (res.status) {
 			            let data = res.data
+						// 支付时间转换
+						if (data.ctime !== null) {
+							data.ctime = _this.$common.timeToDate(data.ctime)
+						}
+						
 			            _this.orderInfo = data
 						_this.goodsInfo = data.items[0];
-						_this.payment_time = _this.$common.timeToDate(data.payment_time);
+					
 			        } else {
 			            _this.$common.errorToShow(res.msg)
 			        }
@@ -354,10 +358,8 @@
 
 	.ig-top-t>view {
 		display: inline-block;
-		/* background-color: #f3f3f3; */
 		padding: 0 10upx;
 		color: #999;
-		/* font-size: 26upx; */
 	}
 
 	.user-head-img-c {

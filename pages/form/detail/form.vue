@@ -704,7 +704,7 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.$db.get("userToken");
-			let ins = encodeURIComponent('type=10&&id=' + this.id + '&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=10&id=' + this.id + '&invite=' + myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.form.name,

@@ -428,8 +428,32 @@ function moneySub(value1,value2){
  */
 function shareParameterEncode(url){
 	let urlArray = url.split('-');
-    let newUrl = 'type=' + urlArray[0] + '&invite=' + urlArray[1] + '&id=' + urlArray[2] + '&team_id=' + urlArray[3];
+    let newUrl = 'type=' + urlArray[0] + '&invite=' + urlArray[1] + '&id=' + urlArray[2] + '&team_id=' + urlArray[3] + '&id_type=' + urlArray[4] + '&page_code=' + urlArray[5] + '&group_id=' + urlArray[6];
     return newUrl;
+}
+
+
+/**
+ * 分享URL压缩
+ * @param {Object} url
+ */
+function shareParameterDecode(url){
+	var urlArray = url.split('&');
+	var allParameter = {
+		'type': '',
+		'invite': '',
+		'id': '',
+		'team_id': '',
+		'id_type': '',
+		'page_code': '',
+		'group_id': '',
+	};
+	for(var i = 0; i < urlArray.length; i++) {
+		var parameter = urlArray[i].split('=');
+		allParameter[parameter[0]] = parameter[1];
+	}
+	var newUrl = allParameter.type + '-' + allParameter.invite + '-' + allParameter.id + '-' + allParameter.team_id + '-' + allParameter.id_type + '-' + allParameter.page_code + '-' + allParameter.group_id;
+	return newUrl;
 }
 
 export {
@@ -456,5 +480,6 @@ export {
   timeToDateObj,
   moneySum,
   moneySub,
-  shareParameterEncode
+  shareParameterEncode,
+  shareParameterDecode
 }

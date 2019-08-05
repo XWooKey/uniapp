@@ -63,9 +63,6 @@
 					res => {
 						if (res.status == true) {
 							this.pageData = res.data.items;
-							uni.setNavigationBarTitle({
-								title: res.data.name
-							});
 							//隐藏loading
 							setTimeout(() => {
 								this.showLoad = false;
@@ -96,7 +93,7 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.myShareCode ? this.myShareCode : '';
-			let ins = encodeURIComponent('type=1&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=1&invite=' + myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.$store.state.config.share_title,

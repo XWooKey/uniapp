@@ -11,7 +11,7 @@
 						  <image class='member-item-img' :src='store_logo_src'></image>
 						</view>
 						<view class='member-item'>
-							<view class="color-o fsz36">115</view>
+							<view class="color-o fsz36">{{total_goods}}</view>
 							<text class='member-item-text'>全部宝贝</text>
 						</view>
 						<view class='member-item' @click="openPopup()">
@@ -140,6 +140,8 @@ export default{
 			top_height: '', //上半部分内容高度
 			slide_height: '', //页面滑动高度
 			isWeixinBrowser: this.$common.isWeiXinBrowser(), //判断是否是微信浏览器
+			total_goods:0,
+			myShareCode:''//邀请码
 		}
 	},
 	//加载执行
@@ -172,10 +174,13 @@ export default{
 		// console.log(options.store)
 		this.getDistribution(store);
 		this.getGoods();
+		this.getMyShareCode()
 		// this.slideTop();
 	},
 	mounted() {
-		// window.addEventListener('scroll', this.handleScroll)
+		// #ifdef H5 || APP-PLUS
+		window.addEventListener('scroll', this.handleScroll)
+		// #endif
 	},
 	updated() {
 		// #ifndef MP-WEIXIN
@@ -188,6 +193,7 @@ export default{
 	},
 	onPageScroll(){
 		var _this = this;
+		
 		// #ifdef MP-WEIXIN
 		const query = wx.createSelectorQuery().in(this)
 		  query.select('.scroll-Y').boundingClientRect(function(res){
@@ -306,9 +312,10 @@ export default{
 					_this.store_logo_src = res.data.store_logo_src;
 					_this.store_logo = res.data.store_logo;
 					_this.store_banner_src = res.data.store_banner_src;
-					// uni.setNavigationBarTitle({
-					// 	title: _this.store_name
-					// });
+					_this.total_goods = res.data.total_goods;
+					uni.setNavigationBarTitle({
+					 	title: _this.store_name
+					});
 				} else {
 					//报错了
 					_this.$common.errorToShow(res.msg);
@@ -421,11 +428,22 @@ export default{
 				}
 			})
 		},
+		getMyShareCode() {
+			let userToken = this.$db.get("userToken");
+			if (userToken && userToken != '') {
+				// 获取我的分享码
+				this.$api.shareCode({}, res => {
+					if (res.status) {
+						this.myShareCode = res.data ? res.data : '';
+					}
+				});
+			}
+		}
 	},
 	//分享
 	onShareAppMessage() {
 		let myInviteCode = this.myShareCode ? this.myShareCode : '';
-		let ins = encodeURIComponent('type=3&invite=' + myInviteCode);
+		let ins = this.$common.shareParameterDecode('type=9&invite=' + myInviteCode+"&id="+this.storeCode);
 		let path = '/pages/share/jump?scene=' + ins;
 		return {
 			title: this.$store.state.config.share_title,
@@ -486,6 +504,8 @@ export default{
 	/*  #endif  */
 	position: position;
 	/* bottom: 0; */
+/* 	padding-bottom:200upx */
+
 }
 .collect-pop{
 	width: 100%;

@@ -44,7 +44,7 @@
 			</view>
 
 			<!-- 团购分享拼单 -->
-			<view class="cell-group margin-cell-group" v-if="orderInfo.text_status == 2 && orderInfo.order_type==2">
+			<view class="cell-group margin-cell-group" v-if="(orderInfo.text_status == 1 || orderInfo.text_status == 2 ) && orderInfo.order_type==2">
 				<view class='cell-item right-img'>
 					<view class='cell-item-hd'>
 						<view v-if="teamInfo.status==1" class='cell-hd-title'>待拼团，还差{{ teamInfo.team_nums }}人</view>
@@ -339,7 +339,7 @@
 						}
 
 						_this.orderInfo = data
-						if (data.order_type == 2 && data.text_status == 2) {
+						if (data.order_type == 2 && (data.text_status == 2 || data.text_status == 1)) {
 							_this.getTeam(data.order_id);
 						}
 					} else {

@@ -69,7 +69,7 @@
 				}
 				this.$api.articleInfo(data, res => {
 					if (res.status) {
-						const info = res.data
+						var info = res.data
 						var htmlString = info.content;
 						info.content = htmlParser(htmlString);
 						this.info = info
@@ -137,7 +137,7 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.myShareCode ? this.myShareCode : '';
-			let ins = encodeURIComponent('type=4&&id=' + this.id + '&id_type=' + this.idType + '&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=4&id=' + this.id + '&id_type=' + this.idType + '&invite=' + myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.info.title,

@@ -25,10 +25,17 @@
 						<text>累计销售{{goodsInfo.buy_count}}件</text>
 					</view>
 					
-					<view class='commodity-time'>
+					<view class='commodity-time' v-if="goodsInfo.pintuan_rule.pintuan_start_status == 1">
 						<text>距结束仅剩</text>
 						<view class='commodity-day'>
 							<uni-countdown textColor="#fce250" :day="lasttime.day" :hour="lasttime.hour" :minute="lasttime.minute" :second="lasttime.second"></uni-countdown>
+						</view>
+					</view>
+					
+					<view class='commodity-time' v-if="goodsInfo.pintuan_rule.pintuan_start_status == 2">
+						<text>即将开团</text>
+						<view class='commodity-day'>
+							<uni-countdown textColor="#fce250" :day="goodsInfo.pintuan_rule.lasttime.day" :hour="goodsInfo.pintuan_rule.lasttime.hour" :minute="goodsInfo.pintuan_rule.lasttime.minute" :second="goodsInfo.pintuan_rule.lasttime.second"></uni-countdown>
 						</view>
 					</view>
 					<view class='commodity-time-img'></view>
@@ -232,6 +239,31 @@
 				</view>
 			</view>
 		</view>
+		
+		<lvv-popup position="bottom" ref="pintuanpop">
+			<view class="ig-top">
+				<view class="ig-top-t">
+					<view class="">
+						剩余时间：<uni-countdown :day="team_time.day" :hour="team_time.hour" :minute="team_time.minute" :second="team_time.second"></uni-countdown>
+					</view>
+				</view>
+				<view class="ig-top-m">
+					<view class="user-head-img-c" v-for="(item, index) in teamInfo.list" :key="index">
+						<view class="user-head-img-tip" v-if="item.id == item.team_id">拼主</view>
+						<image class="user-head-img cell-hd-icon have-none" :src='item.user_avatar' mode=""></image>
+					</view>
+					<view class="user-head-img-c uhihn" v-if="teamInfo.team_nums" v-for="n in teamInfo.team_nums" :key="n"><text>?</text></view>
+				</view>
+				<view class="ig-top-b">
+					<view class="igtb-top">
+						还差<text class="red-price">{{ teamInfo.team_nums }}</text>人，赶快拼单吧
+					</view>
+					<view class="igtb-mid">
+						<button class="btn" @click="goShare()">参与拼团</button>
+					</view>
+				</view>
+			</view>
+		</lvv-popup>
 
 		<lvv-popup position="bottom" ref="share">
 
@@ -314,10 +346,22 @@
 					<view class="color-6 fsz24" >单独购买</view>
 				</view>
 			</button>
-			<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2">
+			<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" v-if="goodsInfo.pintuan_rule.pintuan_start_status == 1 ">
 				<view class="btn-content">
 					<view class="" >￥{{pintuanPrice}}</view>
 					<view class="fsz24" >发起拼团</view>
+				</view>
+			</button>
+			<button class='btn btn-square btn-b' hover-class="btn-hover2" v-if="goodsInfo.pintuan_rule.pintuan_start_status == 2 ">
+				<view class="btn-content">
+					<view class="" >￥{{pintuanPrice}}</view>
+					<view class="fsz24" >即将开团</view>
+				</view>
+			</button>
+			<button class='btn btn-square btn-b' hover-class="btn-hover2" v-if="goodsInfo.pintuan_rule.pintuan_start_status == 3 ">
+				<view class="btn-content">
+					<view class="" >￥{{pintuanPrice}}</view>
+					<view class="fsz24" >拼团已结束</view>
 				</view>
 			</button>
 		</view>
@@ -468,12 +512,20 @@
 				}, //拼团倒计时
 				groupHeight: 'groupHeight',
 				teamId: 0,//去参团的teamid
+				teamInfo: {},
+				team_time: { 
+					day: 0,
+					hour: 0,
+					minute: 0,
+					second: 0
+				}, //被邀请拼团倒计时
 			}
 		},
 		onLoad(e) {
 			this.goodsId = e.id;
 			if(e.team_id){
 				this.teamId = e.team_id;
+				this.getTeam(this.teamId)
 			}
 			if (this.goodsId) {
 				this.getGoodsInfo();
@@ -492,7 +544,13 @@
 			this.getCartNums();
 			this.getMyShareCode();
 		},
+		onReady(){
+			if (this.teamId && this.teamId !=0 && this.teamId !=''){
+				this.pintuanShow();
+			}
+		},
 		computed: {
+			
 			// 规格切换计算规格商品的 可购买数量
 			minNums() {
 				return this.product.stock > this.minBuyNum ? this.minBuyNum : this.product.stock;
@@ -548,7 +606,7 @@
 				}
 				let _this = this;
 				_this.$api.pintuanGoodsInfo(data, res => {
-					
+					console.log(res);
 					if (res.status) {
 						if (res.data.length < 1) {
 							_this.$common.errorToShow('该商品不存在，请返回重新选择商品。', () => {
@@ -608,6 +666,32 @@
 							}
 						}
 					}
+				});
+			},
+			
+			// 获取通过分享进来的拼团数据
+			getTeam(id) {
+				this.$api.getOrderPintuanTeamInfo({
+					team_id: id
+				}, res => {
+					if (res.status) {
+						this.teamInfo = {
+							list: res.data.teams,
+							current_count: res.data.teams.length,
+							people_number: res.data.people_number,
+							team_nums: res.data.team_nums, //剩余
+							close_time: res.data.close_time, //关闭时间
+							id: res.data.id, //拼团id
+							team_id: res.data.team_id, //拼团团队id
+							rule_id: res.data.rule_id,
+							status: res.data.status
+						};
+						this.team_time = this.$common.timeToDateObj(res.data.close_time / 1000);
+						console.log(this.team_time)
+					} else {
+						this.$common.errorToShow(res.msg)
+					}
+			
 				});
 			},
 			
@@ -786,6 +870,9 @@
 								this.$common.navigateTo('/pages/goods/place-order/index?cart_ids=' + JSON.stringify(cartIds)+'&order_type='+this.type+'&team_id='+this.teamId);
 							}
 							
+						}else{
+							this.toclose();
+							this.$common.errorToShow(res.msg);
 						}
 					})
 				}
@@ -810,6 +897,17 @@
 			closeShare() {
 				this.$refs.share.close();
 			},
+			// 拼团弹出层
+			pintuanShow () {
+				this.$refs.pintuanpop.show();
+				// this.$refs.lvvpopref.close();
+			},
+			pintuanClose () {
+				//this.$refs.pintuanpop.close();
+				// this.$refs.pintuanpop.close();
+				// this.$refs.share.close();
+				//this.$refs.lvvpopref.close();
+			},
 			// 图片点击放大
 			clickImg(imgs) {
 				// 预览图片
@@ -832,7 +930,7 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.myShareCode ? this.myShareCode : '';
-			let ins = encodeURIComponent('type=5&id=' + this.goodsId + '&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=5&id=' + this.goodsId + '&invite=' + myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.goodsInfo.name,
@@ -1333,7 +1431,7 @@
 		top: 50%;
 		left: 100upx;
 		transform: translateY(-50%);
-		max-width: 260upx;
+		max-width: 220upx;
 		width: 100%;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -1370,5 +1468,103 @@
 		transform: translateY(-50%);
 	}
 	
-
+	.ig-top {
+		text-align: center;
+		background-color: #fff;
+		padding: 20upx 26upx;
+		width: 690upx;
+		min-height: 90upx;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+	}
+	
+	.ig-top-t,
+	.ig-top-m {
+		margin-bottom: 20upx;
+	}
+	
+	.ig-top-t>view {
+		display: inline-block;
+		padding: 0 10upx;
+		color: #999;
+	}
+	
+	.user-head-img-c {
+		position: relative;
+		width: 80upx;
+		height: 80upx;
+		border-radius: 50%;
+		margin-right: 20upx;
+		box-sizing: border-box;
+		display: inline-block;
+		/* float: left; */
+		border: 1px solid #f3f3f3;
+	}
+	
+	.user-head-img-tip {
+		position: absolute;
+		top: -6upx;
+		left: -10upx;
+		display: inline-block;
+		background-color: #FF7159;
+		color: #fff;
+		font-size: 22upx;
+		z-index: 98;
+		padding: 0 10upx;
+		border-radius: 10upx;
+		transform: scale(.8);
+	}
+	
+	.user-head-img-c .user-head-img {
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+	}
+	
+	.user-head-img-c:first-child {
+		border: 1px solid #FF7159;
+	}
+	
+	.uhihn {
+		width: 80upx;
+		height: 80upx;
+		border-radius: 50%;
+		display: inline-block;
+		border: 2upx dashed #e1e1e1;
+		text-align: center;
+		color: #d1d1d1;
+		font-size: 40upx;
+		box-sizing: border-box;
+		position: relative;
+	}
+	
+	.uhihn>text {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+	
+	.igtb-top {
+		font-size: 32upx;
+		color: #333;
+		margin-bottom: 16upx;
+	}
+	
+	.igtb-mid {
+		margin-bottom: 16upx;
+	}
+	
+	.igtb-mid .btn {
+		width: 100%;
+		background-color: #FF7159;
+		color: #fff;
+	}
+	
+	.igtb-bot {
+		font-size: 24upx;
+		color: #666;
+	}
 </style>

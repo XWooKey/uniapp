@@ -10,7 +10,19 @@
                 		<image class="icon" src="../../../static/image/del.png" mode=""></image>
                 	</view>
 					<view class="color-9 abs-mid">
-						<text class=" color-o">·······</text>·······
+						<!-- <text class=" color-o">·······</text>······· -->
+						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
 					</view>
 					<view class="abs-img">
 						<image class="icon" src="../../../static/image/close.png" mode=""></image>
@@ -98,11 +110,12 @@ export default {
 }
 .apply-bot-sop{
 	position: relative;
-	height: 100upx;
+	height: 60upx;
 	width: 65%;
 	margin: 40upx auto 20upx;
 	display: flex;
-	vertical-align: middle;
+	line-height: 1.7555;
+	/* vertical-align: middle; */
 }
 .apply-bot-sop>view{
 	display: inline-block;
@@ -116,13 +129,19 @@ export default {
 	transform: translateY(-50%);
 }
 .abs-mid{
-	font-size: 70upx;
-	flex: 1;
+	/* font-size: 70upx; */
+	flex: 2;
+	display: flex;
 }
 .apply-bot-text{
 	display: flex;
 }
 .abt-c{
 	flex: 1;
+}
+.dot{
+	width: 8upx;
+	height: 8upx;
+	margin: 0 4upx;
 }
 </style>
