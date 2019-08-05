@@ -446,7 +446,11 @@
 				current: 0, // init tab位
 				goodsId: 0, // 商品id
 				groupId: 0, // 团购ID
-				goodsInfo: {}, // 商品详情
+				goodsInfo:  {
+					pintuan_rule:{
+						pintuan_start_status:1
+					}
+				}, // 商品详情
 				cartNums: 0, // 购物车数量
 				product: {}, // 规格详情
 				goodsParams: [], // 商品参数信息
