@@ -41,7 +41,9 @@
 		},
 		onLoad(e) {
 			this.initData()
-			// this.getPintuan();
+			uni.setNavigationBarTitle({
+				title: this.$store.state.config.shop_name||''
+			});
 		},
 		methods: {
 			//领取红包
