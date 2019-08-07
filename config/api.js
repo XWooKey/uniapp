@@ -79,9 +79,9 @@ const methodsToken = [
 ];
 
 const post = (method, data, callback) => {
-	// uni.showLoading({
-	// 	title: '加载中'
-	// });
+	uni.showLoading({
+	 	title: '加载中'
+	});
 
 	// 判断token是否存在
 	if (methodsToken.indexOf(method) >= 0) {
@@ -107,7 +107,7 @@ const post = (method, data, callback) => {
 		},
 		method: 'POST',
 		success: (response) => {
-			//uni.hideLoading();
+			uni.hideLoading();
 			const result = response.data
 			if (!result.status) {
 				// 登录信息过期或者未登录
@@ -141,7 +141,7 @@ const post = (method, data, callback) => {
 		},
 		
 		fail: (error) => {
-			//uni.hideLoading();
+			uni.hideLoading();
 			if (error && error.response) {
 				showError(error.response);
 			}

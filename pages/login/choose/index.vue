@@ -31,7 +31,6 @@
 export default {
   data() {
     return {
-      appTitle: this.$config.shopName,
       open_id: ''
     }
   },

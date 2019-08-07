@@ -1,4 +1,3 @@
-
 export const orders = {
   mounted() {},
   methods: {
@@ -60,16 +59,20 @@ export const goods = {
     },
     // 团购秒杀详情
     groupDetail(id, group_id) {
-      this.$common.navigateTo('/pages/goods/index/group?id=' + id + '&group_id=' + group_id)
+      this.$common.navigateTo(
+        '/pages/goods/index/group?id=' + id + '&group_id=' + group_id
+      )
     },
-	//拼团详情页
-	pintuanDetail(id,team_id){
-		if(team_id){
-			this.$common.navigateTo('/pages/goods/index/pintuan?id=' + id+'&team_id='+team_id)
-		}else{
-			this.$common.navigateTo('/pages/goods/index/pintuan?id=' + id)
-		}
-	}
+    //拼团详情页
+    pintuanDetail(id, team_id) {
+      if (team_id) {
+        this.$common.navigateTo(
+          '/pages/goods/index/pintuan?id=' + id + '&team_id=' + team_id
+        )
+      } else {
+        this.$common.navigateTo('/pages/goods/index/pintuan?id=' + id)
+      }
+    }
   }
 }
 
@@ -98,13 +101,14 @@ export const goBack = {
   }
 }
 
-/* Function Info 
- * Author:      zhf 
- * CreateTime:  2019/7/12 下午12:10:00 
- * LastEditor:  zhf 
- * ModifyTime:  2019/7/12 下午12:10:00 
+/* Function Info
+ * Author:      zhf
+ * CreateTime:  2019/7/12 下午12:10:00
+ * LastEditor:  zhf
+ * ModifyTime:  2019/7/12 下午12:10:00
  * Description: 登录成功统一跳转处理
-*/ 
+ */
+
 export const jumpBackPage = {
   methods: {
     handleBack() {
@@ -131,13 +135,13 @@ export const jumpBackPage = {
   }
 }
 
-/* Function Info 
- * Author:      zhf 
- * CreateTime:  2019/7/12 下午12:10:28 
- * LastEditor:  zhf 
- * ModifyTime:  2019/7/12 下午12:10:28 
+/* Function Info
+ * Author:      zhf
+ * CreateTime:  2019/7/12 下午12:10:28
+ * LastEditor:  zhf
+ * ModifyTime:  2019/7/12 下午12:10:28
  * Description: 操作判断登录处理
-*/ 
+ */
 
 export const checkLogin = {
   methods: {
@@ -149,7 +153,7 @@ export const checkLogin = {
         success: function(res) {
           // #ifdef H5 || APP-PLUS
           setTimeout(() => {
-			uni.hideToast();
+            uni.hideToast()
             uni.navigateTo({
               url: '/pages/login/login/index1'
             })
@@ -157,7 +161,7 @@ export const checkLogin = {
           // #endif
           // #ifdef MP-WEIXIN || MP-ALIPAY
           setTimeout(() => {
-			uni.hideToast();
+            uni.hideToast()
             uni.navigateTo({
               url: '/pages/login/choose/index',
               animationType: 'pop-in',

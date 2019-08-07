@@ -35,7 +35,14 @@
 
 				<view class='cell-item goods-details'>
 					<view class='cell-item-hd'>
-						<view class='cell-hd-title'>{{ product.name }}</view>
+						<view class='cell-hd-title'>
+							<view class="color-3 fsz28 cell-hd-title-view">
+								{{ product.name }}
+							</view>
+							<view v-if="goodsInfo.brief" class="color-9 fsz24 cell-hd-title-view">
+								{{ goodsInfo.brief }}
+							</view>
+						</view>
 					</view>
 					<view class='cell-item-ft'>
 						<image class='cell-ft-next icon' @click="goShare()" src='../../../static/image/share.png'></image>
@@ -759,12 +766,16 @@
 
 	.goods-details .cell-hd-title {
 		width: 620upx;
-		color: #333;
-		font-size: 26upx;
+	}
+	.goods-details .cell-hd-title .cell-hd-title-view{
+		width: 100%;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 2;
 		overflow: hidden;
+	}
+	.goods-details .cell-hd-title .cell-hd-title-view:last-child{
+		margin-top: 10upx;
 	}
 
 	.goods-details .cell-item-ft {

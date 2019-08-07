@@ -115,8 +115,8 @@
 								<radio-group class="uni-list" @change="radioChange($event,item)" :data-value="item.id" :name="''+item.id">
 									<label class=" uni-list-cell uni-list-cell-pd " v-for="(radio_item, item_index) in  item.radio_value" :key="item_index">
 										<view class="invoice-type-icon">
-											<radio class="a-radio" :id="radio_item" :value="radio_item" checked=true v-if="radio_item==item.default_value" ></radio>
-											<radio class="a-radio" :id="radio_item" :value="radio_item"  v-if="radio_item!=item.default_value" ></radio>
+											<radio class="a-radio" :id="radio_item" :value="radio_item" checked=true v-if="radio_item==item.default_value"></radio>
+											<radio class="a-radio" :id="radio_item" :value="radio_item" v-if="radio_item!=item.default_value"></radio>
 										</view>
 										<view class="invoice-type-c">
 											<label class="label-2-text" :for="radio_item">
@@ -158,8 +158,8 @@
 							</view>
 							<view class='ib-item-right'>
 								<view class="ib-item-mid">
-									<input class='ib-item-input' type='password' :name="''+item.id" v-model="item.default_value"
-									 placeholder-class='ib-item-input-c'  :placeholder="'请输入'+item.name"></input>
+									<input class='ib-item-input' type='password' :name="''+item.id" v-model="item.default_value" placeholder-class='ib-item-input-c'
+									 :placeholder="'请输入'+item.name"></input>
 								</view>
 							</view>
 						</view>
@@ -216,10 +216,11 @@
 			</view>
 			<!-- 底部按钮 -->
 			<view class='bottom-btn'>
-				<button :style='{backgroundColor:form.button_color}' data-statu="open" form-type="submit" :disabled='submitStatus' :loading='submitStatus'>{{form.button_name}}</button>
+				<button :style='{backgroundColor:form.button_color}' data-statu="open" form-type="submit" :disabled='submitStatus'
+				 :loading='submitStatus'>{{form.button_name}}</button>
 			</view>
 		</form>
-		<lvv-popup position="bottom" ref="lvvpopref" class="lvvpopref" >
+		<lvv-popup position="bottom" ref="lvvpopref" class="lvvpopref">
 			<!-- 多规格商品弹出 -->
 			<block v-if="showSpecs">
 				<view class="modal-body" data-statu="closespecs" catchtouchmove="move">
@@ -324,8 +325,8 @@
 				select_goods_id: '',
 				select_id: '',
 				showSpecs: false,
-				submitStatus:false,//按钮状态
-				
+				submitStatus: false, //按钮状态
+
 			}
 		},
 		onLoad(options) {
@@ -337,7 +338,7 @@
 			this.formId = id
 			this.$db.set('formId', id)
 		},
-		onShow(){
+		onShow() {
 			this.getFormDetail()
 		},
 		methods: {
@@ -373,7 +374,7 @@
 			getFormDetail() {
 				var data = {
 					id: this.formId,
-					token:this.$db.get('userToken')
+					token: this.$db.get('userToken')
 				}
 				var that = this
 				this.$api.getFormDetial(data, res => {
@@ -409,11 +410,11 @@
 									}
 								}
 							})
-						}else{
+						} else {
 							//去登录	
 							this.$store.commit({
 								type: 'redirect',
-								page: '/pages/form/detail/form?id='+this.formId
+								page: '/pages/form/detail/form?id=' + this.formId
 							})
 							this.$common.jumpToLogin();
 						}
@@ -525,7 +526,7 @@
 				let obj = {
 					data,
 					id: this.form.id,
-					token:userToken
+					token: userToken
 				}
 				this.submitStatus = true;
 				this.$api.addSubmitForm(obj, res => {
@@ -537,7 +538,8 @@
 							//跳转首页
 							setTimeout(function() {
 								//出来支付按钮
-								that.$common.redirectTo('/pages/goods/payment/index?form_id=' + res.data.id + '&type=' + that.payment_type+'&recharge='+res.data.money)
+								that.$common.redirectTo('/pages/goods/payment/index?form_id=' + res.data.id + '&type=' + that.payment_type +
+									'&recharge=' + res.data.money)
 							}, 1000)
 						} else {
 							that.formReset()
@@ -549,7 +551,7 @@
 								})
 							}, 1500)
 						}
-					}else{
+					} else {
 						this.$common.errorToShow(res.msg);
 					}
 				})
@@ -704,7 +706,7 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.$db.get("userToken");
-			let ins = this.$common.shareParameterDecode('type=10&id=' + this.id + '&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=10&id=' + this.formId + '&invite=' + myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.form.name,
@@ -718,16 +720,24 @@
 		margin-bottom: 200rpx;
 		background-color: #eeeeee;
 	}
-	.sw,.video{
+
+	.sw,
+	.video {
 		height: 350rpx;
 	}
-	.banner,.sw,.video {
+
+	.banner,
+	.sw,
+	.video {
 		width: 100%;
 		/* height: 350rpx; */
 		background-color: #fff;
 	}
 
-	.banner image,.sw swiper,.sw swiper image,.video video {
+	.banner image,
+	.sw swiper,
+	.sw swiper image,
+	.video video {
 		width: 100%;
 		height: 100%;
 	}
@@ -1488,14 +1498,18 @@
 		padding: 0 6rpx;
 		text-align: center;
 	}
-	.uni-list-cell-pd{
+
+	.uni-list-cell-pd {
 		/* width: 200upx; */
 		margin-right: 40upx;
 	}
-	.invoice-type-icon,.invoice-type-c{
+
+	.invoice-type-icon,
+	.invoice-type-c {
 		display: inline-block;
 	}
-	.lvvpopref{
+
+	.lvvpopref {
 		z-index: 100;
 	}
 </style>
