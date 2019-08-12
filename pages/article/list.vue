@@ -86,7 +86,7 @@ export default {
 		},
 		// 查看文章详情
 		articleDetail (articleId) {
-			this.$common.navigateTo('/pages/article/index?article_id=' + articleId)
+			this.$common.navigateTo('/pages/article/index?id=' + articleId +'&id_type=1')
 		}
 	}
 }	

@@ -354,7 +354,7 @@ uni-input div div.input-placeholder{
   font-size: 28upx;
 }
 .img-list-item .goods-item-c{
-  position: absolute;
+  /* position: absolute; */
   /* bottom: 0; */
   width: 100%;
 	margin-top: 0;
@@ -441,7 +441,7 @@ uni-input div div.input-placeholder{
 }
 .little-right .goods-salesvolume{
   font-size: 24upx;
-  float: left;
+  /* float: left; */
 }
 .cell-group{
   background-color: #fff;

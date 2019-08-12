@@ -21,7 +21,7 @@
 			<button class="auth-btn " open-type="getUserInfo" @getuserinfo="getUserInfo" hover-class="btn-hover">允许</button>
 			<!-- #endif -->
 			<!-- #ifdef MP-ALIPAY -->
-			<button class="auth-btn " @click="getAlipayUserInfo" hover-class="btn-hover">授权登录</button>
+			<button class="auth-btn " @click="getALICode" hover-class="btn-hover">授权登录</button>
 			<!-- #endif -->
 		</view>
 	</view>
@@ -141,6 +141,42 @@ export default {
         }
       })
     },
+	getALICode() {
+		let that = this
+		uni.login({
+			scopes: 'auth_user',
+			success: (res) => {
+				if(res.authCode){
+					that.aLiLoginStep1(res.authCode);
+				}else{
+					this.$common.errorToShow('未取得code');
+				}
+			},
+			fail: function(res) {
+				this.$common.errorToShow('用户授权失败my.login');
+			}
+		});
+	},
+	aLiLoginStep1(code) {
+		this.$api.alilogin1({code}, res => {
+			if (res.status) {
+				this.open_id = res.data.user_wx_id
+				//判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
+				if (!res.data.hasOwnProperty('token')) {
+					this.$common.redirectTo('/pages/login/login/index?user_wx_id=' + res.data.user_wx_id);
+				} else {
+					this.$db.set('userToken', res.data.token)
+					//this.initData()
+					uni.navigateBack({
+					  delta: 1
+					});
+					return false;
+				}
+			} else {
+				this.$common.errorToShow(res.msg)
+			}
+		})
+	},
     // #ifdef MP-ALIPAY
     getAlipayUserInfo: function() {
       let _this = this

@@ -44,7 +44,7 @@
 					this.goodsDetail(val)
 				} else if (type == 3) {
 					// 文章详情
-					this.$common.navigateTo('/pages/article/index?article_id=' + val)
+					this.$common.navigateTo('/pages/article/index?id=' + val +'&id_type=1')
 				} else if (type == 4) {
 					// 文章列表
 					this.$common.navigateTo('/pages/article/list?cid=' + val)

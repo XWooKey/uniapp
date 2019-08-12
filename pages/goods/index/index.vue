@@ -39,9 +39,9 @@
 							<view class="color-3 fsz28 cell-hd-title-view">
 								{{ product.name }}
 							</view>
-							<view v-if="goodsInfo.brief" class="color-9 fsz24 cell-hd-title-view">
+							<text v-if="goodsInfo.brief" class="color-9 fsz24 ">
 								{{ goodsInfo.brief }}
-							</view>
+							</text>
 						</view>
 					</view>
 					<view class='cell-item-ft'>
@@ -779,7 +779,7 @@
 	}
 
 	.goods-details .cell-item-ft {
-		top: 40%;
+		top:24upx;
 	}
 
 	.goods-title-item .cell-item-hd {

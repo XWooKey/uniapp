@@ -1004,7 +1004,7 @@
 	}
 
 	.goods-details .cell-item-ft {
-		top: 40%;
+		top:24upx;
 	}
 
 	.goods-title-item .cell-item-hd {

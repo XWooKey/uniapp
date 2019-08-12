@@ -23,9 +23,14 @@
 					<view class="user-head-img">
 						<open-data type="userAvatarUrl"></open-data>
 					</view>
-
-					<view @click="getAuth">
+					<view>
 						<button class="login-btn" open-type="getUserInfo" @getuserinfo="getUserInfo" hover-class="btn-hover">授权登录</button>
+					</view>
+					<!-- #endif -->
+					<!-- #ifdef MP-ALIPAY -->
+					<view class="user-head-img"></view>
+					<view>
+						<button class="login-btn" open-type="getAuthorize" @click="getALICode" hover-class="btn-hover">授权登录</button>
 					</view>
 					<!-- #endif -->
 				</template>
@@ -245,6 +250,22 @@
 					_this.toWxLogin(data)
 				}
 			},
+			getALICode() {
+				let that = this
+				uni.login({
+					scopes: 'auth_user',
+					success: (res) => {
+						if(res.authCode){
+							that.aLiLoginStep1(res.authCode);
+						}else{
+							this.$common.errorToShow('未取得code');
+						}
+					},
+					fail: function(res) {
+						this.$common.errorToShow('用户授权失败my.login');
+					}
+				});
+			},
 			getWxCode() {
 				let that = this
 				uni.login({
@@ -273,6 +294,22 @@
 								delta: 1
 							})
 						})
+					}
+				})
+			},
+			aLiLoginStep1(code) {
+				this.$api.alilogin1({code}, res => {
+					if (res.status) {
+						this.open_id = res.data.user_wx_id
+						//判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
+						if (!res.data.hasOwnProperty('token')) {
+							this.$common.redirectTo('/pages/login/login/index?user_wx_id=' + res.data.user_wx_id);
+						} else {
+							this.$db.set('userToken', res.data.token)
+							this.initData()
+						}
+					} else {
+						this.$common.errorToShow(res.msg)
 					}
 				})
 			},

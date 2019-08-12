@@ -21,7 +21,7 @@
 					分销商须知
 				</view>
 				<view class="db-body color-6 fsz30">
-					<pre class="db-item">{{distributionNotes}}</pre>
+					<text class="db-item">{{distributionNotes}}</text>
 				</view>
 			</view>
 		</view>

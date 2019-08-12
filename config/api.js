@@ -698,6 +698,9 @@ export const login1 = (data, callback) => post('user.wxapplogin1', data, callbac
 //小程序登录第二步
 export const login2 = (data, callback) => post('user.wxapplogin2', data, callback);
 
+//支付宝小程序解析code
+export const alilogin1 = (data, callback) => post('user.alipayapplogin1', data, callback);
+
 //取下级地址列表
 export const getAreaList = (data, callback) => post('user.getarealist', data, callback);
 
