@@ -95,7 +95,7 @@
 				animationData: {},
 				btnDisabled: '',
 				thanksarr: [], //存储谢谢参与的索引
-				chishu: 0,
+				chishu: 5,
 				mold: 1,
 				r_flg: 0,
 				myPrizelist:[]
