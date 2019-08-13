@@ -397,12 +397,6 @@
 		// #endif
         "navigationBarTitleText": "加载中..."
       }
-    },
-    {
-      "path": "pages/activity/index",
-      "style": {
-        "navigationBarTitleText": "转盘抽奖"
-      }
     }
   ],
   "globalStyle": {
