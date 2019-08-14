@@ -342,7 +342,7 @@
 				}, // 商品评论信息
 				buyNum: 1, // 选定的购买数量
 				minBuyNum: 1, // 最小可购买数量
-				type: 2, // 1单独购买 2拼团
+				type: 1, 
 				isfav: false, // 商品是否收藏
 				favLogo: [
 					'../../../static/image/ic-me-collect.png',
@@ -641,7 +641,7 @@
 					let data = {
 						product_id: this.product.id,
 						nums: this.buyNum,
-						order_type: this.type,// 区分购买和拼团
+						order_type: 1,
 						
 					}
 					this.$api.addCart(data, res => {
@@ -649,6 +649,8 @@
 							this.toclose();
 							let cartIds = res.data;
 							this.$common.navigateTo('/pages/goods/place-order/index?cart_ids=' + JSON.stringify(cartIds));
+						}else{
+							this.$common.errorToShow(res.msg);
 						}
 					})
 				}
