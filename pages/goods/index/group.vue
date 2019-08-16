@@ -342,7 +342,7 @@
 				}, // 商品评论信息
 				buyNum: 1, // 选定的购买数量
 				minBuyNum: 1, // 最小可购买数量
-				type: 1, 
+				type: 1,
 				isfav: false, // 商品是否收藏
 				favLogo: [
 					'../../../static/image/ic-me-collect.png',
@@ -520,9 +520,14 @@
 				let key = obj.k;
 				if (this.product.default_spes_desc[index][key].hasOwnProperty('product_id') && this.product.default_spes_desc[index]
 					[key].product_id) {
-					this.$api.getProductInfo({
-						id: this.product.default_spes_desc[index][key].product_id
-					}, res => {
+					let data = {
+						'id': this.product.default_spes_desc[index][key].product_id
+					};
+					let userToken = this.$db.get("userToken");
+					if (userToken) {
+						data['token'] = userToken;
+					}
+					this.$api.getProductInfo(data, res => {
 						if (res.status == true) {
 							// 切换规格判断可购买数量
 							this.buyNum = res.data.stock > this.minBuyNum ? this.minBuyNum : res.data.stock;
@@ -642,14 +647,14 @@
 						product_id: this.product.id,
 						nums: this.buyNum,
 						order_type: 1,
-						
+
 					}
 					this.$api.addCart(data, res => {
 						if (res.status) {
 							this.toclose();
 							let cartIds = res.data;
 							this.$common.navigateTo('/pages/goods/place-order/index?cart_ids=' + JSON.stringify(cartIds));
-						}else{
+						} else {
 							this.$common.errorToShow(res.msg);
 						}
 					})
@@ -661,8 +666,8 @@
 					let data = {
 						product_id: this.product.id,
 						nums: this.buyNum,
-						order_type: this.type,// 区分购买和拼团
-						
+						order_type: this.type, // 区分购买和拼团
+
 					}
 					this.$api.addCart(data, res => {
 						if (res.status) {
@@ -673,7 +678,7 @@
 					})
 				}
 			},
-			
+
 			// 购物车页面跳转
 			redirectCart() {
 				uni.switchTab({
@@ -716,7 +721,8 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.myShareCode ? this.myShareCode : '';
-			let ins = this.$common.shareParameterDecode('type=6&id=' + this.goodsId + '&group_id=' + this.groupId + '&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=6&id=' + this.goodsId + '&group_id=' + this.groupId + '&invite=' +
+				myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.goodsInfo.name,
@@ -762,19 +768,21 @@
 	.goods-details .cell-hd-title {
 		width: 620upx;
 	}
-	.goods-details .cell-hd-title .cell-hd-title-view{
+
+	.goods-details .cell-hd-title .cell-hd-title-view {
 		width: 100%;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 2;
 		overflow: hidden;
 	}
-	.goods-details .cell-hd-title .cell-hd-title-view:last-child{
+
+	.goods-details .cell-hd-title .cell-hd-title-view:last-child {
 		margin-top: 10upx;
 	}
 
 	.goods-details .cell-item-ft {
-		top:24upx;
+		top: 24upx;
 	}
 
 	.goods-title-item .cell-item-hd {

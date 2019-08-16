@@ -24,18 +24,19 @@
 						<text>已售{{goodsInfo.buy_count}}件/剩余{{product.stock}}件</text>
 						<text>累计销售{{goodsInfo.buy_count}}件</text>
 					</view>
-					
+
 					<view class='commodity-time' v-if="goodsInfo.pintuan_rule.pintuan_start_status == 1">
 						<text>距结束仅剩</text>
 						<view class='commodity-day'>
 							<uni-countdown textColor="#fce250" :day="lasttime.day" :hour="lasttime.hour" :minute="lasttime.minute" :second="lasttime.second"></uni-countdown>
 						</view>
 					</view>
-					
+
 					<view class='commodity-time' v-if="goodsInfo.pintuan_rule.pintuan_start_status == 2">
 						<text>即将开团</text>
 						<view class='commodity-day'>
-							<uni-countdown textColor="#fce250" :day="goodsInfo.pintuan_rule.lasttime.day" :hour="goodsInfo.pintuan_rule.lasttime.hour" :minute="goodsInfo.pintuan_rule.lasttime.minute" :second="goodsInfo.pintuan_rule.lasttime.second"></uni-countdown>
+							<uni-countdown textColor="#fce250" :day="goodsInfo.pintuan_rule.lasttime.day" :hour="goodsInfo.pintuan_rule.lasttime.hour"
+							 :minute="goodsInfo.pintuan_rule.lasttime.minute" :second="goodsInfo.pintuan_rule.lasttime.second"></uni-countdown>
 						</view>
 					</view>
 					<view class='commodity-time-img'></view>
@@ -108,10 +109,10 @@
 				</view>
 				<!-- 说明end -->
 			</view>
-			
+
 			<!-- 团购拼单 -->
 			<view class="cell-group margin-cell-group" v-if="pintuanRecord.length>0">
-				
+
 				<view class='cell-item right-img'>
 					<view class='cell-item-hd'>
 						<view class='cell-hd-title'>{{teamCount}}人在拼单，可直接参与</view>
@@ -122,8 +123,8 @@
 					</view> -->
 				</view>
 				<view class="group-swiper">
-					<swiper class="group-swiper-c" :class="groupHeight" :indicator-dots="indicatorDots" :autoplay="autoplay" vertical="true" circular="true"
-					 :interval="interval" :duration="duration">
+					<swiper class="group-swiper-c" :class="groupHeight" :indicator-dots="indicatorDots" :autoplay="autoplay" vertical="true"
+					 circular="true" :interval="interval" :duration="duration">
 						<swiper-item v-for="(item, index) in pintuanRecord" :key="index">
 							<view class="swiper-item">
 								<view class='cell-item'>
@@ -139,13 +140,14 @@
 										</view>
 										<view class="cell-bd-view">
 											<view class='commodity-day'>
-												<text class="fsz24 color-6">剩余：</text><uni-countdown color="#666" :day="item[0].remainder_time.day" :hour="item[0].remainder_time.hour" :minute="item[0].remainder_time.minute"
+												<text class="fsz24 color-6">剩余：</text>
+												<uni-countdown color="#666" :day="item[0].remainder_time.day" :hour="item[0].remainder_time.hour" :minute="item[0].remainder_time.minute"
 												 :second="item[0].remainder_time.second"></uni-countdown>
 											</view>
-			
+
 										</view>
 									</view>
-									<view class="cell-item-ft" >
+									<view class="cell-item-ft">
 										<button class="btn" @click="toshow(2,item[0].team_id)">去拼单</button>
 									</view>
 									<!-- <view class="cell-item-ft" v-else>
@@ -165,10 +167,11 @@
 										</view>
 										<view class="cell-bd-view">
 											<view class='commodity-day'>
-												<text class="fsz24 color-6">剩余：</text><uni-countdown color="#666" :day="item[1].remainder_time.day" :hour="item[1].remainder_time.hour" :minute="item[1].remainder_time.minute"
+												<text class="fsz24 color-6">剩余：</text>
+												<uni-countdown color="#666" :day="item[1].remainder_time.day" :hour="item[1].remainder_time.hour" :minute="item[1].remainder_time.minute"
 												 :second="item[1].remainder_time.second"></uni-countdown>
 											</view>
-			
+
 										</view>
 									</view>
 									<view class="cell-item-ft">
@@ -246,12 +249,13 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<lvv-popup position="bottom" ref="pintuanpop">
 			<view class="ig-top" v-if="teamInfo.list.length>0">
 				<view class="ig-top-t">
 					<view class="">
-						剩余时间：<uni-countdown :day="teamInfo.team_time.day" :hour="teamInfo.team_time.hour" :minute="teamInfo.team_time.minute" :second="teamInfo.team_time.second"></uni-countdown>
+						剩余时间：<uni-countdown :day="teamInfo.team_time.day" :hour="teamInfo.team_time.hour" :minute="teamInfo.team_time.minute"
+						 :second="teamInfo.team_time.second"></uni-countdown>
 					</view>
 				</view>
 				<view class="ig-top-m">
@@ -275,23 +279,23 @@
 		<lvv-popup position="bottom" ref="share">
 
 			<!-- #ifdef H5 -->
-			<shareByH5 :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name" :shareContent="goodsInfo.brief"
-			 :shareHref="shareHref" @close="closeShare()"></shareByH5>
+			<shareByH5 :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name"
+			 :shareContent="goodsInfo.brief" :shareHref="shareHref" @close="closeShare()"></shareByH5>
 			<!-- #endif -->
 
 			<!-- #ifdef MP-WEIXIN -->
-			<shareByWx :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name" :shareContent="goodsInfo.brief"
-			 :shareHref="shareHref" @close="closeShare()"></shareByWx>
+			<shareByWx :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name"
+			 :shareContent="goodsInfo.brief" :shareHref="shareHref" @close="closeShare()"></shareByWx>
 			<!-- #endif -->
 
 			<!-- #ifdef MP-ALIPAY -->
-			<shareByAli :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name" :shareContent="goodsInfo.brief"
-			 :shareHref="shareHref" @close="closeShare()"></shareByAli>
+			<shareByAli :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name"
+			 :shareContent="goodsInfo.brief" :shareHref="shareHref" @close="closeShare()"></shareByAli>
 			<!-- #endif -->
 
 			<!-- #ifdef APP-PLUS -->
-			<shareByApp :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name" :shareContent="goodsInfo.brief"
-			 :shareHref="shareHref" @close="closeShare()"></shareByApp>
+			<shareByApp :shareType='3' :goodsId="goodsInfo.id" :shareImg="goodsInfo.image_url" :shareTitle="goodsInfo.name"
+			 :shareContent="goodsInfo.brief" :shareHref="shareHref" @close="closeShare()"></shareByApp>
 			<!-- #endif -->
 
 		</lvv-popup>
@@ -350,25 +354,25 @@
 			<button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2">
 				<view class="btn-content">
 					<view class="color-6">￥{{product.price}}</view>
-					<view class="color-6 fsz24" >单独购买</view>
+					<view class="color-6 fsz24">单独购买</view>
 				</view>
 			</button>
 			<button class='btn btn-square btn-b' @click="toshow(2)" hover-class="btn-hover2" v-if="goodsInfo.pintuan_rule.pintuan_start_status == 1 ">
 				<view class="btn-content">
-					<view class="" >￥{{pintuanPrice}}</view>
-					<view class="fsz24" >发起拼团</view>
+					<view class="">￥{{pintuanPrice}}</view>
+					<view class="fsz24">发起拼团</view>
 				</view>
 			</button>
 			<button class='btn btn-square btn-b' hover-class="btn-hover2" v-if="goodsInfo.pintuan_rule.pintuan_start_status == 2 ">
 				<view class="btn-content">
-					<view class="" >￥{{pintuanPrice}}</view>
-					<view class="fsz24" >即将开团</view>
+					<view class="">￥{{pintuanPrice}}</view>
+					<view class="fsz24">即将开团</view>
 				</view>
 			</button>
 			<button class='btn btn-square btn-b' hover-class="btn-hover2" v-if="goodsInfo.pintuan_rule.pintuan_start_status == 3 ">
 				<view class="btn-content">
-					<view class="" >￥{{pintuanPrice}}</view>
-					<view class="fsz24" >拼团已结束</view>
+					<view class="">￥{{pintuanPrice}}</view>
+					<view class="fsz24">拼团已结束</view>
 				</view>
 			</button>
 		</view>
@@ -454,8 +458,8 @@
 				goodsId: 0, // 商品id
 				groupId: 0, // 团购ID
 				goodsInfo: {
-					pintuan_rule:{
-						pintuan_start_status:1
+					pintuan_rule: {
+						pintuan_start_status: 1
 					}
 				}, // 商品详情
 				cartNums: 0, // 购物车数量
@@ -511,33 +515,33 @@
 					second: 0
 				}, //购买倒计时
 				pintuanPrice: 0,
-				discount_amount:0,//拼团优惠金额
-				price:0,
+				discount_amount: 0, //拼团优惠金额
+				price: 0,
 				teamCount: 0, //已经有多少人拼团
 				pintuanRecord: [], //拼团列表
-				remainder_time: { 
+				remainder_time: {
 					day: 0,
 					hour: false,
 					minute: 0,
 					second: 0
 				}, //拼团倒计时
 				groupHeight: 'groupHeight',
-				teamId: 0,//去参团的teamid
+				teamId: 0, //去参团的teamid
 				teamInfo: {
-					list:[],
-					team_time: { 
+					list: [],
+					team_time: {
 						day: 0,
 						hour: 0,
 						minute: 0,
 						second: 0
 					}, //被邀请拼团倒计时
 				},
-				
+
 			}
 		},
 		onLoad(e) {
 			this.goodsId = e.id;
-			if(e.team_id){
+			if (e.team_id) {
 				this.teamId = e.team_id;
 				this.getTeam(this.teamId)
 			}
@@ -545,7 +549,7 @@
 				this.getGoodsInfo();
 				this.getGoodsParams();
 				this.getGoodsComments();
-				
+
 			} else {
 				this.$common.errorToShow('获取失败', () => {
 					uni.navigateBack({
@@ -558,11 +562,11 @@
 			this.getCartNums();
 			this.getMyShareCode();
 		},
-		onReady(){
-			
+		onReady() {
+
 		},
 		computed: {
-			
+
 			// 规格切换计算规格商品的 可购买数量
 			minNums() {
 				return this.product.stock > this.minBuyNum ? this.minBuyNum : this.product.stock;
@@ -639,21 +643,21 @@
 							_this.goodsInfo = info;
 							let products = res.data.product;
 							_this.discount_amount = parseFloat(info.pintuan_rule.discount_amount).toFixed(2);
-							
+
 							//products.price = _this.$common.moneySub(products.price,_this.discount_amount);
 							_this.product = _this.spesClassHandle(products);
 							_this.isfav = _this.goodsInfo.isfav === 'true' ? true : false;
 							// _this.pintuanPrice = info.pintuan_price.toFixed(2)
-							_this.pintuanPrice =  this.$common.moneySub(this.product.price,this.discount_amount);
-							let timestamp = Date.parse(new Date())/1000;
-							
+							_this.pintuanPrice = this.$common.moneySub(this.product.price, this.discount_amount);
+							let timestamp = Date.parse(new Date()) / 1000;
+
 							let lasttime = res.data.pintuan_rule.etime - timestamp;
 							_this.lasttime = _this.$common.timeToDateObj(lasttime);
 							// 获取拼团记录
 							let pintuan_data = info.pintuan_record;
 							let new_data = new Array();
 							for (var k = 0; k < pintuan_data.length; k++) {
-								pintuan_data[k].remainder_time = _this.$common.timeToDateObj(pintuan_data[k].close_time-timestamp)
+								pintuan_data[k].remainder_time = _this.$common.timeToDateObj(pintuan_data[k].close_time - timestamp)
 								if (k == 0 || k % 2 == 0) {
 									if (k + 1 < pintuan_data.length) {
 										var a = [
@@ -666,7 +670,7 @@
 									new_data.push(a);
 								}
 							}
-							pintuan_data.length < 2 ? _this.groupHeight = 'groupHeight': _this.groupHeight = '';
+							pintuan_data.length < 2 ? _this.groupHeight = 'groupHeight' : _this.groupHeight = '';
 							_this.pintuanRecord = new_data;
 							// console.log(new_data);
 							_this.teamCount = info.pintuan_record_nums;
@@ -678,7 +682,7 @@
 					}
 				});
 			},
-			
+
 			// 获取通过分享进来的拼团数据
 			getTeam(id) {
 				this.$api.getOrderPintuanTeamInfo({
@@ -696,20 +700,20 @@
 							rule_id: res.data.rule_id,
 							status: res.data.status
 						};
-						let timestamp = Date.parse(new Date())/1000;
+						let timestamp = Date.parse(new Date()) / 1000;
 						this.teamInfo.team_time = this.$common.timeToDateObj(res.data.close_time - timestamp);
-						if(res.data.status == 1){
+						if (res.data.status == 1) {
 							this.pintuanShow();
-						}else{
+						} else {
 							this.teamId = 0;
 						}
 					} else {
 						this.$common.errorToShow(res.msg)
 					}
-			
+
 				});
 			},
-			
+
 			// 获取购物车数量	
 			getCartNums() {
 				let userToken = this.$db.get("userToken");
@@ -723,14 +727,14 @@
 				}
 			},
 			// 显示modal弹出框
-			toshow(type,team_id) {
+			toshow(type, team_id) {
 				this.type = type;
-				if(team_id){
+				if (team_id) {
 					this.teamId = team_id
-				} 
-				if(this.type == 2){
+				}
+				if (this.type == 2) {
 					this.price = this.pintuanPrice;
-				}else{
+				} else {
 					this.price = this.product.price;
 				}
 				this.$refs.lvvpopref.show();
@@ -746,17 +750,23 @@
 				//type = 1是立即购买，2是拼团购买
 				if (this.product.default_spes_desc[index][key].hasOwnProperty('product_id') && this.product.default_spes_desc[index]
 					[key].product_id) {
-					this.$api.getProductInfo({
-						id: this.product.default_spes_desc[index][key].product_id
-					}, res => {
+
+					let data = {
+						'id': this.product.default_spes_desc[index][key].product_id
+					};
+					let userToken = this.$db.get("userToken");
+					if (userToken) {
+						data['token'] = userToken;
+					}
+					this.$api.getProductInfo(data, res => {
 						if (res.status == true) {
 							// 切换规格判断可购买数量
 							this.buyNum = res.data.stock > this.minBuyNum ? this.minBuyNum : res.data.stock;
 							this.product = this.spesClassHandle(res.data);
 							//products.price = _this.$common.moneySub(products.price,_this.discount_amount);
-							if(this.type == 2){//拼团
-								this.price =  this.$common.moneySub(this.product.price,this.discount_amount);
-							}else{
+							if (this.type == 2) { //拼团
+								this.price = this.$common.moneySub(this.product.price, this.discount_amount);
+							} else {
 								this.price = this.product.price;
 							}
 						}
@@ -873,19 +883,21 @@
 					let data = {
 						product_id: this.product.id,
 						nums: this.buyNum,
-						order_type:this.type
+						order_type: this.type
 					}
 					this.$api.addCart(data, res => {
 						if (res.status) {
 							this.toclose();
 							let cartIds = res.data;
-							if (this.teamId ==0) {
-								this.$common.navigateTo('/pages/goods/place-order/index?cart_ids=' + JSON.stringify(cartIds)+'&order_type='+this.type);
-							} else{
-								this.$common.navigateTo('/pages/goods/place-order/index?cart_ids=' + JSON.stringify(cartIds)+'&order_type='+this.type+'&team_id='+this.teamId);
+							if (this.teamId == 0) {
+								this.$common.navigateTo('/pages/goods/place-order/index?cart_ids=' + JSON.stringify(cartIds) + '&order_type=' +
+									this.type);
+							} else {
+								this.$common.navigateTo('/pages/goods/place-order/index?cart_ids=' + JSON.stringify(cartIds) + '&order_type=' +
+									this.type + '&team_id=' + this.teamId);
 							}
-							
-						}else{
+
+						} else {
 							this.toclose();
 							this.$common.errorToShow(res.msg);
 						}
@@ -913,11 +925,11 @@
 				this.$refs.share.close();
 			},
 			// 拼团弹出层
-			pintuanShow () {
+			pintuanShow() {
 				this.$refs.pintuanpop.show();
 				// this.$refs.lvvpopref.close();
 			},
-			pintuanClose () {
+			pintuanClose() {
 				//this.$refs.pintuanpop.close();
 				// this.$refs.pintuanpop.close();
 				// this.$refs.share.close();
@@ -992,19 +1004,21 @@
 	.goods-details .cell-hd-title {
 		width: 620upx;
 	}
-	.goods-details .cell-hd-title .cell-hd-title-view{
+
+	.goods-details .cell-hd-title .cell-hd-title-view {
 		width: 100%;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 2;
 		overflow: hidden;
 	}
-	.goods-details .cell-hd-title .cell-hd-title-view:last-child{
+
+	.goods-details .cell-hd-title .cell-hd-title-view:last-child {
 		margin-top: 10upx;
 	}
 
 	.goods-details .cell-item-ft {
-		top:24upx;
+		top: 24upx;
 	}
 
 	.goods-title-item .cell-item-hd {
@@ -1429,9 +1443,11 @@
 	.group-swiper {
 		/* padding: 20upx 26upx; */
 	}
-	.groupHeight{
+
+	.groupHeight {
 		height: 122upx !important;
 	}
+
 	.group-swiper-c {
 		height: 242upx;
 	}
@@ -1464,16 +1480,20 @@
 		padding-right: 134upx;
 		text-align: center;
 	}
-	.group-swiper-c .swiper-item .cell-item .cell-item-bd .cell-bd-view{
+
+	.group-swiper-c .swiper-item .cell-item .cell-item-bd .cell-bd-view {
 		margin-bottom: 0;
 	}
-	.group-swiper-c .swiper-item .cell-item .cell-item-bd .cell-bd-text{
+
+	.group-swiper-c .swiper-item .cell-item .cell-item-bd .cell-bd-text {
 		float: none;
 	}
-	.group-swiper-c .commodity-day>text{
+
+	.group-swiper-c .commodity-day>text {
 		background: none !important;
 		padding: 0;
 	}
+
 	.group-swiper-c .swiper-item .cell-item .cell-item-ft .btn {
 		font-size: 26upx;
 		color: #fff;
@@ -1481,13 +1501,14 @@
 		/* padding: 0; */
 		text-align: center;
 	}
-	.btn-content{
+
+	.btn-content {
 		line-height: 1.2;
 		position: relative;
 		top: 49%;
 		transform: translateY(-50%);
 	}
-	
+
 	.ig-top {
 		text-align: center;
 		background-color: #fff;
@@ -1497,20 +1518,20 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 	}
-	
+
 	.ig-top-t,
 	.ig-top-m {
 		margin-bottom: 20upx;
 	}
-	
+
 	.ig-top-t>view {
 		display: inline-block;
 		padding: 0 10upx;
 		color: #999;
 	}
-	
+
 	.user-head-img-c {
 		position: relative;
 		width: 80upx;
@@ -1522,7 +1543,7 @@
 		/* float: left; */
 		border: 1px solid #f3f3f3;
 	}
-	
+
 	.user-head-img-tip {
 		position: absolute;
 		top: -6upx;
@@ -1536,17 +1557,17 @@
 		border-radius: 10upx;
 		transform: scale(.8);
 	}
-	
+
 	.user-head-img-c .user-head-img {
 		width: 100%;
 		height: 100%;
 		border-radius: 50%;
 	}
-	
+
 	.user-head-img-c:first-child {
 		border: 1px solid #FF7159;
 	}
-	
+
 	.uhihn {
 		width: 80upx;
 		height: 80upx;
@@ -1559,30 +1580,30 @@
 		box-sizing: border-box;
 		position: relative;
 	}
-	
+
 	.uhihn>text {
 		position: absolute;
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
 	}
-	
+
 	.igtb-top {
 		font-size: 32upx;
 		color: #333;
 		margin-bottom: 16upx;
 	}
-	
+
 	.igtb-mid {
 		margin-bottom: 16upx;
 	}
-	
+
 	.igtb-mid .btn {
 		width: 100%;
 		background-color: #FF7159;
 		color: #fff;
 	}
-	
+
 	.igtb-bot {
 		font-size: 24upx;
 		color: #666;

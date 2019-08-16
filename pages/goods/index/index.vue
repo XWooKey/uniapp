@@ -8,7 +8,7 @@
 			</view>
 		</view>
 		<!-- #endif -->
-		
+
 		<view class="content-top">
 
 			<!-- 轮播图 -->
@@ -154,8 +154,11 @@
 										<image :src="img" mode="aspectFill" v-for="(img, key) in item.images_url" :key="key" @click="clickImg(img)"></image>
 									</view>
 									<view class="seller-content" v-if="item.seller_content">
-										<view class="seller-content-top"><image class="seller-content-img" src="../../../static/image/seller-content.png"></image>掌柜回复</view>
-										{{item.seller_content}}</view>
+										<view class="seller-content-top">
+											<image class="seller-content-img" src="../../../static/image/seller-content.png"></image>掌柜回复
+										</view>
+										{{item.seller_content}}
+									</view>
 								</view>
 							</view>
 							<uni-load-more :status="goodsComments.loadStatus"></uni-load-more>
@@ -220,7 +223,8 @@
 					<view class="pop-b">
 						<!-- <button class='btn btn-square btn-g btn-half' @click="addToCart">加入购物车</button>
 						<button class='btn btn-square btn-b btn-half' @click="buyNow">立即购买</button> -->
-						<button class='btn btn-square btn-b btn-all' hover-class="btn-hover2" @click="clickHandle()" :disabled='submitStatus' :loading='submitStatus' v-if="product.stock">确定</button>
+						<button class='btn btn-square btn-b btn-all' hover-class="btn-hover2" @click="clickHandle()" :disabled='submitStatus'
+						 :loading='submitStatus' v-if="product.stock">确定</button>
 						<button class='btn btn-square btn-g btn-all' v-else>已售罄</button>
 					</view>
 				</view>
@@ -381,7 +385,7 @@
 					});
 				});
 			}
-			
+
 			// 获取购物车数量
 			this.getCartNums();
 			this.getMyShareCode();
@@ -428,11 +432,11 @@
 		},
 		methods: {
 			// 返回上一页
-			backBtn(){
-					uni.navigateBack({
-						delta: 1
-					});
-				
+			backBtn() {
+				uni.navigateBack({
+					delta: 1
+				});
+
 			},
 			// 获取商品详情
 			getGoodsDetail() {
@@ -498,11 +502,17 @@
 			changeSpes(obj) {
 				let index = obj.v;
 				let key = obj.k;
+
 				if (this.product.default_spes_desc[index][key].hasOwnProperty('product_id') && this.product.default_spes_desc[index]
 					[key].product_id) {
-					this.$api.getProductInfo({
-						id: this.product.default_spes_desc[index][key].product_id
-					}, res => {
+					let data = {
+						'id': this.product.default_spes_desc[index][key].product_id
+					};
+					let userToken = this.$db.get("userToken");
+					if (userToken) {
+						data['token'] = userToken;
+					}
+					this.$api.getProductInfo(data, res => {
 						if (res.status == true) {
 							// 切换规格判断可购买数量
 							this.buyNum = res.data.stock > this.minBuyNum ? this.minBuyNum : res.data.stock;
@@ -585,7 +595,7 @@
 					if (res.status == true) {
 						let _list = res.data.list;
 						let count = res.data.count;
-						this.items = ['图文详情','商品参数','买家评论('+count+')']
+						this.items = ['图文详情', '商品参数', '买家评论(' + count + ')']
 						// 如果评论没有图片 在这块作处理否则控制台报错
 						_list.forEach(item => {
 							item.ctime = this.$common.timeToDate(item.ctime, true);
@@ -632,7 +642,7 @@
 						}
 						this.submitStatus = false;
 					})
-				}else{
+				} else {
 					this.submitStatus = false;
 				}
 			},
@@ -653,7 +663,7 @@
 						}
 						this.submitStatus = false;
 					})
-				}else{
+				} else {
 					this.submitStatus = false;
 				}
 			},
@@ -767,19 +777,21 @@
 	.goods-details .cell-hd-title {
 		width: 620upx;
 	}
-	.goods-details .cell-hd-title .cell-hd-title-view{
+
+	.goods-details .cell-hd-title .cell-hd-title-view {
 		width: 100%;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 2;
 		overflow: hidden;
 	}
-	.goods-details .cell-hd-title .cell-hd-title-view:last-child{
+
+	.goods-details .cell-hd-title .cell-hd-title-view:last-child {
 		margin-top: 10upx;
 	}
 
 	.goods-details .cell-item-ft {
-		top:24upx;
+		top: 24upx;
 	}
 
 	.goods-title-item .cell-item-hd {
@@ -1183,41 +1195,47 @@
 		padding: 0 6upx;
 		border-radius: 6upx;
 	}
-	.nav-back{
+
+	.nav-back {
 		width: 100%;
 		height: 44px;
 		padding: 12px 12px 0;
 		position: fixed;
 		top: 0;
-		background-color: rgba(255,255,255,0);
+		background-color: rgba(255, 255, 255, 0);
 		z-index: 99;
 	}
-	.back-btn{
+
+	.back-btn {
 		height: 32px;
 		width: 32px;
 		border-radius: 50%;
-		background-color: rgba(0,0,0,0.5);
+		background-color: rgba(0, 0, 0, 0.5);
 	}
-	.back-btn .icon{
+
+	.back-btn .icon {
 		height: 20px;
 		width: 20px;
 		position: relative;
 		top: 50%;
 		left: 46%;
-		transform: translate(-50%,-50%);
+		transform: translate(-50%, -50%);
 	}
-	.seller-content{
+
+	.seller-content {
 		background-color: #f8f8f8;
 		margin: 0 13px 15px;
 		padding: 10px;
 		color: #6e6e6e;
 		border-radius: 4px;
 	}
-	.seller-content-top{
+
+	.seller-content-top {
 		font-weight: bold;
 		margin-bottom: 6px;
 	}
-	.seller-content-img{
+
+	.seller-content-img {
 		width: 20px;
 		height: 20px;
 		vertical-align: middle;
