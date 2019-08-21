@@ -166,6 +166,7 @@
                 this.$api.userInfo({}, res => {
                     if (res.status) {
                         this.userInfo = res.data
+						
                     } else {
                         this.$common.errorToShow(res.msg)
                     }

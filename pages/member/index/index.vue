@@ -422,8 +422,8 @@
 				//传递客户信息
 				window._AIHECONG('customer', {
 					head: _this.userInfo.avatar,
-					名称: _this.userInfo.nickname,
-					手机: _this.userInfo.mobile
+					'名称': _this.userInfo.nickname,
+					'手机': _this.userInfo.mobile
 				})
 				window._AIHECONG('showChat')
 				// #endif
@@ -432,7 +432,7 @@
 				// #ifdef APP-PLUS
 				if (this.kfmobile) {
 					uni.makePhoneCall({
-						phoneNumber: this.kfmobile,
+						phoneNumber: ''+this.kfmobile,
 						success: () => {
 							// console.log("成功拨打电话")
 						}
@@ -524,7 +524,7 @@
 
 	.login-btn {
 		color: #fff;
-		width: 160upx;
+		width: 180upx;
 		height: 50upx;
 		line-height: 50upx;
 		border-radius: 25upx;

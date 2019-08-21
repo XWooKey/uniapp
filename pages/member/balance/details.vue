@@ -73,8 +73,9 @@ export default {
 	onLoad (e) {
 		if(e.status){
 			this.index = this.states.indexOf(parseInt(e.status));
+		}else{
+			this.balances()//修复多次加载问题
 		}
-		this.balances()
 	},
 	onReachBottom () {
 		if (this.loadStatus === 'more') {

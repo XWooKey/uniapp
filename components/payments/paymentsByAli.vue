@@ -92,7 +92,7 @@ export default {
 				payment_code: code,
 				payment_type: this.type
 			}
-			data['ids'] = (this.type == 1 || 5 || 6) ? this.orderId : this.uid
+			data['ids'] = (this.type == 1 || this.type == 5 || this.type == 6) ? this.orderId : this.uid
 			
 			// 判断订单支付类型
 			if (this.type == 2 && this.recharge) {

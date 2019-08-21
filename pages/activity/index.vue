@@ -1,85 +1,76 @@
 <template>
 	<view class="conbox">
 		<view class="container">
-			<!-- 背景 -->
 			<image src="../../static/img/bg.png" class="cont" mode=""></image>
 			<image src="../../static/img/caidai.png" class="caidai" mode=""></image>
 			<view class="header">
 				<view class="header-title">
 					<view class="left">
-						次数： <text style="color: #E4431A;">{{chishu}}</text>
+						免费次数：<text style="color: #E4431A;">{{chishu}}</text>
+					</view>
+					<view class="left">
+						账户积分：<text style="color: #E4431A;">{{jifen}}</text>
 					</view>
 					<view class="right" @click="getmyPrize">
-						我的奖品 >
+						抽奖记录 >
 					</view>
 				</view>
 			</view>
 			<view class="main">
 				<view class="canvas-container">
-
 					<view :animation="animationData" class="canvas-content" id="zhuanpano" style="">
 					<!-- <view :animation="animationData" class="canvas-content" id="zhuanpano"  :style="[{transform:'rotate('+runDeg+')'}]"> -->
 						<!-- <canvas class="canvas" canvas-id="canvas"></canvas> -->
 						<view class="canvas-line">
 							<view class="canvas-litem" v-for="(item,index1) in awardsList" :key="index1" :style="[{transform:'rotate('+item.lineTurn+')'}]"></view>
 						</view>
-
 						<view class="canvas-list">
 							<view class="canvas-item" :style="[{zIndex:index2}]" v-for="(iteml,index2) in awardsList" :key="index2">
 								<view class="canvas-item-text" :style="[{transform:'rotate('+iteml.turn+')'}]">
 									<text>{{iteml.award}}</text>
-									<image class="canvas-item-text-img" src="../../static/img/xiaolian.png" v-if="iteml.type == 3"></image>
+									<image class="canvas-item-text-img" src="../../static/img/kongjiang.png" v-if="iteml.type == 0"></image>
+									<image class="canvas-item-text-img" src="../../static/img/jifen.png" v-if="iteml.type == 1"></image>
 									<image class="canvas-item-text-img" src="../../static/img/youhuiquan.png" v-if="iteml.type == 2"></image>
-									<image class="canvas-item-text-img" src="../../static/img/jingyan.png" v-if="iteml.type == 1"></image>
-									<image class="canvas-item-text-img" src="../../static/img/jifenimg.png" v-if="iteml.type == 0"></image>
+									<image class="canvas-item-text-img" src="../../static/img/yue.png" v-if="iteml.type == 3"></image>
+									<image class="canvas-item-text-img" src="../../static/img/shangpin.png" v-if="iteml.type == 4"></image>
 								</view>
 							</view>
 						</view>
 					</view>
-
 					<view @tap="playReward" class="canvas-btn" v-bind:class="btnDisabled">开始 </view>
 				</view>
 			</view>
-			<!-- 现金抽奖 -->
-			<view class="typecheckbox">
-				<view :class="mold==1?'left active':'left'" @click="choosetype(1)">
-					幸运抽奖
-				</view>
-				<view :class="mold==2?'left active':'left' " @click="choosetype(2)">
-					现金抽奖
-				</view>
-			</view>
+			<view class="typecheckbox"></view>
 			<!-- 规则 -->
 			<view class="guize">
 				<view class="title">
 					规则说明
 				</view>
-				<view class="g_item">
-					1.用户每天登录即送1次抽奖机会，分享好友则多赠1次机会
-				</view>
-				<view class="g_item">
-					2.用户点击大转盘抽奖按钮，有积分和现金两种方式可参与抽奖，没抽一次消耗1次抽奖机会
-				</view>
-				<view class="g_item">
-					3.用户获得的奖品，可在我的道具里查看
+				<view class="g_item" v-for="(v, k) in awardsConfig.rule" :key="k">
+					{{v}}
 				</view>
 			</view>
-			<!-- 我的奖品 -->
+			<view class="typecheckbox2"></view>
+			<!-- 抽奖记录 -->
 			<view class="shadowbox" v-if="r_flg" @click="closeshadow">
 				<view class="myrewards" @click.stop="openshadow">
 					<view class="title">
-						我的奖品
+						抽奖记录
 					</view>
 					<view class="itembox">
 						<view class="item" v-for="(items,i) in myPrizelist" :key="i">
-							<text class="left">{{items.name}}</text>
-							<text class="right">{{items.createtime}}</text>
+							<div class="t">
+								<text class="left">{{items.name}}</text>
+								<text class="right">{{items.ctime_name}}</text>
+							</div>
+							<div class="b">
+								{{items.prize_content}}
+							</div>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
-
 	</view>
 </template>
 
@@ -89,16 +80,17 @@
 			return {
 				awardsConfig: {
 					chance: true, //是否有抽奖机会
-					lists: [], //奖品列表 
+					prize: [], //奖品列表 
 				},
 				awardsList: {},
 				animationData: {},
 				btnDisabled: '',
 				thanksarr: [], //存储谢谢参与的索引
-				chishu: 5,
+				chishu: 0,
 				mold: 1,
 				r_flg: 0,
-				myPrizelist:[]
+				myPrizelist:[],
+				jifen: 0
 			}
 		},
 		onLoad: function() {
@@ -111,17 +103,9 @@
 		methods: {
 			// 查看奖品
 			getmyPrize(){
-				var that = this
-				that.requestFun('/api/Turntable/myPrize', {
-					page: 1,
-					num:1000
-				}, 1).then(function(data) {
-					data.lists.forEach(function(element,index){
-						element.createtime=that.dateformat(element.createtime)
-					})
-					that.myPrizelist = data.lists
-
-					that.r_flg=1
+				this.$api.myLottery({page: 1, limit: 1000}, res => {
+					this.myPrizelist = res.data
+					this.r_flg=1
 				})
 			},
 			openshadow(){
@@ -130,43 +114,27 @@
 			closeshadow(){
 				this.r_flg=0
 			},
-			// 选择抽奖方式
-			choosetype(val) {
-				this.mold = val
-				this.initdata(this)
-			},
 			// 初始化抽奖数据
 			initdata:function(that){
-				that.requestFun('/api/Turntable/integralLucky', {
-					mold: that.mold
-				}, 1).then(function(data) {
-					that.awardsConfig = data
-					that.chishu = data.luckdraw;
+				this.$api.lotteryConfig(res => {
+					this.awardsConfig = res.data
+					this.chishu = res.data.user.day_remaining;
+					this.jifen = res.data.user.jifen;
 					// 获取奖品的个数
-					let awarrlength = that.awardsConfig.lists.length
-					// push 谢谢参与奖项
-					for (var i = 0; i <= 3 * 2; i++) {
-						if (i % 3 == 0) {
-							that.thanksarr.push(i)
-							that.awardsConfig.lists.splice(i, 0, {
-								name: '谢谢参与',
-								type: 0
-							});
-						}
-					}
+					let awarrlength = this.awardsConfig.prize.length
 					// 为每一项追加index属性
-					that.awardsConfig.lists.forEach(function(element, index) {
+					this.awardsConfig.prize.forEach(function(element, index) {
 						element.index = index
-					})
-				
+					});
+					
 					// 画转盘
-					that.drawAwardRoundel();
-				})
+					this.drawAwardRoundel();
+				});
 			},
 			//画抽奖圆盘  
 			drawAwardRoundel: function() {
 				// 拿到奖品列表
-				var awards = this.awardsConfig.lists;
+				var awards = this.awardsConfig.prize;
 				var awardsList = [];
 				// 每份奖品所占角度
 				var turnNum = 1 / awards.length * 360; // 文字旋转 turn 值  
@@ -175,127 +143,153 @@
 					awardsList.push({
 						turn: i * turnNum + 'deg', //每个奖品块旋转的角度
 						lineTurn: i * turnNum + turnNum / 2 + 'deg', //奖品分割线的旋转角度
-						award: awards[i].name, //奖品的名字,
+						award: awards[i].title, //奖品的名字,
 						type: awards[i].type,
-						id:awards[i].type,
+						id: awards[i].id,
 					});
 				}
-				this.btnDisabled = this.chishu ? '' : 'disabled';
+				if(this.chishu < 1 && this.jifen < this.awardsConfig.integral_exchange) {
+					this.btnDisabled = 'disabled';
+				}else{
+					if(!this.awardsConfig.user.lottery){
+						this.btnDisabled = 'disabled';
+					}else{
+						this.btnDisabled = '';
+					}
+				}
+				
 				this.awardsList = awardsList;
 			},
 			//发起抽奖  
 			playReward: function() {
-				var that = this
-				
-				// that.runDeg = 60*Math.random()
-				if (this.chishu == 0) {
-					uni.showToast({
-						title: '抽奖次数已经用完',
-						icon: 'none',
-						duration: 1000,
-						complete: function () {
-							setTimeout(function() {
-								uni.hideToast();
-							},1000);
-						}
-					})
-					return
+				if(this.chishu < 1) {
+					if(this.jifen < this.awardsConfig.integral_exchange) {
+						this.$common.errorToShow('抽奖次数已经用完');
+						return false;
+					} else if (this.jifen >= this.awardsConfig.integral_exchange) {
+						this.$common.modelShow('提示', '本次抽奖将消耗'+this.awardsConfig.integral_exchange+'积分，确认吗？', res => {
+							this.lottery();
+						});
+					}
+				}else{
+					this.lottery();
 				}
-
-				// 获取奖品
-				that.requestFun('/api/Turntable/winningPrize', {
-					mold: that.mold
-				}, 1).then(function(data) {
-					var awardIndex = 3
-					that.awardsList.forEach(function(element, index) {
-						if (element.award == data.name) {
-							awardIndex = index
-						}
-					})
-					//中奖index  
-					var awardsNum = that.awardsConfig.lists;
-					// var awardIndex = 1 || Math.round(Math.random() * (awardsNum.length - 1)); //随机数  
-					var runNum = 4; //旋转8周  
-					var duration = 4000; //时长  
-				
-					// 旋转角度  
-					that.runDeg = that.runDeg || 0;
-					let preDeg = that.runDeg
-					that.runDeg = that.runDeg + (360 - that.runDeg % 360) + (360 * runNum - awardIndex * (360 / awardsNum.length)) +1
-					//创建动画  
-					if(process.env.VUE_APP_PLATFORM == 'h5'){
-						// document.styleSheets[0]
-						document.getElementById('zhuanpano').style='animation:rotate_before 4s 0ms ease forwards;'
-						if(document.styleSheets[0].cssRules.length>0){
-							Array.from(document.styleSheets[0].cssRules).forEach(function(element,index){
-								if(element.name == 'rotate_before'){
-									// 删除上次插入的动画
-									document.styleSheets[0].deleteRule(index)
-								}
-							})
-						}
-						
-						// console.log(document.styleSheets[0].cssRules)
-						// console.log("@keyframes rotate_before{from{ transform: rotate("+preDeg+"deg); }to{ transform: rotate("+that.runDeg+"deg);}}")
-						// 插入定义的动画
-						document.styleSheets[0].insertRule("@keyframes rotate_before{from{ transform: rotate("+preDeg+"deg); }to{ transform: rotate("+that.runDeg+"deg);}}",8);
-						
-					}else{
-						var animationRun = uni.createAnimation({
-							duration: duration,
-							timingFunction: 'ease'
-						})
-						animationRun.rotate(that.runDeg).step();
-						that.animationData = animationRun.export();
-					}
-// 					// #ifndef H5
-// 					console.log(document.styleSheets)
-// 					document.getElementById('zhuanpano')
-// 					// #endif
-					that.btnDisabled = 'disabled';
-
-					// 中奖提示  
-					var awardsConfig = that.awardsConfig;
-					var awardType = awardsConfig.lists[awardIndex].type;
-					that.chishu = that.chishu - 1;
-					if (awardType != 0) {
-						setTimeout(function() {
-							uni.showModal({
-								title: '恭喜',
-								content: '获得' + (awardsConfig.lists[awardIndex].name),
-								showCancel: false,
-								success:function(){
-									// 置空style  否则动画不生效
-									setTimeout(function(){
-										document.getElementById('zhuanpano').style=''
-									},1000)
-								}
-							});
-							that.btnDisabled = '';
-						}.bind(that), duration);
-					} else {
-						setTimeout(function() {
-							uni.showModal({
-								title: '很遗憾',
-								content: '没中奖 ' + (awardsConfig.lists[awardIndex].name),
-								showCancel: false,
-								success:function(){
-									// 置空style  否则动画不生效
-									setTimeout(function(){
-										document.getElementById('zhuanpano').style=''
-									},1000)
-								}
-							});
-							that.btnDisabled = '';
-						}.bind(that), duration);
-					}
-					
-				})
-
 			},
-
+			lottery: function () {
+				// 抽奖
+				this.$api.lottery(res => {
+					if(res.status) {
+						let awardIndex = 0;
+						let awardInfo = res.data.result;
+						
+						//获取抽奖结果
+						this.awardsList.forEach(function(element, index) {
+							if (element.id == awardInfo.id) {
+								awardIndex = index;
+							}
+						})
+						
+						//中奖index  
+						let awardsNum = this.awardsConfig.prize;
+						let runNum = 4; //旋转8周
+						let duration = 3686; //时长
+										
+						// 旋转角度  
+						this.runDeg = this.runDeg || 0;
+						let preDeg = this.runDeg;
+						this.runDeg = this.runDeg + (360 - this.runDeg % 360) + (360 * runNum - awardIndex * (360 / awardsNum.length)) + 1;
+						
+						//创建动画  
+						if(process.env.VUE_APP_PLATFORM == 'h5'){
+							// document.styleSheets[0]
+							document.getElementById('zhuanpano').style='animation:rotate_before 4s 0ms ease forwards;'
+							if(document.styleSheets[0].cssRules.length>0){
+								Array.from(document.styleSheets[0].cssRules).forEach(function(element,index){
+									if(element.name == 'rotate_before'){
+										// 删除上次插入的动画
+										document.styleSheets[0].deleteRule(index)
+									}
+								})
+							}
+							
+							// console.log(document.styleSheets[0].cssRules)
+							// console.log("@keyframes rotate_before{from{ transform: rotate("+preDeg+"deg); }to{ transform: rotate("+this.runDeg+"deg);}}")
+							// 插入定义的动画
+							document.styleSheets[0].insertRule("@keyframes rotate_before{from{ transform: rotate("+preDeg+"deg); }to{ transform: rotate("+this.runDeg+"deg);}}",8);
+						}else{
+							var animationRun = uni.createAnimation({
+								duration: duration,
+								timingFunction: 'ease'
+							})
+							animationRun.rotate(this.runDeg).step();
+							this.animationData = animationRun.export();
+						}
+						// 					// #ifndef H5
+						// 					console.log(document.styleSheets)
+						// 					document.getElementById('zhuanpano')
+						// 					// #endif
+						this.btnDisabled = 'disabled';
+						
+						// 中奖提示  
+						var awardsConfig = this.awardsConfig;
+						var awardType = awardsConfig.prize[awardIndex].type;
+						this.jifen = this.chishu <= 0 ? (this.jifen - awardsConfig.integral_exchange >= 0 ? this.jifen - awardsConfig.integral_exchange : 0) : this.jifen;
+						this.chishu = this.chishu > 1 ? this.chishu - 1 : 0;
+						if (awardType != 0) {
+							let msg = this.getPrizeMsg(awardsConfig.prize[awardIndex].type, awardsConfig.prize[awardIndex].val);
+							setTimeout(function() {
+								this.$common.modelShow('恭喜', '获得' + (awardsConfig.prize[awardIndex].title) + '，' + msg, res => {
+									setTimeout(function(){
+										document.getElementById('zhuanpano').style=''
+									},1000)
+								}, false);
+								if(!res.data.is_lottery.lottery){
+									this.btnDisabled = 'disabled';
+								}else{
+									this.btnDisabled = '';
+								}
+							}.bind(this), duration);
+						} else {
+							setTimeout(function() {
+								this.$common.modelShow('很遗憾', '没中奖，再接再厉！', res => {
+									setTimeout(function(){
+										document.getElementById('zhuanpano').style=''
+									},1000)
+								}, false);
+								if(!res.data.is_lottery.lottery){
+									this.btnDisabled = 'disabled';
+								}else{
+									this.btnDisabled = '';
+								}
+							}.bind(this), duration);
+						}
+					} else {
+						this.$common.modelShow('提示', res.msg);
+					}
+				});
+			},
+			//获取显示的奖品信息
+			getPrizeMsg: function(type, val){
+				let msg = '';
+				switch(type){
+					case 1: //积分
+						msg = '积分：' + val + '个';
+						break;
+					case 2: //优惠券
+						msg = '优惠券：“' + val + '” 一张';
+						break;
+					case 3: //余额
+						msg = '余额：' + val + '元';
+						break;
+					case 4: //商品
+						msg = '商品：“' + val + '”';
+						break;
+					default: //默认
+						break;
+				}
+				return msg;
+			}
 		}
-
 	}
 </script>
 <style scoped>
@@ -537,6 +531,23 @@
 		align-items: flex-end;
 		/* padding-top: 46upx; */
 	}
+	
+	.typecheckbox2{
+		width: 100%;
+		position: relative;
+		z-index: 3;
+		display: flex;
+		justify-content: space-between;
+		padding: 20upx;
+		box-sizing: border-box;
+		color: #fff;
+		font-size: 28upx;
+		top: -120upx;
+		flex-direction: column;
+		height: 120upx;
+		align-items: flex-end;
+		/* padding-top: 46upx; */
+	}
 
 	.typecheckbox view {
 		border: 1px solid #FF3637;
@@ -611,7 +622,7 @@
 		font-size: 24upx;
 		font-family: PingFang-SC-Medium;
 		border-radius: 40upx;
-		padding-bottom: 20upx;
+		padding:0 24upx 20upx;
 	}
 
 	.myrewards .title {
@@ -632,11 +643,20 @@
 
 	.myrewards .item {
 		width: 100%;
-		height: 66upx;
-		padding: 0 32upx;
+		padding: 12upx 0;
 		box-sizing: border-box;
+		border-bottom: 1upx dashed #CCCCCC;
+
+	}
+	.myrewards .item .t{
 		display: flex;
-		align-items: center;
 		justify-content: space-between;
+		align-items: center;
+		margin-bottom:10upx;
+	}
+	.myrewards .item .b{
+		font-size: 12px;
+		color:#999999;
+		text-align: left;
 	}
 </style>

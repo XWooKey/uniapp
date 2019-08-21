@@ -97,7 +97,7 @@ export default {
 				payment_type: _this.type
 			}
 			
-			data['ids'] = (this.type == 1 || 5 || 6) ? this.orderId : this.uid
+			data['ids'] = (this.type == 1 || this.type == 5 || this.type == 6) ? this.orderId : this.uid
 			 if ((this.type == 5 || this.type == 6) && this.recharge) {
 				data['params'] = {
 					trade_type: 'APP',
@@ -125,7 +125,7 @@ export default {
 						uni.requestPayment({  
 							provider: "alipay",  
 							orderInfo: res.data.data,
-							success: function(res){
+							success: function(data){
 								_this.$common.successToShow('支付成功', () => {
 									_this.redirectHandler(res.data.payment_id)
 								})
@@ -152,8 +152,9 @@ export default {
 					// 微信app支付
 					_this.$api.pay(data, res => {
 						if (res.status) {
+							console.log(JSON.stringify(res));
 							// 调用微信支付  
-							uni.requestPayment({  
+							uni.requestPayment({
 								provider: "wxpay",  
 								orderInfo: {
 									appid: res.data.appid,
@@ -164,10 +165,13 @@ export default {
 									timestamp: res.data.timestamp,
 									sign: res.data.sign,
 								},
-								success: function(res){
+								success: function(data){
 									_this.$common.successToShow('支付成功', () => {
 										_this.redirectHandler(res.data.payment_id)
 									})
+								},
+								fail:function(res){
+									console.log(JSON.stringify(res));
 								}
 							});
 						} else {

@@ -47,8 +47,7 @@
 		},
 	
 		created() {
-			// 获取搜索框距离顶部高度
-			// #ifndef MP-WEIXIN
+			//#ifdef H5
 			this.$nextTick(() => {
 				this.searchTop = this.$refs.searchBar.$el.offsetTop;
 			})
@@ -60,7 +59,7 @@
 		},
 
 		mounted() {
-			// #ifdef H5 ||APP-PLUS
+			// #ifdef H5
 			window.addEventListener('scroll', this.handleScroll)
 			// #endif
 			
@@ -83,8 +82,8 @@
 		},
 		onPageScroll(){
 			var _this = this;
-			// #ifdef MP-WEIXIN
-			const query = wx.createSelectorQuery().in(this)
+			// #ifdef MP-WEIXIN || APP-PLUS
+			const query = uni.createSelectorQuery().in(this)
 			  query.select('.search').boundingClientRect(function(res){
 				if(res.top<0){
 					_this.searchFixed = true ;
