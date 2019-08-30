@@ -687,6 +687,9 @@ export default {
 </script>
 
 <style>
+page{
+	background-color: #fff;
+}
 .search{
 	position: fixed;
 	z-index: 997;

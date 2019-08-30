@@ -101,6 +101,14 @@ export default {
 				this.$common.errorToShow('请填写店铺名称');
 				return;
 			}
+			if(this.images.length <= 0){
+				this.$common.errorToShow('请上传店招');
+				return;
+			}
+			if(!this.store_logo){
+				this.$common.errorToShow('请上传图标');
+				return;
+			}
 			this.store_banner = this.images[0].image_id;
 			
 			this.$api.setStore({

@@ -114,15 +114,16 @@
 			_this.$api.getDistributioninfo({}, function(res) {
 				if (res.status) {
 					_this.info = res.data;
+					if (res.data.verify != 1) { //审核通过
+						_this.$common.redirectTo('/pages/member/distribution/index');
+					}
 					_this.orderItems.freeze.nums = _this.info.freeze_amount;
 					_this.orderItems.settlement.nums = _this.info.settlement_amount;
 					_this.orderItems.current_month_order.nums = _this.info.current_month_order;
 					if (_this.$store.state.config.distribution_store == '1') {
 						_this.utilityMenus.my_store.router = './my_store?store=' + _this.info.store;
 					}
-					if (!res.data.verify && res.data.verify != 1) { //审核通过
-						_this.$common.redirectTo('/pages/member/distribution/index');
-					}
+					
 				} else {
 					//报错了
 					_this.$common.errorToShow(res.msg);

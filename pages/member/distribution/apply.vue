@@ -37,8 +37,8 @@
 					</view>
 					
 				</view>
-				<view class="apply-tip color-6 fsz26" @click="agreeAgreement">
-					<label class="radio" ><radio value="1" :checked="checked" color="#FF7159"/></label>我已经阅读并接受<text class="">"分销协议"</text>
+				<view class="apply-tip color-6 fsz26">
+					<label class="radio" @click="agreeAgreement"><radio value="1" :checked="checked" color="#FF7159"/>我已经阅读并接受</label><text class="" @click="goAgreement()">"分销协议"</text>
 				</view>
 			</view>
 			
@@ -124,7 +124,11 @@ export default {
 				});
 			}
 		},
-
+		goAgreement(){
+			uni.navigateTo({
+				url: './agreement'
+			})
+		}
         
     }
 }

@@ -18,7 +18,7 @@
 				<view class='price-salesvolume' v-if="lasttime.hour!==false">
 					<view class='commodity-price'>
 						<text class='current-price'>￥{{pintuanPrice}}</text>
-						<text class='cost-price'>￥{{product.mktprice}}</text>
+						<text class='cost-price' v-if="parseFloat(product.mktprice)>0">￥{{product.mktprice}}</text>
 					</view>
 					<view class='commodity-salesvolume'>
 						<text>已售{{goodsInfo.buy_count}}件/剩余{{product.stock}}件</text>
@@ -1018,7 +1018,7 @@
 	}
 
 	.goods-details .cell-item-ft {
-		top: 24upx;
+		top: 42upx;
 	}
 
 	.goods-title-item .cell-item-hd {

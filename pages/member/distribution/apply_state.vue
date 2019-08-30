@@ -1,28 +1,34 @@
 <template>
 	<view class="content">
 		<view class="apply-c">
-			<view class="apply-top fsz36 color-o">
+			<view class="apply-top fsz36 color-o"  v-if="info.verify==2">
 				恭喜，您的申请已提交！
 			</view>
-			<view class="apply-bot">
+			<view class="apply-top-refuse fsz36 color-o"  v-if="info.verify==3">
+				抱歉，您的申请被驳回！
+			</view>
+			<view class="apply-top fsz36 color-o"  v-if="info.verify==1">
+				恭喜，您的申请已通过！
+			</view>
+			<view class="apply-bot"  v-if="info.verify==2">
                 <view class="apply-bot-sop">
                 	<view class="abs-img">
                 		<image class="icon" src="../../../static/image/del.png" mode=""></image>
                 	</view>
-					<view class="color-9 abs-mid">
-						<!-- <text class=" color-o">·······</text>······· -->
+					<view class="color-9 abs-mid"  >
 						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
 						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
 						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
 						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
 						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
 						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+
 						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
 					</view>
 					<view class="abs-img">
 						<image class="icon" src="../../../static/image/close.png" mode=""></image>
@@ -103,6 +109,9 @@ export default {
 }
 .apply-top{
 	margin-top: 40upx;
+}
+.apply-top-refuse{
+	margin-top: 140upx;
 }
 .apply-bot{
 	width: 100%;

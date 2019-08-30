@@ -147,7 +147,21 @@ export default {
 			scopes: 'auth_user',
 			success: (res) => {
 				if(res.authCode){
-					that.aLiLoginStep1(res.authCode);
+					uni.getUserInfo({
+						provider: 'alipay',
+						success: function (infoRes) {
+							if(infoRes.errMsg == "getUserInfo:ok"){
+								let user_info = {
+									'nickname': infoRes.nickName,
+									'avatar': infoRes.avatar
+								}
+								that.aLiLoginStep1(res.authCode, user_info);
+							}
+						},
+						fail: function (errorRes) {
+							this.$common.errorToShow('未取得用户昵称头像信息');
+						}
+					});
 				}else{
 					this.$common.errorToShow('未取得code');
 				}
@@ -157,8 +171,13 @@ export default {
 			}
 		});
 	},
-	aLiLoginStep1(code) {
-		this.$api.alilogin1({code}, res => {
+	aLiLoginStep1(code, user_info) {
+		let data = {
+			'code': code,
+			'user_info': user_info
+		}
+		this.$api.alilogin1(data, res => {
+			this.alipayNoLogin = false;
 			if (res.status) {
 				this.open_id = res.data.user_wx_id
 				//判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
@@ -166,53 +185,15 @@ export default {
 					this.$common.redirectTo('/pages/login/login/index?user_wx_id=' + res.data.user_wx_id);
 				} else {
 					this.$db.set('userToken', res.data.token)
-					//this.initData()
 					uni.navigateBack({
 					  delta: 1
 					});
-					return false;
 				}
 			} else {
 				this.$common.errorToShow(res.msg)
 			}
 		})
 	},
-    // #ifdef MP-ALIPAY
-    getAlipayUserInfo: function() {
-      let _this = this
-      this.getCode(function(code) {
-        var data = {
-          code: code,
-          type: 'alipay'
-        }
-        //有推荐码的话，带上
-        var invitecode = _this.$db.get('invitecode')
-        if (invitecode) {
-          data.invitecode = invitecode
-        }
-        _this.$api.login1(data, function(res) {
-          if (res.status) {
-            //判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
-            if (typeof res.data.token == 'undefined') {
-              uni.redirectTo({
-                url:
-                  '/pages/login/login/index?user_wx_id=' + res.data.user_wx_id
-              })
-            } else {
-              //登陆成功，设置token，并返回上一页
-              _this.$db.set('userToken', res.data.token)
-              uni.navigateBack({
-                delta: 1
-              })
-              return false
-            }
-          } else {
-            _this.$common.errorToShow('登录失败，请重试')
-          }
-        })
-      })
-    }
-    // #endif
   }
 }
 </script>

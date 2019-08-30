@@ -89,7 +89,7 @@ export default {
   onShow() {
     let _this = this
     let userToken = _this.$db.get('userToken')
-    if (userToken || userToken != '') {
+    if (userToken && userToken != '') {
       uni.switchTab({
         url: '/pages/member/index/index'
       })

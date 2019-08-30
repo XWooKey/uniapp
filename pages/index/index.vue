@@ -41,9 +41,11 @@
 		},
 		onLoad(e) {
 			this.initData()
-			uni.setNavigationBarTitle({
-				title: this.$store.state.config.shop_name||''
-			});
+			if(this.$store.state.config.shop_name){
+				uni.setNavigationBarTitle({
+					title: this.$store.state.config.shop_name||''
+				});
+			}
 		},
 		methods: {
 			//领取红包

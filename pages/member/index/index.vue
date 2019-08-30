@@ -145,6 +145,9 @@
 				kefupara: '', //客服传递资料
 				afterSaleNums: 0,
 				isClerk: false,
+				alipayNoLogin: true,
+				alipayName: '',
+				alipayAvatar: '',
 				orderItems: [{
 						name: '待付款',
 						icon: '../../../static/image/me-ic-obligation.png',
@@ -256,7 +259,21 @@
 					scopes: 'auth_user',
 					success: (res) => {
 						if(res.authCode){
-							that.aLiLoginStep1(res.authCode);
+							uni.getUserInfo({
+								provider: 'alipay',
+								success: function (infoRes) {
+									if(infoRes.errMsg == "getUserInfo:ok"){
+										let user_info = {
+											'nickname': infoRes.nickName,
+											'avatar': infoRes.avatar
+										}
+										that.aLiLoginStep1(res.authCode, user_info);
+									}
+								},
+								fail: function (errorRes) {
+									this.$common.errorToShow('未取得用户昵称头像信息');
+								}
+							});
 						}else{
 							this.$common.errorToShow('未取得code');
 						}
@@ -297,8 +314,13 @@
 					}
 				})
 			},
-			aLiLoginStep1(code) {
-				this.$api.alilogin1({code}, res => {
+			aLiLoginStep1(code, user_info) {
+				let data = {
+					'code': code,
+					'user_info': user_info
+				}
+				this.$api.alilogin1(data, res => {
+					this.alipayNoLogin = false;
 					if (res.status) {
 						this.open_id = res.data.user_wx_id
 						//判断是否返回了token，如果没有，就说明没有绑定账号，跳转到绑定页面
@@ -313,7 +335,6 @@
 					}
 				})
 			},
-
 			toWxLogin(data) {
 				let _this = this
 				_this.$api.login2(data, function(res) {
