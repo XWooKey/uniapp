@@ -1,5 +1,11 @@
 <template>
 	<view class="content">
+		<view class="nav-back">
+			<view class="back-btn" @click="backBtn()">
+				<image class="icon" src="../../../static/image/back-black.png" mode=""></image>
+			</view>
+		</view>
+		
 		<view class="content-top">
 			<!-- 轮播图 -->
 			<view class='swiper'>
@@ -610,6 +616,12 @@
 			}
 		},
 		methods: {
+			// 返回上一页
+			backBtn() {
+				uni.navigateBack({
+					delta: 1
+				});
+			},
 			// 获取商品详情
 			getGoodsInfo() {
 				let data = {
@@ -1436,6 +1448,38 @@
 		border-radius: 6upx;
 	}
 
+
+	.nav-back {
+		width: 100%;
+		height: 44px;
+		/* #ifndef MP-WEIXIN */
+		padding: 12px 12px 0;
+		/* #endif */
+		/* #ifdef MP-WEIXIN */
+		padding: 26px 12px 0;
+		/* #endif */
+		
+		position: fixed;
+		top: 0;
+		background-color: rgba(255, 255, 255, 0);
+		z-index: 98;
+	}
+
+	.back-btn {
+		height: 32px;
+		width: 32px;
+		border-radius: 50%;
+		background-color: rgba(255, 255, 255, 0.8);
+	}
+
+	.back-btn .icon {
+		height: 20px;
+		width: 20px;
+		position: relative;
+		top: 50%;
+		left: 46%;
+		transform: translate(-50%, -50%);
+	}
 	.tl {
 		width: 70% !important;
 	}

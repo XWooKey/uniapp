@@ -31,13 +31,32 @@
 						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
 					</view>
 				</view>
-				<view class='cell-item add-title-item'>
+				<view class='cell-item add-title-item' v-if="!orderInfo.store">
 					<view class='cell-item-bd'>
 						<view class="cell-bd-view black-text">
 							<text class="cell-bd-text">收件人：{{ orderInfo.ship_name }}</text>
 						</view>
 						<view class="cell-bd-view">
 							<text class="cell-bd-text">{{ orderInfo.ship_area_name + orderInfo.ship_address }}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+			
+			<view class='cell-group margin-cell-group' v-if="orderInfo.store">
+				<view class='cell-item add-title-item'>
+					<view class="cell-item-hd">
+						<image class='cell-hd-icon' src='../../../static/image/homepage.png'></image>
+					</view>
+					<view class='cell-item-bd'>
+						<view class="cell-bd-view black-text">
+							<text class="cell-bd-text">{{orderInfo.store.store_name}}</text>
+						</view>
+						<view class="cell-bd-view">
+							<text class="cell-bd-text">电话：{{orderInfo.store.mobile}}</text>
+						</view>
+						<view class="cell-bd-view">
+							<text class="cell-bd-text">地址：{{orderInfo.store.all_address}}</text>
 						</view>
 					</view>
 				</view>
@@ -575,5 +594,11 @@
 		background-color: #FF7159;
 		/* padding: 0; */
 		text-align: center;
+	}
+	
+	.add-title-item .cell-item-hd {
+	    min-width: 20px;
+	    color: #666;
+	    font-size: 14px;
 	}
 </style>

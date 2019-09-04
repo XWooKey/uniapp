@@ -173,13 +173,15 @@
 		// #ifdef H5
 		"titleNView": false,
 		// #endif
-        "navigationBarTitleText": "商品详情"
+        "navigationBarTitleText": "商品详情",
+		"navigationStyle": "custom"
       }
     },
     {
       "path": "pages/goods/index/group",
       "style": {
-        "navigationBarTitleText": "促销详情"
+        "navigationBarTitleText": "促销详情",
+		"navigationStyle": "custom"
       }
     },
     {
@@ -326,7 +328,8 @@
     {
       "path": "pages/goods/index/pintuan",
       "style": {
-        "navigationBarTitleText": "拼团详情"
+        "navigationBarTitleText": "拼团详情",
+		"navigationStyle": "custom"
       }
     },
     {

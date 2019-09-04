@@ -1,13 +1,12 @@
 <template>
 	<view class="content">
-		<!-- 返回按钮,小程序不要 -->
-		<!-- #ifndef MP-WEIXIN -->
+		
 		<view class="nav-back">
 			<view class="back-btn" @click="backBtn()">
-				<image class="icon" src="../../../static/image/back-img.png" mode=""></image>
+				<image class="icon" src="../../../static/image/back-black.png" mode=""></image>
 			</view>
 		</view>
-		<!-- #endif -->
+		
 
 		<view class="content-top">
 
@@ -390,6 +389,9 @@
 			this.getCartNums();
 			this.getMyShareCode();
 		},
+		onShow(){
+			this.submitStatus = false;
+		},
 		computed: {
 			// 规格切换计算规格商品的 可购买数量
 			minNums() {
@@ -436,7 +438,6 @@
 				uni.navigateBack({
 					delta: 1
 				});
-
 			},
 			// 获取商品详情
 			getGoodsDetail() {
@@ -1199,18 +1200,24 @@
 	.nav-back {
 		width: 100%;
 		height: 44px;
+		/* #ifndef MP-WEIXIN */
 		padding: 12px 12px 0;
+		/* #endif */
+		/* #ifdef MP-WEIXIN */
+		padding: 26px 12px 0;
+		/* #endif */
+		
 		position: fixed;
 		top: 0;
 		background-color: rgba(255, 255, 255, 0);
-		z-index: 99;
+		z-index: 98;
 	}
 
 	.back-btn {
 		height: 32px;
 		width: 32px;
 		border-radius: 50%;
-		background-color: rgba(0, 0, 0, 0.5);
+		background-color: rgba(255, 255, 255, 0.8);
 	}
 
 	.back-btn .icon {

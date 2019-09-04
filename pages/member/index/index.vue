@@ -68,7 +68,7 @@
 		<!-- 其他功能菜单 -->
 		<view class='cell-group margin-cell-group right-img'>
 
-			<view class='cell-item' v-for="(item, index) in utilityMenus" :key="index">
+			<view class='cell-item' v-for="(item, index) in utilityMenus" :key="index" v-if="!item.unshowItem">
 				<view class='cell-item-hd' @click="navigateToHandle(item.router)">
 					<image class='cell-hd-icon' :src='item.icon'></image>
 					<view class='cell-hd-title'>{{ item.name }}</view>
@@ -148,6 +148,7 @@
 				alipayNoLogin: true,
 				alipayName: '',
 				alipayAvatar: '',
+				config:'',//配置信息
 				orderItems: [{
 						name: '待付款',
 						icon: '../../../static/image/me-ic-obligation.png',
@@ -170,56 +171,66 @@
 					}
 				],
 				utilityMenus: {
-					distribution:{
+					distribution: {
 						name: '分销中心',
 						icon: '../../../static/image/distribution.png',
-						router: '../distribution/user'
+						router: '../distribution/user',
+						unshowItem: false
 					},
-					coupon:{
+					coupon: {
 						name: '我的优惠券',
 						icon: '../../../static/image/ic-me-coupon.png',
-						router: '../coupon/index'
+						router: '../coupon/index',
+						unshowItem: false
 					},
-					balance:{
+					balance: {
 						name: '我的余额',
 						icon: '../../../static/image/ic-me-balance.png',
-						router: '../balance/index'
+						router: '../balance/index',
+						unshowItem: false
 					},
-					integral:{
+					integral: {
 						name: '我的积分',
 						icon: '../../../static/image/integral.png',
-						router: '../integral/index'
+						router: '../integral/index',
+						unshowItem: false
 					},
-					address:{
+					address: {
 						name: '地址管理',
 						icon: '../../../static/image/me-ic-site.png',
-						router: '../address/list'
+						router: '../address/list',
+						unshowItem: false
 					},
-					collection:{
+					collection: {
 						name: '我的收藏',
 						icon: '../../../static/image/ic-me-collect.png',
-						router: '../collection/index'
+						router: '../collection/index',
+						unshowItem: false
 					},
-					history:{
+					history: {
 						name: '我的足迹',
 						icon: '../../../static/image/ic-me-track.png',
-						router: '../history/index'
+						router: '../history/index',
+						unshowItem: false
 					},
-					invite:{
+					invite: {
 						name: '邀请好友',
 						icon: '../../../static/image/ic-me-invite.png',
-						router: '../invite/index'
+						router: '../invite/index',
+						unshowItem: true
 					},
-					setting:{
+					setting: {
 						name: '系统设置',
 						icon: '../../../static/image/me-ic-set.png',
-						router: '../setting/index'
+						router: '../setting/index',
+						unshowItem: false
 					}
 				},
 				clerk: [{
 						name: '提货单列表',
 						icon: '../../../static/image/me-ic-phone.png',
 						router: '../take_delivery/list'
+
 					},
 					{
 						name: '提货单核销',
@@ -258,11 +269,11 @@
 				uni.login({
 					scopes: 'auth_user',
 					success: (res) => {
-						if(res.authCode){
+						if (res.authCode) {
 							uni.getUserInfo({
 								provider: 'alipay',
-								success: function (infoRes) {
-									if(infoRes.errMsg == "getUserInfo:ok"){
+								success: function(infoRes) {
+									if (infoRes.errMsg == "getUserInfo:ok") {
 										let user_info = {
 											'nickname': infoRes.nickName,
 											'avatar': infoRes.avatar
@@ -270,11 +281,11 @@
 										that.aLiLoginStep1(res.authCode, user_info);
 									}
 								},
-								fail: function (errorRes) {
+								fail: function(errorRes) {
 									this.$common.errorToShow('未取得用户昵称头像信息');
 								}
 							});
-						}else{
+						} else {
 							this.$common.errorToShow('未取得code');
 						}
 					},
@@ -360,11 +371,14 @@
 				// 获取用户信息
 				var _this = this
 				//判断是开启分销还是原始推广
-				if(this.$store.state.config.open_distribution){
-					delete this.utilityMenus.invite;
-				}else{
-					delete this.utilityMenus.distribution;
-				}
+				this.$api.shopConfig(res => {
+					this.config = res;
+					if (res.open_distribution) {
+						this.utilityMenus.invite.unshowItem = true
+					} else {
+						this.utilityMenus.distribution.unshowItem = true
+					}
+				})
 				if (this.$db.get('userToken')) {
 					this.hasLogin = true
 					this.$api.userInfo({}, res => {
@@ -429,7 +443,7 @@
 				// #ifdef H5
 				let _this = this
 				window._AIHECONG('ini', {
-					entId: _this.$store.state.config.ent_id,
+					entId: this.config.ent_id,
 					button: false,
 					appearance: {
 						panelMobile: {
@@ -453,7 +467,7 @@
 				// #ifdef APP-PLUS
 				if (this.kfmobile) {
 					uni.makePhoneCall({
-						phoneNumber: ''+this.kfmobile,
+						phoneNumber: '' + this.kfmobile,
 						success: () => {
 							// console.log("成功拨打电话")
 						}

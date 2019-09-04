@@ -158,6 +158,11 @@
                 this.$api.orderDetail(data, res => {
                     if (res.status) {
                         this.orderInfo = res.data
+						if(this.orderInfo.pay_status == 2){
+							this.$common.redirectTo(
+								'/pages/goods/payment/result?order_id=' + this.orderInfo.order_id
+							)
+						}
                     }
                 })
             },

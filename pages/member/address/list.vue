@@ -138,7 +138,7 @@ export default {
 								}
 								this.$api.saveUserShipWx(userShipData, res2 => {
 									if (res2.status) {
-										this.$common.successToShow('存储微信地址成功', r => {
+										this.$common.errorToShow('存储微信地址成功', r => {
 											setTimeout(rp => {
 												this.userShipList();
 											}, 1000);
