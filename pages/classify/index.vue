@@ -269,6 +269,9 @@ export default {
 		if(options.brand_id){
 			where.brand_id =options.brand_id
 		}
+		if(options.label_id){
+			where.label_id =options.label_id
+		}
 		this.setSearchData({
 			where: where
 		});
