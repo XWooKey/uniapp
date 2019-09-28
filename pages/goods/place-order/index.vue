@@ -8,7 +8,7 @@
 					<view class='cell-group margin-cell-group' v-if="userShip.id"  @click="showAddressList">
 						<view class='cell-item add-title-item right-img'>
 							<view class='cell-item-hd'>
-								<image class='cell-hd-icon' src='../../../static/image/location.png'></image>
+								<image class='cell-hd-icon' src='/static/image/location.png'></image>
 							</view>
 							<view class='cell-item-bd'>
 								<view class="cell-bd-view">
@@ -20,7 +20,7 @@
 								</view>
 							</view>
 							<view class='cell-item-ft'>
-								<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+								<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 							</view>
 						</view>
 					</view>
@@ -35,7 +35,7 @@
 					<view v-if="store.id != 0" class='cell-group margin-cell-group' @click="goStorelist()">
 						<view class='cell-item add-title-item right-img'>
 							<view class='cell-item-hd'>
-								<image class='cell-hd-icon' src='../../../static/image/homepage.png'></image>
+								<image class='cell-hd-icon' src='/static/image/homepage.png'></image>
 							</view>
 							<view class='cell-item-bd'>
 								<view class="cell-bd-view">
@@ -47,7 +47,7 @@
 								</view>
 							</view>
 							<view class='cell-item-ft'>
-								<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+								<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 							</view>
 						</view>
 					</view>
@@ -133,7 +133,7 @@
 						<view class='cell-hd-title'>发票</view>
 					</view>
 					<view class='cell-item-ft' @click="goInvoice()">
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 						<text class='cell-ft-text'>{{invoice.name}}</text>
 					</view>
 				</view>
@@ -186,7 +186,7 @@
                             </view>
                             <view class='cell-item-ft'
                             @click="toclose()">
-                                <image class='cell-ft-next icon' src='../../../static/image/close.png'></image>
+                                <image class='cell-ft-next icon' src='/static/image/close.png'></image>
                             </view>
                         </view>
                     </view> -->
@@ -246,7 +246,7 @@
 								</view>
 							</scroll-view>
 							<view class="coupon-none" v-else>
-								<image class="coupon-none-img" src="../../../static/image/order.png" mode=""></image>
+								<image class="coupon-none-img" src="/static/image/order.png" mode=""></image>
 							</view>
 						</view>
 
@@ -257,7 +257,7 @@
 								</view>
 								<!-- #ifdef MP-WEIXIN -->
 								<!-- <view class="coupon-code">
-									<image src="../../../static/image/ewm.png" class="icon" mode="" @click="scanCode"></image>
+									<image src="/static/image/ewm.png" class="icon" mode="" @click="scanCode"></image>
 								</view> -->
 								<!-- #endif -->
 								<view class="coupon-enter-btn"

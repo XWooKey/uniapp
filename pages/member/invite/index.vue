@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<image class="invite-bg" src="../../../static/image/invite-bg.png" mode=""></image>
+		<image class="invite-bg" src="/static/image/invite-bg.png" mode=""></image>
 		<view class="invite-c">
 			<view class="invite-w">
 				<view class='invite-w-t'>我的专属邀请码</view>
@@ -8,12 +8,12 @@
 				<view class='invite-w-detail'>快去分享您的邀请码吧，让更多的好友加入到【{{appTitle}}】，您也可以获得丰厚的奖励！</view>
 				<view class='invite-w-bot'>
 					<view bindtap='commission' @click="toMoney">
-						<image class='invite-w-bot-ic' src='../../../static/image/ic-earnings.png'></image>
+						<image class='invite-w-bot-ic' src='/static/image/ic-earnings.png'></image>
 						<text class='invite-w-bot-red'>￥{{money}}元</text>
 						<text class='invite-w-bot-gray'>邀请收益</text>
 					</view>
 					<view bindtap='recommendlist' @click="toList">
-						<image class='invite-w-bot-ic' src='../../../static/image/ic-number.png'></image>
+						<image class='invite-w-bot-ic' src='/static/image/ic-number.png'></image>
 						<text class='invite-w-bot-red'>{{number}}人</text>
 						<text class='invite-w-bot-gray'>邀请人数</text>
 					</view>
@@ -27,11 +27,16 @@
 			<view class='invite-btn'>
 				<!-- #ifdef MP-WEIXIN -->
 				<button class='share btn' open-type="share">
-					<image src='../../../static/image/ic-wechat.png'></image>
+					<image src='/static/image/ic-wechat.png'></image>
+				</button>
+				<!-- #endif -->
+				<!-- #ifdef H5 -->
+				<button class='share btn' @click="copyUrl()">
+					<image src='/static/image/ic-link.png'></image>
 				</button>
 				<!-- #endif -->
 				<button class='share btn' @click="createPoster()">
-					<image src='../../../static/image/ic-img.png'></image>
+					<image src='/static/image/ic-img.png'></image>
 				</button>
 			</view>
 		</view>
@@ -101,13 +106,10 @@
 					type: 2
 				}
 
-				let pages = getCurrentPages()
-				let page = pages[pages.length - 1]
 				let page_path = '/pages/share/jump';
 				// #ifdef H5
 				data.source = 1;
-				data.return_url = apiBaseUrl + 'wap/#' + page_path;
-				// console.log(apiBaseUrl)
+				data.return_url = apiBaseUrl + 'wap/' + page_path;
 				// #endif
 
 				// #ifdef MP-WEIXIN
@@ -132,6 +134,36 @@
 						this.$common.errorToShow(res.msg)
 					}
 				})
+			},
+			//复制URL链接
+			copyUrl() {
+				let data = {
+					type: 2
+				}
+				let page_path = '/pages/share/jump';
+				data.return_url = apiBaseUrl + 'wap' + page_path;
+				let userToken = this.$db.get('userToken')
+				if (userToken) {
+					data.token = userToken
+				}
+				let _this = this;
+				_this.$api.createShareUrl(data, res => {
+					if(res.status) {
+						//todo::要复制的内容是 res.data
+						uni.setClipboardData({
+							data:res.data,
+							success:function(data){
+								_this.$common.successToShow('复制成功');
+							}, 
+							fail:function(err){
+								_this.$common.errorToShow('复制分享URL失败');
+							}
+						})
+						
+					} else {
+						_this.$common.errorToShow('复制分享URL失败');
+					}
+				});
 			},
 			getMyShareCode() {
 				let userToken = this.$db.get("userToken");

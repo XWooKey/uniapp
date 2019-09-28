@@ -144,8 +144,8 @@
 				goodsInfo: [],
 				teamInfo: [],
 				favLogo: [
-					'../../../static/image/ic-me-collect.png',
-					'../../../static/image/ic-me-collect2.png'
+					'/static/image/ic-me-collect.png',
+					'/static/image/ic-me-collect2.png'
 				],
 				horizontal: 'right', //右下角弹出按钮
 				vertical: 'bottom',
@@ -218,11 +218,11 @@
 				let pages = getCurrentPages()
 				let page = pages[pages.length - 1]
 				// #ifdef H5 || MP-WEIXIN || APP-PLUS || APP-PLUS-NVUE
-				return apiBaseUrl + 'wap/#/' + page.route + '?scene=' + this.query;
+				return apiBaseUrl + 'wap/' + page.route + '?scene=' + this.query;
 				// #endif
 
 				// #ifdef MP-ALIPAY
-				return apiBaseUrl + 'wap/#/' + page.__proto__.route + '?scene=' + this.query;
+				return apiBaseUrl + 'wap/' + page.__proto__.route + '?scene=' + this.query;
 				// #endif
 			}
 

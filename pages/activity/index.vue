@@ -117,18 +117,26 @@
 			// 初始化抽奖数据
 			initdata:function(that){
 				this.$api.lotteryConfig(res => {
-					this.awardsConfig = res.data
-					this.chishu = res.data.user.day_remaining;
-					this.jifen = res.data.user.jifen;
-					// 获取奖品的个数
-					let awarrlength = this.awardsConfig.prize.length
-					// 为每一项追加index属性
-					this.awardsConfig.prize.forEach(function(element, index) {
-						element.index = index
-					});
-					
-					// 画转盘
-					this.drawAwardRoundel();
+					if(res.status){
+						this.awardsConfig = res.data
+						this.chishu = res.data.user.day_remaining;
+						this.jifen = res.data.user.jifen;
+						// 获取奖品的个数
+						let awarrlength = this.awardsConfig.prize.length
+						// 为每一项追加index属性
+						this.awardsConfig.prize.forEach(function(element, index) {
+							element.index = index
+						});
+						
+						// 画转盘
+						this.drawAwardRoundel();
+					}else{
+						this.$common.errorToShow(res.msg, () => {
+							uni.navigateBack({
+								delta: 1
+							});
+						});
+					}
 				});
 			},
 			//画抽奖圆盘  

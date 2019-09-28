@@ -7,47 +7,47 @@
 		<view class='cell-group margin-cell-group right-img'>
 			<view class='cell-item'>
 				<view class='cell-item-hd' @click="navigateToHandle('./recharge')">
-					<image class='cell-hd-icon' src='../../../static/image/topup.png'></image>
+					<image class='cell-hd-icon' src='/static/image/topup.png'></image>
 					<view class='cell-hd-title'>账户充值</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<view class='cell-item'>
 				<view class='cell-item-hd' @click="navigateToHandle('./withdraw_cash')">
-					<image class='cell-hd-icon' src='../../../static/image/withdraw.png'></image>
+					<image class='cell-hd-icon' src='/static/image/withdraw.png'></image>
 					<view class='cell-hd-title'>余额提现</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<view class='cell-item'>
 				<view class='cell-item-hd' @click="navigateToHandle('./details')">
-					<image class='cell-hd-icon' src='../../../static/image/detail.png'></image>
+					<image class='cell-hd-icon' src='/static/image/detail.png'></image>
 					<view class='cell-hd-title'>余额明细</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<view class='cell-item'>
 				<view class='cell-item-hd' @click="navigateToHandle('./cashlist')">
-					<image class='cell-hd-icon' src='../../../static/image/record.png'></image>
+					<image class='cell-hd-icon' src='/static/image/record.png'></image>
 					<view class='cell-hd-title'>提现记录</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<view class='cell-item'>
 				<view class='cell-item-hd' @click="navigateToHandle('./bankcard')">
-					<image class='cell-hd-icon' src='../../../static/image/card.png'></image>
+					<image class='cell-hd-icon' src='/static/image/card.png'></image>
 					<view class='cell-hd-title'>我的银行卡</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 		</view>

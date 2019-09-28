@@ -1,6 +1,6 @@
 <template>
 	<!-- 拼团 -->
-	<view class="img-list bottom-cell-group group-buying" v-if="data.params.list.length > 0">
+	<view class="img-list bottom-cell-group group-buying" v-if="data.params.list && data.params.list.length > 0">
 		<view class='cell-item right-img'>
 			<view class='cell-item-hd group-title'>
 				{{data.params.title}}
@@ -19,7 +19,7 @@
 								<view class="goods-salesvolume red-price" v-if="item.pintuan_start_status == 3">已结束</view>
 								<view class="goods-salesvolume red-price" v-if="item.pintuan_start_status == 2">即将开团</view>
 								
-								<image class="goods-cart" src="../../static/image/ic-car.png" @click="pintuanDetail(item.goods.id)"></image>
+								<image class="goods-cart" src="/static/image/ic-car.png" @click="pintuanDetail(item.goods.id)"></image>
 							</view>
 						</view>
 					</view>

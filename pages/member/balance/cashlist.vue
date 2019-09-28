@@ -12,7 +12,7 @@
 								<view class="uni-input">{{objectType[index]}}</view>
 							</picker>
 						</view>
-						<image class='right-img icon' src='../../../static/image/ic-pull-down.png'></image>
+						<image class='right-img icon' src='/static/image/ic-pull-down.png'></image>
 					</view>
 				</view>
 			</view>
@@ -48,7 +48,7 @@
 			></uni-load-more>
 		</view>
 		<view class="order-none" v-else>
-			<image class="cash-none-img" src="../../../static/image/order.png" mode=""></image>
+			<image class="cash-none-img" src="/static/image/order.png" mode=""></image>
 		</view>
 	</view>
 </template>

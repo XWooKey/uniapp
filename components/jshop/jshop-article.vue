@@ -1,5 +1,5 @@
 <template>
-	<view class='index-article cell-group bottom-cell-group' v-if="data.params.list.length > 0">
+	<view class='index-article cell-group bottom-cell-group' v-if="data.params.list && data.params.list.length > 0">
 		<view class='cell-item'
 		v-for="item in data.params.list"
 		:key="item.id"

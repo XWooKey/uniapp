@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="nav-back">
 			<view class="back-btn" @click="backBtn()">
-				<image class="icon" src="../../../static/image/back-black.png" mode=""></image>
+				<image class="icon" src="/static/image/back-black.png" mode=""></image>
 			</view>
 		</view>
 		
@@ -65,7 +65,7 @@
 						</view>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' @click="goShare()" src='../../../static/image/share.png'></image>
+						<image class='cell-ft-next icon' @click="goShare()" src='/static/image/share.png'></image>
 					</view>
 				</view>
 				<!-- 分享end -->
@@ -104,11 +104,11 @@
 					</view>
 					<view class='cell-item-bd'>
 						<view class="cell-bd-view">
-							<image class="goods-title-item-ic" src="../../../static/image/ic-dui.png" mode=""></image>
+							<image class="goods-title-item-ic" src="/static/image/ic-dui.png" mode=""></image>
 							<text class="cell-bd-text">24小时内发货</text>
 						</view>
 						<view class="cell-bd-view">
-							<image class="goods-title-item-ic" src="../../../static/image/ic-dui.png" mode=""></image>
+							<image class="goods-title-item-ic" src="/static/image/ic-dui.png" mode=""></image>
 							<text class="cell-bd-text">7天拆封无条件退货</text>
 						</view>
 					</view>
@@ -124,7 +124,7 @@
 						<view class='cell-hd-title'>{{teamCount}}人在拼单，可直接参与</view>
 					</view>
 					<!-- <view class='cell-item-ft' >
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 						<text class='cell-ft-text'>查看更多</text>
 					</view> -->
 				</view>
@@ -201,7 +201,7 @@
 				<uni-segmented-control :current="current" :values="items" @clickItem="onClickItem" style-type="text" active-color="#333"></uni-segmented-control>
 				<view class="goods-content-c">
 					<view class="goods-detail" v-if="current === 0">
-						<rich-text :nodes="goodsInfo.intro"></rich-text>
+						<jshopContent :content="goodsInfo.intro" v-if="goodsInfo.intro"></jshopContent>
 					</view>
 					<view class="goods-parameter" v-else-if="current === 1">
 						<view class='cell-group' v-if="goodsParams.length">
@@ -249,7 +249,7 @@
 							<uni-load-more :status="goodsComments.loadStatus"></uni-load-more>
 						</view>
 						<view class="comment-none" v-else>
-							<image class="comment-none-img" src="../../../static/image/order.png" mode=""></image>
+							<image class="comment-none-img" src="/static/image/order.png" mode=""></image>
 						</view>
 					</view>
 				</view>
@@ -319,7 +319,7 @@
 							<view class='pop-goods-price red-price'>￥ {{ price }}</view>
 						</view>
 						<view class='close-btn' @click="toclose()">
-							<image src='../../../static/image/close.png'></image>
+							<image src='/static/image/close.png'></image>
 						</view>
 					</view>
 					<scroll-view class="pop-m" scroll-y="true" style="max-height: 560upx;">
@@ -354,7 +354,7 @@
 
 			<view class="goods-bottom-ic" @click="redirectCart">
 				<view class="badge color-f" v-if="cartNums">{{ cartNums }}</view>
-				<image class="icon" src="../../../static/image/ic-me-car.png" mode=""></image>
+				<image class="icon" src="/static/image/ic-me-car.png" mode=""></image>
 				<view>购物车</view>
 			</view>
 			<button class='btn btn-square btn-g' @click="toshow(1)" hover-class="btn-hover2">
@@ -387,7 +387,7 @@
 		<!-- 右边浮动球 -->
 		<!-- <view class="right-ball">
 			<view class="" @click="goIndex()">
-				<image class="icon" src="../../../static/image/tab-ic-hom-selected.png" mode=""></image>
+				<image class="icon" src="/static/image/tab-ic-hom-selected.png" mode=""></image>
 			</view>
 		</view> -->
 		<uni-fab :pattern="pattern" :content="content" :horizontal="horizontal" :vertical="vertical" :direction="direction"
@@ -422,8 +422,7 @@
 	// #ifdef APP-PLUS
 	import shareByApp from '@/components/share/shareByApp.vue'
 	// #endif
-
-	import htmlParser from '@/common/html-parser'
+	import jshopContent from '@/components/jshop/jshop-content.vue'//视频和文本解析组件
 	export default {
 		components: {
 			uniSegmentedControl,
@@ -434,6 +433,7 @@
 			uniFab,
 			uniCountdown,
 			spec,
+			jshopContent,
 			// #ifdef H5
 			shareByH5,
 			// #endif
@@ -482,8 +482,8 @@
 				type: 2, // 1单独购买 2拼团
 				isfav: false, // 商品是否收藏
 				favLogo: [
-					'../../../static/image/ic-me-collect.png',
-					'../../../static/image/ic-me-collect2.png'
+					'/static/image/ic-me-collect.png',
+					'/static/image/ic-me-collect2.png'
 				],
 				horizontal: 'right', //右下角弹出按钮
 				vertical: 'bottom',
@@ -495,16 +495,16 @@
 					buttonColor: "#FF7159"
 				},
 				content: [{
-						iconPath: '../../../static/image/tab-ic-hom-selected.png',
-						selectedIconPath: '../../../static/image/tab-ic-hom-unselected.png',
+						iconPath: '/static/image/tab-ic-hom-selected.png',
+						selectedIconPath: '/static/image/tab-ic-hom-unselected.png',
 						// text: '首页',
 						active: false,
 						url: '/pages/index/index'
 					},
 
 					{
-						iconPath: '../../../static/image/tab-ic-me-selected.png',
-						selectedIconPath: '../../../static/image/tab-ic-me-unselected.png',
+						iconPath: '/static/image/tab-ic-me-selected.png',
+						selectedIconPath: '/static/image/tab-ic-me-unselected.png',
 						// text: '个人中心',
 						active: false,
 						url: '/pages/member/index/index'
@@ -602,11 +602,11 @@
 				let pages = getCurrentPages()
 				let page = pages[pages.length - 1]
 				// #ifdef H5 || MP-WEIXIN || APP-PLUS || APP-PLUS-NVUE
-				return apiBaseUrl + 'wap/#/' + page.route + '?id=' + this.goodsId + '&group_id=' + this.groupId;
+				return apiBaseUrl + 'wap/' + page.route + '?id=' + this.goodsId + '&group_id=' + this.groupId;
 				// #endif
 
 				// #ifdef MP-ALIPAY
-				return apiBaseUrl + 'wap/#/' + page.__proto__.route + '?id=' + this.goodsId + '&group_id=' + this.groupId;
+				return apiBaseUrl + 'wap/' + page.__proto__.route + '?id=' + this.goodsId + '&group_id=' + this.groupId;
 				// #endif
 			}
 		},
@@ -650,8 +650,6 @@
 							});
 						} else {
 							let info = res.data;
-							var htmlString = info.intro;
-							info.intro = htmlParser(htmlString);
 							_this.goodsInfo = info;
 							let products = res.data.product;
 							_this.discount_amount = parseFloat(info.pintuan_rule.discount_amount).toFixed(2);
@@ -1289,6 +1287,7 @@
 		font-size: 26upx;
 		color: #333;
 		padding: 0 26upx;
+		word-wrap: break-word;
 	}
 
 	.gai-body-img {

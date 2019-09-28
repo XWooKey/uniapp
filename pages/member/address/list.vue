@@ -8,7 +8,7 @@
 							<view class='cell-hd-title'>{{item.name}} <text class="phone-num">{{item.mobile}}</text></view>
 						</view>
 						<view class='cell-item-ft' v-show="type != 'order'">
-							<image class='cell-ft-next icon' src='../../../static/image/compile.png' @click="toEdit(item.id)"></image>
+							<image class='cell-ft-next icon' src='/static/image/compile.png' @click="toEdit(item.id)"></image>
 							<text class="cell-ft-text"></text>
 						</view>
 					</view>
@@ -24,7 +24,7 @@
 			</view>
 		</view>
 		<view class="address-none" v-else>
-			<image class="address-none-img" src="../../../static/image/order.png" mode=""></image>
+			<image class="address-none-img" src="/static/image/order.png" mode=""></image>
 		</view>
 		<view class="button-bottom">
 			<!-- #ifdef MP-WEIXIN -->

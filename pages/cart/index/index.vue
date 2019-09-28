@@ -4,7 +4,7 @@
 			<view class="cell-group margin-cell-group">
 				<view class="cell-item">
 					<view class="cell-item-hd">
-						<image class="cell-hd-icon" src="../../../static/image/homepage.png" style="width: 32upx;height: 32upx;"></image>
+						<image class="cell-hd-icon" src="/static/image/homepage.png" style="width: 32upx;height: 32upx;"></image>
 					</view>
 					<view class="cell-item-bd">
 						<text class="cell-bd-text">{{ shopName }}</text>
@@ -12,7 +12,7 @@
 					<view class="cell-item-ft">
 						<text class="cell-bd-text" @click="editBtn" v-if="!editStatus">编辑</text>
 						<text class="cell-bd-text" @click="editNoBtn" v-else>完成</text>
-						<!-- <image class='cell-ft-next icon' src='../../../static/image/right.png'></image> -->
+						<!-- <image class='cell-ft-next icon' src='/static/image/right.png'></image> -->
 					</view>
 				</view>
 			</view>
@@ -53,7 +53,7 @@
 											<text v-else-if="item.stockTension && !editStatus" class="stockError stockTension">库存紧张</text>
 											<uni-number-box v-on:change="bindChange($event, item)" :min="1" :max="item.maxStock" :value="item.nums" v-if="!editStatus"></uni-number-box>
 											<view v-else="" @click="del(index,item.id)" class='click-del'>
-												<image class="icon" src="../../../static/image/delete.png" mode=""></image>
+												<image class="icon" src="/static/image/delete.png" mode=""></image>
 											</view>
 										</view>
 									</view>
@@ -87,13 +87,13 @@
 	</view>
 	<!-- 购物车为空 -->
 	<!-- <view class='cart-none' v-else-if="cartData.list && cartData.list.length < 1 && isLoad == true">
-		<image class="cart-none-img" src="../../../static/image/car.png" mode=""></image>
+		<image class="cart-none-img" src="/static/image/car.png" mode=""></image>
 		<view class='cart-none-t'>购物车快饿瘪了 T.T</view>
 		<view class='cart-none-m'>快给我挑点宝贝吧</view>
 		<navigator class="cart-none-b" url='../../index/index' hover-class="btn-hover" open-type="switchTab">去逛逛</navigator>
 	</view> -->
 	<view class='cart-none' v-else>
-		<image class="cart-none-img" src="../../../static/image/car.png" mode=""></image>
+		<image class="cart-none-img" src="/static/image/car.png" mode=""></image>
 		<view class='cart-none-t'>购物车快饿瘪了 T.T</view>
 		<view class='cart-none-m'>快给我挑点宝贝吧</view>
 		<navigator class="cart-none-b" url='../../index/index' hover-class="btn-hover" open-type="switchTab">去逛逛</navigator>

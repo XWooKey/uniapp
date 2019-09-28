@@ -1,18 +1,18 @@
 <template>
 	<view class="imgwindow bottom-cell-group">
 		<view class="imgwindow-list" v-if="data.params.style == '2' ||data.params.style == '3' ||data.params.style == '4'"
-		 v-bind:class="'row'+data.params.style" :style="{margin:-padding+'px'}">
-			<view class="imgwindow-item" ref="imgwitem" :style="{height:height+'px',padding:padding+'px'}" v-for="(item, index) in data.params.list"
+		 v-bind:class="'row'+data.params.style" :style="{margin:-data.params.margin+'px'}">
+			<view class="imgwindow-item" ref="imgwitem" :style="{height:height+'px',padding:data.params.margin+'px'}" v-for="(item, index) in data.params.list"
 			 :key="index">
 				<image :src="item.image" mode="aspectFill" @click="showSliderInfo(item.linkType, item.linkValue)"></image>
 			</view>
 		</view>
-		<view class="imgwindow-list" v-if="data.params.style == '0'" v-bind:class="'row'+data.params.style" :style="{margin:-padding+'px'}">
-			<view class="imgwindow-item" ref="imgwitem" :style="{height:height+'px',padding:padding+'px'}" v-for="(item, index) in data.params.list"
+		<view class="imgwindow-list" v-if="data.params.style == '0'" v-bind:class="'row'+data.params.style" :style="{margin:-data.params.margin+'px'}">
+			<view class="imgwindow-item" ref="imgwitem" :style="{height:height+'px',padding:data.params.margin+'px'}" v-for="(item, index) in data.params.list"
 			 :key="index" v-if="index == 0">
 				<image :src="item.image" mode="aspectFill" @click="showSliderInfo(item.linkType, item.linkValue)"></image>
 			</view>
-			<view class="imgwindow-item" ref="imgwitem" :style="{height:height1+'px',padding:padding+'px'}" v-for="(item, index) in data.params.list"
+			<view class="imgwindow-item" ref="imgwitem" :style="{height:height1+'px',padding:data.params.margin+'px'}" v-for="(item, index) in data.params.list"
 			 :key="index" v-if="index !== 0">
 				<image :src="item.image" mode="aspectFill" @click="showSliderInfo(item.linkType, item.linkValue)"></image>
 			</view>
@@ -82,6 +82,9 @@
 		},
 		methods: {
 			showSliderInfo(type, val) {
+				if (!val) {
+					return;
+				}
 				if (type == 1) {
 					if (val.indexOf('http') != -1) {
 						// #ifdef H5 
@@ -89,7 +92,8 @@
 						// #endif
 					} else {
 						// #ifdef H5 || APP-PLUS || APP-PLUS-NVUE || MP
-						if (val == '/pages/classify/classify' || val == '/pages/cart/index/index' || val == '/pages/member/index/index') {
+						if (val == '/pages/index/index' || val == '/pages/classify/classify' || val == '/pages/cart/index/index' || val ==
+							'/pages/member/index/index') {
 							uni.switchTab({
 								url: val
 							});
@@ -105,7 +109,7 @@
 					this.goodsDetail(val)
 				} else if (type == 3) {
 					// 文章详情
-					this.$common.navigateTo('/pages/article/index?id=' + val +'&id_type=1')
+					this.$common.navigateTo('/pages/article/index?id=' + val + '&id_type=1')
 				} else if (type == 4) {
 					// 文章列表
 					this.$common.navigateTo('/pages/article/list?cid=' + val)

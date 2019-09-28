@@ -8,6 +8,14 @@
 						<view class='cell-hd-title'>个人信息</view>
 					</view>
 					<view class='cell-item-ft'>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
+					</view>
+				</view>
+				<view class='cell-item'>
+					<view class='cell-item-hd' @click="navigateToHandle('./user_info/password')">
+						<view class='cell-hd-title'>修改密码</view>
+					</view>
+					<view class='cell-item-ft'>
 						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
 					</view>
 				</view>
@@ -17,25 +25,25 @@
 						<view class='cell-hd-title'>清除缓存</view>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					</view>
 				</view>
 				<view class='cell-item'>
 					<view class='cell-item-hd' @click="aboutUs">
-						<!-- <image class='cell-hd-icon' src='../../../static/image/me-ic-about.png'></image> -->
+						<!-- <image class='cell-hd-icon' src='/static/image/me-ic-about.png'></image> -->
 						<view class='cell-hd-title'>关于我们</view>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					</view>
 				</view>
 				<view class='cell-item'>
 					<view class='cell-item-hd' @click="logOff">
-						<!-- <image class='cell-hd-icon' src='../../../static/image/me-ic-about.png'></image> -->
+						<!-- <image class='cell-hd-icon' src='/static/image/me-ic-about.png'></image> -->
 						<view class='cell-hd-title'>退出</view>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					</view>
 				</view>
 			</view>

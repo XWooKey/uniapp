@@ -791,3 +791,6 @@ export const lottery = (callback) => pluginsPost('lottery-api-lottery', {}, call
 
 //获取我的抽奖记录
 export const myLottery = (data, callback) => pluginsPost('lottery-api-lotteryLog', data, callback);
+
+//生成分享URL
+export const createShareUrl = (data, callback) => post('user.shareurl', data, callback);

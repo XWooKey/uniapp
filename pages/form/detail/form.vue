@@ -69,7 +69,7 @@
 									 :data-id='item.id'>
 										<view>{{item.default_value}}</view>
 									</picker>
-									<image class='icon-img-right' src='../../../static/image/ic-unfold.png'></image>
+									<image class='icon-img-right' src='/static/image/ic-unfold.png'></image>
 								</view>
 							</view>
 						</view>
@@ -84,7 +84,7 @@
 									 @change="bindTimeChange($event,item)" :data-id='item.id'>
 										<view>{{item.default_value}}</view>
 									</picker>
-									<image class='icon-img-right' src='../../../static/image/ic-unfold.png'></image>
+									<image class='icon-img-right' src='/static/image/ic-unfold.png'></image>
 								</view>
 							</view>
 						</view>
@@ -171,13 +171,13 @@
 									<view class='upload-img-list'>
 										<view class='upload-img-bd'>
 											<view class='upload-img' v-for="(pic_item, i) in item.pics" :key="i">
-												<image @click='pic_del(item,index,i)' :data-index="i" class='del-img' src='../../../static/image/del.png'></image>
+												<image @click='pic_del(item,index,i)' :data-index="i" class='del-img' src='/static/image/del.png'></image>
 												<image class='upload-camera' :src="pic_item.src" mode='aspectFit'></image>
 												<input type='text' hidden='hidden' :name="item.id+'_'+i" v-model="pic_item.image_id"></input>
 											</view>
 										</view>
 										<view class='upload-img-hd'>
-											<image class='upload-camera' src="../../../static/image/camera.png" @click="pic_choose($event,item,index)"
+											<image class='upload-camera' src="/static/image/camera.png" @click="pic_choose($event,item,index)"
 											 :data-id="item.id"></image>
 										</view>
 									</view>
@@ -200,7 +200,7 @@
 							</view>
 							<view class='ib-item-right'>
 								<view class="ib-item-mid">
-									<image class='icon-img' src='../../../static/image/ic-location.png'></image>
+									<image class='icon-img' src='/static/image/ic-location.png'></image>
 									<input class='ib-item-input margin-r' placeholder-class='ib-item-input-c' :name="''+item.id" :value="item.default_value"
 									 disabled='disabled' placeholder="点击获取位置信息" @click="chooseLocation($event,item)" :data-id='item.id' />
 								</view>
@@ -231,7 +231,7 @@
 						</view>
 						<view class='close-btn' @click="closeModal" :data-goods="select_goods_id" :data-id="select_id" data-type="100"
 						 data-statu="closespecs">
-							<image src='../../../static/image/close.png'></image>
+							<image src='/static/image/close.png'></image>
 						</view>
 					</view>
 					<scroll-view class='specs-goods-c' scroll-y="true">

@@ -15,19 +15,19 @@
 							</view>
 							<view class="goods-price red-price">
 								￥{{item.pintuanPrice}} <text class="people-num color-9 fsz24">{{item.pintuan_rule.people_number}}人成团</text>
-								<!-- <image class="goods-cart" src="../../static/image/more.png"></image> -->
+								<!-- <image class="goods-cart" src="/static/image/more.png"></image> -->
 							</view>
 							<view class="goods-buy">
 								<view class="goods-salesvolume" v-if="item.comments_count > 0">{{item.comments_count}}条评论</view>
 								<view class="goods-salesvolume" v-else-if="item.comments_count <= 0">暂无评论</view>
-								<image class="goods-cart" src="../../static/image/more.png"></image>
+								<image class="goods-cart" src="/static/image/more.png"></image>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="order-none" v-else>
-				<image class="order-none-img" src="../../static/image/order.png" mode=""></image>
+				<image class="order-none-img" src="/static/image/order.png" mode=""></image>
 			</view>
 		</view>
 	</view>

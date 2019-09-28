@@ -17,6 +17,17 @@
 				<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
 			</view>
 		</view>
+		<view class="payment-pop" v-show="popShow">
+			<view class="payment-pop-c">
+				<image src="../../../static/image/wait-pay.png" style="width: 30px;
+		height: 30px;"></image>
+				<view class="text">支付中，请稍后...</view>
+			</view>
+			<view class="payment-pop-b">
+				<button class="btn btn-c" @click="popBtn">支付失败</button>
+				<button class="btn btn-o" @click="popBtn">支付成功</button>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -58,7 +69,8 @@
 		data() {
 			return {
 				payments: [],
-				openid: ''
+				openid: '',
+				popShow: false
 			}
 		},
 		mounted() {
@@ -132,6 +144,7 @@
 			},
 			// 用户点击支付方式处理
 			toPayHandler(code) {
+				this.popShow = true;
 				let data = {
 					payment_code: code,
 					payment_type: this.type
@@ -146,12 +159,12 @@
 							data['params'] = {
 								trade_type: 'WAP',
 								return_url: baseUrl +
-									'wap/#/pages/goods/payment/result'
+									'wap/pages/goods/payment/result'
 							}
 						} else if (this.type == 2 && this.recharge) {
 							data['params'] = {
 								money: this.recharge,
-								return_url: baseUrl + 'wap/#/pages/goods/payment/result'
+								return_url: baseUrl + 'wap/pages/goods/payment/result'
 							}
 						} else if ((this.type == 5 || this.type == 6) && this.recharge) {
 							data['params'] = {
@@ -198,7 +211,7 @@
 						if (isWeiXin) {
 							var transitUrl =
 								baseUrl +
-								'wap/#/pages/goods/payment/auth?order_id=' +
+								'wap/pages/goods/payment/auth?order_id=' +
 								this.orderId +
 								'&type=' +
 								this.type;
@@ -256,13 +269,13 @@
 								data['params'] = {
 									trade_type: 'MWEB',
 									return_url: baseUrl +
-										'wap/#/pages/goods/payment/result'
+										'wap/pages/goods/payment/result'
 								}
 							} else if (this.type == 2 && this.recharge) {
 								data['params'] = {
 									trade_type: 'MWEB',
 									money: this.recharge,
-									return_url: baseUrl + 'wap/#/pages/goods/payment/result'
+									return_url: baseUrl + 'wap/pages/goods/payment/result'
 								}
 							} else if ((this.type == 5 || this.type == 6) && this.recharge) {
 								data['params'] = {
@@ -313,6 +326,10 @@
 						)
 						break
 				}
+			},
+			// 支付中显示隐藏
+			popBtn() {
+				this.popShow = false
 			}
 		}
 	}
@@ -342,4 +359,42 @@
 		font-size: 24upx;
 		color: #999;
 	}
+
+
+
+.payment-pop {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 400rpx;
+	height: 272rpx;
+	background-color: #fff;
+	text-align: center;
+	box-shadow: 0 0 20rpx #ccc;
+	/* border-radius: 10rpx; */
+}
+
+.payment-pop-c {
+	padding: 50rpx 30rpx;
+	/* line-height: 300rpx; */
+	font-size: 32rpx;
+	color: #999;
+}
+
+.payment-pop-b {
+	position: absolute;
+	bottom: 0;
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.payment-pop-b .btn {
+	flex: 1;
+}
+
+.payment-pop .text {
+	font-size: 24upx;
+}
 </style>

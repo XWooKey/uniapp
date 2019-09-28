@@ -32,7 +32,7 @@
 						</view>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/ic-pull-down.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/ic-pull-down.png'></image>
 					</view>
 				</view>
 				<view class='cell-item right-img'>
@@ -49,7 +49,7 @@
 						</view>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/ic-pull-down.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/ic-pull-down.png'></image>
 					</view>
 				</view>
 			</view>

@@ -1,7 +1,7 @@
 <template>
-	<view class="notice bottom-cell-group" v-if="data.params.list.length > 0">
+	<view class="notice bottom-cell-group" v-if="data.params.list && data.params.list.length > 0">
 		<view class="notice-icon">
-			<image class="icon news-icon" src="../../static/image/news.png" mode=""></image>
+			<image class="icon news-icon" src="/static/image/news.png" mode=""></image>
 		</view>
 		<swiper class="notice-c" :indicator-dots="false" :autoplay="true" :interval="3000" :duration="1000" :vertical="true" :circular="true">
 			<swiper-item v-for="item in data.params.list" :key="item.id">

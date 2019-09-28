@@ -1,7 +1,7 @@
 <template>
   <view class="content">
     <view class="content-c">
-      <image class="load-img" src="../static/image/loading.gif" mode=""></image>
+      <image class="load-img" src="/static/image/loading.gif" mode=""></image>
       <view class="load-text color-9">信息加载中.....</view>
     </view>
   </view>

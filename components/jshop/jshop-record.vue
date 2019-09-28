@@ -44,7 +44,7 @@ export default {
 			adbshow:false,
 			hideanimation: true,
 			log:{
-				avatar:'../../static/demo-img/user-head.jpg',
+				avatar:'/static/demo-img/user-head.jpg',
 				nickname:'',
 				desc:'',
 				ctime:'',

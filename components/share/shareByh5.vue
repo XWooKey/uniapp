@@ -1,10 +1,10 @@
 <template>
 	<view style="width: 100%;height: 300upx;background: #FFFFFF;position: absolute;left:0;bottom: 0;">
 		<view class="share-pop">
-<!-- 			<view class="share-item" @click="share()">
+			<view class="share-item" @click="copyUrl()">
 				<image src="../../../static/image/share-f.png" mode=""></image>
-				<view class="">分享给好友</view>
-			</view> -->
+				<view class="">复制链接</view>
+			</view>
 			<view class="share-item" @click="createPoster()">
 				<image src="../../../static/image/poster.png" mode=""></image>
 				<view class="">生成海报</view>
@@ -80,13 +80,9 @@ export default {
 				type: this.shareType,
 				group_id :this.groupId,
 				team_id :this.teamId,
-			}	
+			}
 			
-			let pages = getCurrentPages()
-			let page = pages[pages.length - 1]
-			
-			data.source = 1;
-			data.return_url = apiBaseUrl + 'wap/#/pages/share/jump';
+			data.return_url = apiBaseUrl + 'wap/pages/share/jump';
 
 			let userToken = this.$db.get('userToken')
 			if (userToken) {
@@ -100,7 +96,38 @@ export default {
 				} else {
 					this.$common.errorToShow(res.msg)
 				}
-			})
+			});
+		},
+		copyUrl () {
+			let data = {
+				id: this.goodsId,
+				type: this.shareType,
+				group_id :this.groupId,
+				team_id :this.teamId,
+			}
+			
+			data.return_url = apiBaseUrl + 'wap/pages/share/jump';
+			let userToken = this.$db.get('userToken')
+			if (userToken) {
+				data.token = userToken
+			}
+			let _this = this;
+			_this.$api.createShareUrl(data, res => {
+				if(res.status) {
+					//todo::要复制的内容是 res.data
+					uni.setClipboardData({
+						data:res.data,
+						success:function(data){
+							_this.$common.successToShow('复制成功');
+						}, 
+						fail:function(err){
+							_this.$common.errorToShow('复制分享URL失败');
+						}
+					})
+				} else {
+					_this.$common.errorToShow('复制分享URL失败');
+				}
+			});
 		},
 		// 分享操作
 		share () {

@@ -43,7 +43,7 @@
 			</view>
 		</view>
 		<view class="cards-none" v-else>
-			<image class="cards-none-img" src="../../../static/image/order.png" mode=""></image>
+			<image class="cards-none-img" src="/static/image/order.png" mode=""></image>
 		</view>
 		<view class="button-bottom">
 			<button class="btn btn-b" @click="goAddcard()">添加银行卡</button>

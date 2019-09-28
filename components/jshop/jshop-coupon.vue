@@ -3,7 +3,7 @@
 		<view class="coupon-item" v-for="item in data.params.list" :key="item.id" @click="receiveCoupon(item.id)">
 			<view class="coupon-i-l">
 				<view class="coupon-i-l-t">
-					<image class="icon" src="../../static/image/element-ic.png" mode=""></image>
+					<image class="icon" src="/static/image/element-ic.png" mode=""></image>
 					<text>{{ item.name }}</text>
 				</view>
 				<view class="coupon-i-l-b">
@@ -11,7 +11,7 @@
 				</view>
 			</view>
 			<view class="coupon-i-r">
-				<image class="coupon-logo" src="../../static/image/coupon-element.png" mode=""></image>
+				<image class="coupon-logo" src="/static/image/coupon-element.png" mode=""></image>
 			</view>
 		</view>
 	</view>

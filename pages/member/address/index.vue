@@ -30,7 +30,7 @@
 					</view>
 					
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/ic-pull-down.png' @click="showThreePicker"></image>
+						<image class='cell-ft-next icon' src='/static/image/ic-pull-down.png' @click="showThreePicker"></image>
 					</view>
 				</view>
 				

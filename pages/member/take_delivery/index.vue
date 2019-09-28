@@ -2,11 +2,11 @@
 	<view class="content">
 		<view class="content-top">
 			<view class="ad" >
-				<image class="ad-img" src="../../../static/demo-img/banner.png" mode="widthFix" ></image>
+				<image class="ad-img" src="/static/demo-img/banner.png" mode="widthFix" ></image>
 			</view>
 			<view class='search'>
 				<view class='search-c'>
-					<image class='icon search-icon' src='../../../static/image/zoom.png'></image>
+					<image class='icon search-icon' src='/static/image/zoom.png'></image>
 					<input class='search-input' placeholder-class='search-input-p' placeholder='请输入完整提货单号、订单号、提货手机号' v-model="key"></input>
 				</view>
 				<button class="btn btn-g" hover-class="btn-hover2" @click="search">查询</button>

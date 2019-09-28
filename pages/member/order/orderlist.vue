@@ -96,11 +96,11 @@
 				></uni-load-more>
 			</view>
 			<view class="order-none" v-else>
-				<image class="order-none-img" src="../../../static/image/order.png" mode=""></image>
+				<image class="order-none-img" src="/static/image/order.png" mode=""></image>
 			</view>
 <!-- 			<view class="goods-detail" v-show="current === 1">
 				<view class="order-none">
-					<image class="order-none-img" src="../../../static/image/order.png" mode=""></image>
+					<image class="order-none-img" src="/static/image/order.png" mode=""></image>
 				</view>
 			</view>
 			<view class="goods-detail" v-show="current === 2">

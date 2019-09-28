@@ -3,7 +3,7 @@
 
 		<!-- 用户头像header -->
 		<view class='member-top'>
-			<image class='bg-img' src='../../../static/image/member-bg.png'></image>
+			<image class='bg-img' src='/static/image/member-bg.png'></image>
 			<view class='member-top-c'>
 				<template v-if="hasLogin">
 					<image class='user-head-img' mode="aspectFill" :src='userInfo.avatar'></image>
@@ -46,7 +46,7 @@
 					<view class='cell-hd-title'>我的订单</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 		</view>
@@ -59,7 +59,7 @@
 			</view>
 			<view class='member-item' @click="goAfterSaleList">
 				<view class="badge color-f" v-if="afterSaleNums != 0">{{afterSaleNums}}</view>
-				<image class='member-item-icon' src='../../../static/image/me-ic-evaluate.png'></image>
+				<image class='member-item-icon' src='/static/image/me-ic-evaluate.png'></image>
 				<text class='member-item-text'>退换货</text>
 			</view>
 		</view>
@@ -74,37 +74,37 @@
 					<view class='cell-hd-title'>{{ item.name }}</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<!-- #ifdef H5 || APP-PLUS -->
 			<view class='cell-item'>
 				<view class='cell-item-hd' @click="showChat()">
-					<image class='cell-hd-icon' src='../../../static/image/me-ic-phone.png'></image>
+					<image class='cell-hd-icon' src='/static/image/me-ic-phone.png'></image>
 					<view class='cell-hd-title'>联系客服</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<!-- #endif -->
 			<!-- #ifdef MP-WEIXIN -->
 			<view class='cell-item'>
 				<button class="cell-item-hd " hover-class="none" open-type="contact" bindcontact="showChat" :session-from="kefupara">
-					<image src='../../../static/image/me-ic-phone.png' class='cell-hd-icon'></image>
+					<image src='/static/image/me-ic-phone.png' class='cell-hd-icon'></image>
 					<view class='cell-hd-title'>联系客服</view>
 				</button>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<!-- #endif -->
 			<!-- #ifdef MP-ALIPAY -->
 			<view class='cell-item'>
-				<contact-button icon="../../../static/image/kefu2.png" size="170rpx*76rpx" tnt-inst-id="WKPKUZXG" scene="SCE00040186"
+				<contact-button icon="/static/image/kefu2.png" size="170rpx*76rpx" tnt-inst-id="WKPKUZXG" scene="SCE00040186"
 				 class="cell-item-hd " hover-class="none" />
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<!-- #endif -->
@@ -117,7 +117,7 @@
 					<view class='cell-hd-title'>{{ item.name }}</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 		</view>
@@ -151,90 +151,90 @@
 				config:'',//配置信息
 				orderItems: [{
 						name: '待付款',
-						icon: '../../../static/image/me-ic-obligation.png',
+						icon: '/static/image/me-ic-obligation.png',
 						nums: 0
 					},
 					{
 						name: '待发货',
-						icon: '../../../static/image/me-ic-sendout.png',
+						icon: '/static/image/me-ic-sendout.png',
 						nums: 0
 					},
 					{
 						name: '待收货',
-						icon: '../../../static/image/me-ic-receiving.png',
+						icon: '/static/image/me-ic-receiving.png',
 						nums: 0
 					},
 					{
 						name: '待评价',
-						icon: '../../../static/image/me-ic-evaluate.png',
+						icon: '/static/image/me-ic-evaluate.png',
 						nums: 0
 					}
 				],
 				utilityMenus: {
 					distribution: {
 						name: '分销中心',
-						icon: '../../../static/image/distribution.png',
+						icon: '/static/image/distribution.png',
 						router: '../distribution/user',
 						unshowItem: false
 					},
 					coupon: {
 						name: '我的优惠券',
-						icon: '../../../static/image/ic-me-coupon.png',
+						icon: '/static/image/ic-me-coupon.png',
 						router: '../coupon/index',
 						unshowItem: false
 					},
 					balance: {
 						name: '我的余额',
-						icon: '../../../static/image/ic-me-balance.png',
+						icon: '/static/image/ic-me-balance.png',
 						router: '../balance/index',
 						unshowItem: false
 					},
 					integral: {
 						name: '我的积分',
-						icon: '../../../static/image/integral.png',
+						icon: '/static/image/integral.png',
 						router: '../integral/index',
 						unshowItem: false
 					},
 					address: {
 						name: '地址管理',
-						icon: '../../../static/image/me-ic-site.png',
+						icon: '/static/image/me-ic-site.png',
 						router: '../address/list',
 						unshowItem: false
 					},
 					collection: {
 						name: '我的收藏',
-						icon: '../../../static/image/ic-me-collect.png',
+						icon: '/static/image/ic-me-collect.png',
 						router: '../collection/index',
 						unshowItem: false
 					},
 					history: {
 						name: '我的足迹',
-						icon: '../../../static/image/ic-me-track.png',
+						icon: '/static/image/ic-me-track.png',
 						router: '../history/index',
 						unshowItem: false
 					},
 					invite: {
 						name: '邀请好友',
-						icon: '../../../static/image/ic-me-invite.png',
+						icon: '/static/image/ic-me-invite.png',
 						router: '../invite/index',
 						unshowItem: true
 					},
 					setting: {
 						name: '系统设置',
-						icon: '../../../static/image/me-ic-set.png',
+						icon: '/static/image/me-ic-set.png',
 						router: '../setting/index',
 						unshowItem: false
 					}
 				},
 				clerk: [{
 						name: '提货单列表',
-						icon: '../../../static/image/me-ic-phone.png',
+						icon: '/static/image/me-ic-phone.png',
 						router: '../take_delivery/list'
 
 					},
 					{
 						name: '提货单核销',
-						icon: '../../../static/image/me-ic-about.png',
+						icon: '/static/image/me-ic-about.png',
 						router: '../take_delivery/index'
 					}
 				]
@@ -377,6 +377,7 @@
 						this.utilityMenus.invite.unshowItem = true
 					} else {
 						this.utilityMenus.distribution.unshowItem = true
+						this.utilityMenus.invite.unshowItem = false
 					}
 				})
 				if (this.$db.get('userToken')) {

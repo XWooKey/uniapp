@@ -8,7 +8,7 @@
 					{{ searchKey }}
 					</view>
 				</view>
-				<image class="icon search-icon" src="../../static/image/zoom.png"></image>
+				<image class="icon search-icon" src="/static/image/zoom.png"></image>
 			</view>
 		</view>
 
@@ -17,41 +17,41 @@
 			<view class="screen-item" @click="comprehensive">
 				<text class="screen-item-text">综合</text>
 				<view class='screen-item-icon'>
-					<image v-if="searchData.order.key == 'sort' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="../../static/image/bottom-black.png"></image>
-					<image v-else class="screen-item-icon-img" src="../../static/image/bottom-gray.png" ></image>
+					<image v-if="searchData.order.key == 'sort' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="/static/image/bottom-black.png"></image>
+					<image v-else class="screen-item-icon-img" src="/static/image/bottom-gray.png" ></image>
 				</view>
 			</view>
 			<view class="screen-item" @click="priceSort">
 				<text class="screen-item-text">价格</text>
 				<view class="screen-item-icon">
-					<image v-if="searchData.order.key == 'price' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="../../static/image/top-black.png"></image>
-					<image v-else-if="!(searchData.order.key == 'price' && searchData.order.sort == 'asc')" class="screen-item-icon-img" src="../../static/image/top-gray.png"></image>
-					<image v-if="searchData.order.key == 'price' && searchData.order.sort == 'desc'" class="screen-item-icon-img" src="../../static/image/bottom-black.png"></image>
-					<image v-if="!(searchData.order.key == 'price' && searchData.order.sort == 'desc')" class="screen-item-icon-img" src="../../static/image/bottom-gray.png" ></image>
+					<image v-if="searchData.order.key == 'price' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="/static/image/top-black.png"></image>
+					<image v-else-if="!(searchData.order.key == 'price' && searchData.order.sort == 'asc')" class="screen-item-icon-img" src="/static/image/top-gray.png"></image>
+					<image v-if="searchData.order.key == 'price' && searchData.order.sort == 'desc'" class="screen-item-icon-img" src="/static/image/bottom-black.png"></image>
+					<image v-if="!(searchData.order.key == 'price' && searchData.order.sort == 'desc')" class="screen-item-icon-img" src="/static/image/bottom-gray.png" ></image>
 				</view>
 			</view>
 			<view class="screen-item" @click="salesVolume">
 				<text class="screen-item-text">销量</text>
 				<view class="screen-item-icon">
-					<image v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="../../static/image/top-black.png"></image>
-					<image v-else-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'asc')" class="screen-item-icon-img" src="../../static/image/top-gray.png"></image>
-					<image v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'desc'" class="screen-item-icon-img" src="../../static/image/bottom-black.png"></image>
-					<image v-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'desc')" class="screen-item-icon-img" src="../../static/image/bottom-gray.png"></image>
+					<image v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'asc'" class="screen-item-icon-img" src="/static/image/top-black.png"></image>
+					<image v-else-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'asc')" class="screen-item-icon-img" src="/static/image/top-gray.png"></image>
+					<image v-if="searchData.order.key == 'buy_count' && searchData.order.sort == 'desc'" class="screen-item-icon-img" src="/static/image/bottom-black.png"></image>
+					<image v-if="!(searchData.order.key == 'buy_count' && searchData.order.sort == 'desc')" class="screen-item-icon-img" src="/static/image/bottom-gray.png"></image>
 				</view>
 			</view>
 			<view class="screen-item">
 				<view class="screen-item-icon" style-type="button" :current="current" @click="listGrid">
-					<image class="list-grid" src="../../static/image/switch-ic-side-2.png" v-if="current == 0"></image>
-					<image class="list-grid" src="../../static/image/switch-ic-list.png" v-else-if="current == 1"></image>
+					<image class="list-grid" src="/static/image/switch-ic-side-2.png" v-if="current == 0"></image>
+					<image class="list-grid" src="/static/image/switch-ic-list.png" v-else-if="current == 1"></image>
 				</view>
 			</view>
 			<view class="screen-item screents" v-if="screents" @click="toshow()">
 				<text class="screen-item-text">筛选</text>
-				<image class="filter-img" src="../../static/image/top.png"></image>
+				<image class="filter-img" src="/static/image/top.png"></image>
 			</view>
 			<view class="screen-item screents" v-else-if="screentc" @click="toclose()">
 				<text class="screen-item-text">筛选</text>
-				<image class="filter-img" src="../../static/image/bottom.png"></image>
+				<image class="filter-img" src="/static/image/bottom.png"></image>
 			</view>
 		</view>
 		
@@ -160,14 +160,14 @@
 							</view>
 							<view class="goods-item-c">
 								<view class="goods-price red-price">￥{{item.price}}</view>
-								<image class="goods-cart" src="../../static/image/ic-car.png"></image>
+								<image class="goods-cart" src="/static/image/ic-car.png"></image>
 							</view>
 						</view>
 					</view>
 				</view>
 				<!-- 无数据时默认显示 -->
 				<view class="order-none" v-else>
-					<image class="order-none-img" src="../../static/image/order.png" mode=""></image>
+					<image class="order-none-img" src="/static/image/order.png" mode=""></image>
 				</view>
 			</view>
 		
@@ -185,14 +185,14 @@
 								<view class="goods-buy">
 									<view class="goods-salesvolume" v-if="item.comments_count > 0">{{item.comments_count}}条评论</view>
 									<view class="goods-salesvolume" v-else-if="item.comments_count <= 0">暂无评论</view>
-									<image class="goods-cart" src="../../static/image/ic-car.png"></image>
+									<image class="goods-cart" src="/static/image/ic-car.png"></image>
 								</view>
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="order-none" v-else>
-					<image class="order-none-img" src="../../static/image/order.png" mode=""></image>
+					<image class="order-none-img" src="/static/image/order.png" mode=""></image>
 				</view>
 			</view>
 		</scroll-view>
@@ -268,6 +268,12 @@ export default {
 		}
 		if(options.brand_id){
 			where.brand_id =options.brand_id
+		}
+		if(options.hot){
+			where.hot =options.hot
+		}
+		if(options.recommend){
+			where.recommend =options.recommend
 		}
 		if(options.label_id){
 			where.label_id =options.label_id

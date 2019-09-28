@@ -7,18 +7,20 @@
 				<text class="fsz24 color-9 article-time">{{ info.ctime }}</text>
 			</view>
 			<!-- <view class="article-time">
-				
 			</view> -->
 			<view class="article-content">
-				<rich-text :nodes="info.content"></rich-text>
+				<jshopContent :content="info.content" v-if="info.content"></jshopContent>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import htmlParser from '@/common/html-parser'
+	import jshopContent from '@/components/jshop/jshop-content.vue'
 	export default {
+		components: {
+			jshopContent
+		},
 		data() {
 			return {
 				myShareCode: '', //分享Code
@@ -30,7 +32,7 @@
 		onLoad(e) {
 			this.idType = e.id_type;
 			this.id = e.id;
-			
+
 			if (!this.idType && !this.id) {
 				this.$common.errorToShow('请求出错', res => {
 					uni.switchTab({
@@ -48,10 +50,10 @@
 				uni.setNavigationBarTitle({
 					title: '图文消息'
 				});
-				
+
 				this.messageDetail();
 			}
-			
+
 			this.getMyShareCode();
 		},
 		computed: {
@@ -69,15 +71,12 @@
 				}
 				this.$api.articleInfo(data, res => {
 					if (res.status) {
-						var info = res.data
-						var htmlString = info.content;
-						info.content = htmlParser(htmlString);
-						this.info = info
+						this.info = res.data
 						uni.setNavigationBarTitle({
-							title: info.title
+							title: this.info.title
 						});
 					} else {
-						this.$common.errorToShow(res.msg, res=> {
+						this.$common.errorToShow(res.msg, res => {
 							uni.navigateBack({
 								delta: 1
 							});
@@ -91,12 +90,9 @@
 				}
 				this.$api.noticeInfo(data, res => {
 					if (res.status) {
-						const info = res.data
-						var htmlString = info.content;
-						info.content = htmlParser(htmlString);
-						this.info = info
+						this.info = res.data
 						uni.setNavigationBarTitle({
-							title: info.title
+							title: this.info.title
 						});
 					} else {
 						this.$common.errorToShow(res.msg)
@@ -110,12 +106,9 @@
 				}
 				this.$api.messageDetail(data, res => {
 					if (res.status) {
-						const info = res.data
-						var htmlString = info.content;
-						info.content = htmlParser(htmlString);
-						this.info = info
+						this.info  = res.data
 						uni.setNavigationBarTitle({
-							title: info.title
+							title: this.info.title
 						});
 					} else {
 						this.$common.errorToShow(res.msg)
@@ -137,7 +130,8 @@
 		//分享
 		onShareAppMessage() {
 			let myInviteCode = this.myShareCode ? this.myShareCode : '';
-			let ins = this.$common.shareParameterDecode('type=4&id=' + this.id + '&id_type=' + this.idType + '&invite=' + myInviteCode);
+			let ins = this.$common.shareParameterDecode('type=4&id=' + this.id + '&id_type=' + this.idType + '&invite=' +
+				myInviteCode);
 			let path = '/pages/share/jump?scene=' + ins;
 			return {
 				title: this.info.title,

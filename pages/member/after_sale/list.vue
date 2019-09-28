@@ -7,6 +7,7 @@
 						<view class='cell-item'>
 							<view class='cell-item-hd'>
 								<view class='cell-hd-title'>售后单号：{{item.aftersales_id}}</view>
+								<button class='btn btn-g btn-small' hover-class="btn-hover" @click="copyData(item.aftersales_id)">复制</button>
 							</view>
 							<view class='cell-item-ft'>
 								<text class='cell-ft-text' v-if="item.status == 1">待审核</text>
@@ -51,8 +52,12 @@
 </template>
 
 <script>
+import {
+	tools
+} from '@/config/mixins.js'
 import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue'
 export default {
+	mixins: [tools],
 	components: {
 		uniLoadMore
 	},

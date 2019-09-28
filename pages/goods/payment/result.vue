@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="result succsee" v-if="status && paymentInfo.status === 2">
-			<image class="result-img" src="../../../static/image/win.png" mode=""></image>
+			<image class="result-img" src="/static/image/win.png" mode=""></image>
 			<view class="result-top">
 				支付成功
 			</view>
@@ -13,7 +13,7 @@
 			</view>
 		</view>
 		<view class="result fail" v-else-if="status && paymentInfo.status === 1">
-			<image class="result-img" src="../../../static/image/pastdue.png" mode=""></image>
+			<image class="result-img" src="/static/image/pastdue.png" mode=""></image>
 			<view class="result-top">
 				支付失败
 			</view>

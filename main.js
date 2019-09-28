@@ -6,6 +6,7 @@ import * as Common from './config/common.js'
 import * as Db from './config/db.js'
 import * as Config from './config/config.js'
 import store from './store'
+import './common/uni-H5Api'
 
 Vue.config.productionTip = false
 Vue.prototype.$api = Api;

@@ -19,6 +19,17 @@
 				</view>
 			</button>
 		</form>
+		<view class="payment-pop" v-show="popShow">
+			<view class="payment-pop-c">
+				<image src="../../../static/image/wait-pay.png" style="width: 30px;
+		height: 30px;"></image>
+				<view class="text">支付中，请稍后...</view>
+			</view>
+			<view class="payment-pop-b">
+				<button class="btn btn-c" @click="popBtn">支付失败</button>
+				<button class="btn btn-o" @click="popBtn">支付成功</button>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -57,7 +68,8 @@ export default {
 	},
 	data () {
 		return {
-			payments: []
+			payments: [],
+			popShow: false
 		}
 	},
 	mounted () {
@@ -91,6 +103,7 @@ export default {
 		},
 		// 用户点击支付方式处理
 		toPayHandler (e) {
+			this.popShow = true;
 			let code = e.target.value.code;
 			let formId = e.detail.formId;
 			
@@ -199,5 +212,41 @@ export default {
 }
 .payment-wx .btn .cell-item-hd{
 	min-width: 100upx;
+}
+
+.payment-pop {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 400rpx;
+	height: 272rpx;
+	background-color: #fff;
+	text-align: center;
+	box-shadow: 0 0 20rpx #ccc;
+	/* border-radius: 10rpx; */
+}
+
+.payment-pop-c {
+	padding: 50rpx 30rpx;
+	/* line-height: 300rpx; */
+	font-size: 32rpx;
+	color: #999;
+}
+
+.payment-pop-b {
+	position: absolute;
+	bottom: 0;
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.payment-pop-b .btn {
+	flex: 1;
+}
+
+.payment-pop .text {
+	font-size: 24upx;
 }
 </style>

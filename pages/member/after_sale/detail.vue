@@ -341,6 +341,7 @@ export default {
 	padding: 0 26upx 20upx;
 	font-size: 26upx;
 	color: #333;
+	word-wrap: break-word;
 }
 .evaluate-c-b{
 	overflow: hidden;

@@ -77,6 +77,8 @@
 				:uid="userInfo.id"
 		></payments-by-app>
 		<!-- #endif -->
+		
+		
 	</view>
 </template>
 

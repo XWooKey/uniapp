@@ -9,6 +9,7 @@
 						</view>
 						<view class="cell-bd-view">
 							<text class="cell-bd-text">订单号：{{ orderInfo.order_id }}</text>
+							<button class='btn btn-g btn-small' hover-class="btn-hover" @click="copyData(orderInfo.order_id)">复制</button>
 						</view>
 						<view class="cell-bd-view">
 							<text class="cell-bd-text">下单时间：{{ orderInfo.ctime }}</text>
@@ -28,7 +29,7 @@
 						</view>
 					</view>
 					<view class="cell-item-ft">
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					</view>
 				</view>
 				<view class='cell-item add-title-item' v-if="!orderInfo.store">
@@ -46,21 +47,28 @@
 			<view class='cell-group margin-cell-group' v-if="orderInfo.store">
 				<view class='cell-item add-title-item'>
 					<view class="cell-item-hd">
-						<image class='cell-hd-icon' src='../../../static/image/homepage.png'></image>
+						<image class='cell-hd-icon' src='/static/image/homepage.png'></image>
 					</view>
 					<view class='cell-item-bd'>
 						<view class="cell-bd-view black-text">
 							<text class="cell-bd-text">{{orderInfo.store.store_name}}</text>
 						</view>
 						<view class="cell-bd-view">
-							<text class="cell-bd-text">电话：{{orderInfo.store.mobile}}</text>
+							<text class="cell-bd-text">门店电话：{{orderInfo.store.mobile}}</text>
 						</view>
 						<view class="cell-bd-view">
-							<text class="cell-bd-text">地址：{{orderInfo.store.all_address}}</text>
+							<text class="cell-bd-text">门店地址：{{orderInfo.store.all_address}}</text>
+						</view>
+						<view class="cell-bd-view">
+							<text class="cell-bd-text">提货人信息：{{orderInfo.ship_name}}</text><text class="cell-bd-text" style="margin-left: 10rpx;">{{orderInfo.ship_mobile}}</text>
+						</view>
+						<view class="cell-bd-view" v-if="lading.status">
+							<text class="cell-bd-text">提货码：<text class="red-price">{{lading.code}}</text></text>
 						</view>
 					</view>
 				</view>
 			</view>
+			
 
 			<!-- 团购分享拼单 -->
 			<view class="cell-group margin-cell-group" v-if="(orderInfo.text_status == 1 || orderInfo.text_status == 2 ) && orderInfo.order_type==2">
@@ -272,21 +280,26 @@
 <script>
 	import {
 		orders,
-		goods
+		goods,
+		tools
 	} from '@/config/mixins.js'
 	export default {
-		mixins: [orders, goods],
+		mixins: [orders, goods,tools],
 		data() {
 			return {
 				orderId: 0,
 				orderInfo: {}, // 订单详情
 				teamInfo: [], //拼团团信息
+				lading: {
+					status: false,
+					code: ''
+				}, //提货信息
 			}
 		},
 		onLoad(options) {
 			this.orderId = options.order_id
 			if (this.orderId) {
-				this.orderDetail()
+				//this.orderDetail()
 			} else {
 				this.$common.errorToShow('', () => {
 					uni.navigateBack({
@@ -360,6 +373,13 @@
 						_this.orderInfo = data
 						if (data.order_type == 2 && (data.text_status == 2 || data.text_status == 1)) {
 							_this.getTeam(data.order_id);
+						}
+						
+						if(data.ladingItem[0]){
+							_this.lading = {
+								status: true,
+								code: data.ladingItem[0].id
+							}
 						}
 					} else {
 						_this.$common.errorToShow(res.msg)
@@ -466,7 +486,7 @@
 					}
 
 				});
-			},
+			}
 		}
 	}
 </script>

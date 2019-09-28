@@ -1,6 +1,6 @@
 <template>
 	<!-- 团购秒杀 -->
-	<view class="img-list bottom-cell-group group-buying" v-if="data.params.list.length > 0">
+	<view class="img-list bottom-cell-group group-buying" v-if="data.params.list && data.params.list.length > 0">
 		<view class='cell-item right-img'>
 			<view class='cell-item-hd group-title'>
 				{{data.params.title}}
@@ -22,7 +22,7 @@
 								</view>
 								<view class="goods-salesvolume red-price" v-if="item.goods.lasttime == '已经结束'">已结束</view>
 								<view class="goods-salesvolume red-price" v-if="item.goods.lasttime == '即将开始'">即将开始</view>
-								<image class="goods-cart" src="../../static/image/ic-car.png" @click="groupDetail(item.goods.id, item.goods.group_id)"></image>
+								<image class="goods-cart" src="/static/image/ic-car.png" @click="groupDetail(item.goods.id, item.goods.group_id)"></image>
 							</view>
 						</view>
 					</view>

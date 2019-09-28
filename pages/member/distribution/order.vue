@@ -26,7 +26,7 @@
 			></uni-load-more>
 		</view>
 		<view class="order-none" v-else>
-			<image class="balance-none-img" src="../../../static/image/order.png" mode=""></image>
+			<image class="balance-none-img" src="/static/image/order.png" mode=""></image>
 		</view>
 	</view>
 </template>

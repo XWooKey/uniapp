@@ -358,7 +358,6 @@ export default {
   }
 }
 .btn-square {
-  height: 80upx;
-  line-height: 80upx;
+  color: #333;
 }
 </style>

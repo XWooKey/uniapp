@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class='search'>
 			<view class='search-c'>
-				<image class='icon search-icon' src='../../../static/image/zoom.png'></image>
+				<image class='icon search-icon' src='/static/image/zoom.png'></image>
 				<input class='search-input' placeholder-class='search-input-p' placeholder='请输入门店名' v-model="key"></input>
 			</view>
 			<button class="btn btn-g" hover-class="btn-hover2" @click="storeSearch">搜索</button>
@@ -10,7 +10,7 @@
 		<view class='cell-group margin-cell-group'>
 			<view class='cell-item add-title-item right-img' v-for="(item, key) in storeList" :key="key" @click="selectStore(item.id, item.store_name, item.mobile, item.all_address)">
 				<view class="cell-item-hd">
-					<image class='cell-hd-icon' src='../../../static/image/homepage.png'></image>
+					<image class='cell-hd-icon' src='/static/image/homepage.png'></image>
 				</view>
 				<view class='cell-item-bd'>
 					<view class="cell-bd-view black-text">
@@ -24,7 +24,7 @@
 					</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/location.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/location.png'></image>
 					<text class="cell-ft-text color-9">{{item.distance}}</text>
 				</view>
 			</view>

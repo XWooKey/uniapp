@@ -145,7 +145,7 @@ export default {
 			let page = pages[pages.length - 1]
 			
 			data.source = 1;
-			data.return_url = apiBaseUrl + 'wap/#/' + page.route;
+			data.return_url = apiBaseUrl + 'wap/' + page.route;
 			
 			let userToken = this.$db.get('userToken')
 			if (userToken) {

@@ -235,7 +235,7 @@ export default {
 			
 			// #ifdef H5
 			data.source = 1;
-			data.return_url = apiBaseUrl + 'wap/#/pages/share/jump';
+			data.return_url = apiBaseUrl + 'wap/pages/share/jump';
 			// #endif
 			
 			// #ifdef MP-WEIXIN

@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class='search'>
 			<view class='search-c'>
-				<image class='icon search-icon' src='../../static/image/zoom.png'></image>
+				<image class='icon search-icon' src='/static/image/zoom.png'></image>
 				<input v-bind:class="$store.state.searchStyle" class='search-input' placeholder-class='search-input-p' placeholder='请输入关键字搜索' v-model="key" focus :auto-focus="focus" :fixed="focus"></input>
 			</view>
 			<button class="btn btn-g" @click="search" hover-class="btn-hover2">搜索</button>

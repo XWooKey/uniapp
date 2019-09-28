@@ -57,7 +57,7 @@
 						<view class='cell-hd-title'>本次不开具发票</view>
 					</view>
 					<view class='cell-item-ft'>
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					</view>
 				</view>
 			</view>

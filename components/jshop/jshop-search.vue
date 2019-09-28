@@ -8,7 +8,7 @@
 						{{data.params.keywords}}
 					</view>
 				</view>
-				<image class='icon search-icon' src='../../static/image/zoom.png'></image>
+				<image class='icon search-icon' src='/static/image/zoom.png'></image>
 			</view>
 		</view>
 		<!-- 搜索框 -->
@@ -19,7 +19,7 @@
 						{{data.params.keywords}}
 					</view>
 				</view>
-				<image class='icon search-icon' src='../../static/image/zoom.png'></image>
+				<image class='icon search-icon' src='/static/image/zoom.png'></image>
 			</view>
 		</view>	
 	</view>

@@ -11,7 +11,7 @@
 				<view class='cell-item-bd'>
 				</view>
 				<view class='cell-item-ft' v-if="data.params.lookMore == 'true'">
-					<image class='cell-ft-next icon' src='../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					<text class='cell-ft-text' @click="goodsList({cat_id: data.params.classifyId,brand_id:data.params.brandId})">查看更多</text>
 				</view>
 			</view>
@@ -79,7 +79,7 @@
 				<view class='cell-item-bd'>
 				</view>
 				<view class='cell-item-ft' v-if="data.params.lookMore == 'true'">
-					<image class='cell-ft-next icon' src='../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					<text class='cell-ft-text' @click="goodsList({cat_id: data.params.classifyId,brand_id:data.params.brandId})">查看更多</text>
 				</view>
 			</view>
@@ -95,14 +95,14 @@
 							<view class="goods-buy">
 								<view class="goods-salesvolume" v-if="item.comments_count > 0">{{item.comments_count}}条评论</view>
 								<view class="goods-salesvolume" v-else-if="item.comments_count <= 0">暂无评论</view>
-								<image class="goods-cart" src="../../static/image/ic-car.png"></image>
+								<image class="goods-cart" src="/static/image/ic-car.png"></image>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="order-none" v-else>
-				<image class="order-none-img" src="../../static/image/order.png" mode=""></image>
+				<image class="order-none-img" src="/static/image/order.png" mode=""></image>
 			</view>
 		</view>
 		
@@ -117,7 +117,7 @@
 				<view class='cell-item-bd'>
 				</view>
 				<view class='cell-item-ft' v-if="data.params.lookMore == 'true'">
-					<image class='cell-ft-next icon' src='../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					<text class='cell-ft-text' @click="goodsList({cat_id: data.params.classifyId,brand_id:data.params.brandId})">查看更多</text>
 				</view>
 			</view>

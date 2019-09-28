@@ -1,5 +1,5 @@
 <template>
-	<view class='swiper bottom-cell-group' v-if="data.params.list.length > 0">
+	<view class='swiper bottom-cell-group' v-if="data.params.list && data.params.list.length > 0">
 		<swiper class="swiper-c" :indicator-dots="swiper.indicatorDots" :autoplay="swiper.autoplay" :interval="data.params.duration"
 		 :duration="swiper.duration">
 			<swiper-item class="have-none" v-for="(item, index) in data.params.list" :key="index">
@@ -33,6 +33,9 @@
 		methods: {
 			// 广告点击查看详情
 			showSliderInfo(type, val) {
+				if (!val) {
+					return;
+				}
 				if (type == 1) {
 					if (val.indexOf('http') != -1) {
 						// #ifdef H5 
@@ -40,7 +43,7 @@
 						// #endif
 					} else {
 						// #ifdef H5 || APP-PLUS || APP-PLUS-NVUE || MP
-						if (val == '/pages/classify/classify' || val == '/pages/cart/index/index' || val == '/pages/member/index/index') {
+						if (val == '/pages/index/index' || val == '/pages/classify/classify' || val == '/pages/cart/index/index' || val == '/pages/member/index/index') {
 							uni.switchTab({
 								url: val
 							});
@@ -56,7 +59,7 @@
 					this.goodsDetail(val)
 				} else if (type == 3) {
 					// 文章详情
-					this.$common.navigateTo('/pages/article/index?id=' + val +'&id_type=1')
+					this.$common.navigateTo('/pages/article/index?id=' + val + '&id_type=1')
 				} else if (type == 4) {
 					// 文章列表
 					this.$common.navigateTo('/pages/article/list?cid=' + val)

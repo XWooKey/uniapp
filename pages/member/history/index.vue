@@ -25,7 +25,7 @@
 							<view class="list-detail">{{ item.ctime }}</view>
 						</view>
 						<view class="list-right-1">
-							<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+							<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 						</view>
 					</view>
 					<view class="group-btn">
@@ -47,7 +47,7 @@
 			></uni-load-more>
 		</view>
 		<view class="history-none" v-else>
-			<image class="history-none-img" src="../../../static/image/order.png" mode=""></image>
+			<image class="history-none-img" src="/static/image/order.png" mode=""></image>
 		</view>
 	</view>
 </template>

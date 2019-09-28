@@ -15,7 +15,7 @@
 						<text class="cell-bd-view">{{ cardInfo.card_number }}</text>
 					</view>
 					<view class="cell-item-ft">
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					</view>
 				</view>
 			</view>
@@ -25,13 +25,13 @@
 			>
 				<view class='cell-item right-img'>
 					<view class='cell-item-hd'>
-						<image class="yl-logo" src="../../../static/image/yl.png" mode=""></image>
+						<image class="yl-logo" src="/static/image/yl.png" mode=""></image>
 					</view>
 					<view class='cell-item-bd'>
 						<text class="cell-bd-view">请添加银行卡</text>
 					</view>
 					<view class="cell-item-ft">
-						<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+						<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 					</view>
 				</view>
 			</view>

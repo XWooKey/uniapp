@@ -1,12 +1,17 @@
 <template>
 	<view class="textarea bottom-cell-group" >
-		<rich-text :nodes="data.params"></rich-text>
+		<jshopContent :content="data.params" v-if="data.params"></jshopContent>
 	</view>
 </template>
 
 <script>
 import htmlParser from '@/common/html-parser'
+import jshopContent from '@/components/jshop/jshop-content.vue'//视频和文本解析组件
+
 export default {
+	components: {
+		jshopContent
+	},
 	name: "jshoptextarea",
 	props: {
 		data:{
@@ -15,7 +20,7 @@ export default {
 		}
 	},
 	created() {
-		this.data.params = htmlParser(this.data.params)
+		//this.data.params = htmlParser(this.data.params)
 	},
 	onLoad() {
 		

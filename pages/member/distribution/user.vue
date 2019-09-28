@@ -3,7 +3,7 @@
 
 		<!-- 用户头像header -->
 		<view class='member-top'>
-			<!-- <image class='bg-img' src='../../../static/image/member-bg.png'></image> -->
+			<!-- <image class='bg-img' src='/static/image/member-bg.png'></image> -->
 			<view class='member-top-c'>
 				<view class="fsz50 color-f">{{info.total_settlement_amount}}</view>
 				<view class='fsz26 color-d'>累计收入</view>
@@ -25,16 +25,16 @@
 					<view class='cell-hd-title'>{{ item.name }}</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 			<view class='cell-item'>
 				<view class='cell-item-hd' @click="createPoster()">
-					<image class='cell-hd-icon' src='../../../static/image/extension.png'></image>
+					<image class='cell-hd-icon' src='/static/image/extension.png'></image>
 					<view class='cell-hd-title'>我要推广</view>
 				</view>
 				<view class='cell-item-ft'>
-					<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+					<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 				</view>
 			</view>
 		</view>
@@ -77,27 +77,27 @@
 				utilityMenus: {
 					invite: {
 						name: '我的邀请',
-						icon: '../../../static/image/ic-me-invite.png',
+						icon: '/static/image/ic-me-invite.png',
 						router: '../invite/list'
 					},
 					order: {
 						name: '推广订单',
-						icon: '../../../static/image/extension_order.png',
+						icon: '/static/image/extension_order.png',
 						router: './order'
 					},
 					balance: {
 						name: '我的佣金',
-						icon: '../../../static/image/ic-me-balance.png',
+						icon: '/static/image/ic-me-balance.png',
 						router: '../balance/details?status=5'
 					},
 					my_store: {
 						name: '我的店铺',
-						icon: '../../../static/image/my_store.png',
+						icon: '/static/image/my_store.png',
 						router: './my_store'
 					},
 					store_setting: {
 						name: '店铺设置',
-						icon: '../../../static/image/me-ic-set.png',
+						icon: '/static/image/me-ic-set.png',
 						router: './store_setting'
 					}
 				},
@@ -161,7 +161,7 @@
 				let page_path = '/pages/share/jump';
 				// #ifdef H5
 				data.source = 1;
-				data.return_url = apiBaseUrl + 'wap/#' + page_path;
+				data.return_url = apiBaseUrl + 'wap/' + page_path;
 				// #endif
 
 				// #ifdef MP-WEIXIN

@@ -1,7 +1,7 @@
 {
     "name" : "Jshop云商",
     "appid" : "__UNI__60F611E",
-    "description" : "Jshop云商小程序商城",
+    "description" : "Jshop云商",
     "versionName" : "2.0",
     "versionCode" : 15,
     "transformPx" : false,
@@ -47,7 +47,7 @@
             "sdkConfigs" : {
                 "payment" : {
                     "weixin" : {
-                        "appid" : ""
+                        "appid" : "wxf62e2f29f15741af"
                     },
                     "alipay" : {
                         "scheme" : ""
@@ -63,7 +63,7 @@
     "quickapp" : {},
     /* 快应用特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wxaec38ca2e5cdc46a",
         "setting" : {
             "urlCheck" : true,
             "postcss" : true,
@@ -74,18 +74,28 @@
             "scope.userLocation" : {
                 "desc" : "用于获取您附近的门店列表"
             }
-        }
+        },
+        "usingComponents" : false
     },
     "h5" : {
         "title" : "Jshop云商",
-        "domain" : "https://demo.jihainet.com",
+        "domain" : "https://wmp.uneedabox.com",
         "router" : {
-            "base" : "/wap/"
+            "base" : "/wap/",
+            "mode" : "history"
         },
         "template" : "index.html",
         "devServer" : {
             "port" : 8080,
-            "disableHostCheck" : true
+            "disableHostCheck" : true,
+            "https" : false
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "AEIBZ-H5TRI-A6VGA-5KRNA-QKKK6-JGB33"
+                }
+            }
         }
     }
 }

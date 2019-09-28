@@ -13,25 +13,25 @@
 			<view class="apply-bot"  v-if="info.verify==2">
                 <view class="apply-bot-sop">
                 	<view class="abs-img">
-                		<image class="icon" src="../../../static/image/del.png" mode=""></image>
+                		<image class="icon" src="/static/image/del.png" mode=""></image>
                 	</view>
 					<view class="color-9 abs-mid"  >
-						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="/static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="/static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="/static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="/static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="/static/image/dot-o.png" mode=""></image>
+						<image class="dot" src="/static/image/dot-o.png" mode=""></image>
 
-						<image class="dot" src="../../../static/image/dot-g.png" mode=""></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
-						<image class="dot" src="../../../static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="/static/image/dot-g.png" mode=""></image>
+						<image class="dot" src="/static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="/static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="/static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="/static/image/dot-g.png" mode="" ></image>
+						<image class="dot" src="/static/image/dot-g.png" mode="" ></image>
 					</view>
 					<view class="abs-img">
-						<image class="icon" src="../../../static/image/close.png" mode=""></image>
+						<image class="icon" src="/static/image/close.png" mode=""></image>
 					</view>
                 </view>
 				<view class="apply-bot-text">

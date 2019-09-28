@@ -84,11 +84,11 @@
 					<view class="">
 						<view class="evaluate-c-b">
 							<view class="goods-img-item" v-for="(item, key) in images" :key="key">
-								<image class="del" src="../../../static/image/del.png" mode="" @click="delImage(item)"></image>
+								<image class="del" src="/static/image/del.png" mode="" @click="delImage(item)"></image>
 								<image class="" :src="item.url" mode="" @click="clickImg(item.url)"></image>
 							</view>
 							<view class="upload-img" v-show="isImage" @click="upImage">
-								<image class="icon" src="../../../static/image/camera.png" mode=""></image>
+								<image class="icon" src="/static/image/camera.png" mode=""></image>
 								<view class="">上传照片</view>
 							</view>
 						</view>

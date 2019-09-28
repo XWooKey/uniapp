@@ -39,11 +39,11 @@
 							v-for="(img, key) in images[item.id]"
 							:key="key"
 							>
-								<image class="del" src="../../../static/image/del.png" mode="" @click="removeImg(item.id, key)"></image>
+								<image class="del" src="/static/image/del.png" mode="" @click="removeImg(item.id, key)"></image>
 								<image class="" :src="img.url" mode="" @click="clickImg(img.url)"></image>
 							</view>
 							<view class="upload-img" v-show="isupload[item.id]">
-								<image class="icon" src="../../../static/image/camera.png" mode="" @click="uploadImg(item.id)"></image>
+								<image class="icon" src="/static/image/camera.png" mode="" @click="uploadImg(item.id)"></image>
 								<view class="">上传照片</view>
 							</view>
 						</view>

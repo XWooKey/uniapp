@@ -1,5 +1,5 @@
+
 export const apiBaseUrl = 'http://www.b2c.com/'
-//export const apiBaseUrl = 'https://demo.jihainet.com/'
 // #ifdef H5
 export const baseUrl=process.env.NODE_ENV === 'development'?window.location.origin+'/':apiBaseUrl
 // #endif

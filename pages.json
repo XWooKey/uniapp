@@ -137,6 +137,12 @@
         "navigationBarTitleText": "个人信息"
       }
     },
+	{
+	  "path": "pages/member/setting/user_info/password",
+	  "style": {
+	    "navigationBarTitleText": "修改密码"
+	  }
+	},
     {
       "path": "pages/member/integral/index",
       "style": {
@@ -406,7 +412,13 @@
 		// #endif
         "navigationBarTitleText": "加载中..."
       }
-    }
+    },
+	{
+	  "path": "pages/store_map/index",
+	  "style": {
+	    "navigationBarTitleText": "门店列表"
+	  }
+	}
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

@@ -15,19 +15,19 @@
 							<text class='member-item-text'>全部宝贝</text>
 						</view>
 						<view class='member-item' @click="openPopup()">
-							<image class='member-item-icon' src='../../../static/image/ic-me-collect.png'></image>
+							<image class='member-item-icon' src='/static/image/ic-me-collect.png'></image>
 							<text class='member-item-text'>收藏本店</text>
 						</view>
 						<view class='member-item'>
 							<!-- #ifdef MP-WEIXIN -->
 							<button class='share btn' open-type="share">
-								<image class='member-item-icon' src='../../../static/image/qr_code.png'></image>
+								<image class='member-item-icon' src='/static/image/qr_code.png'></image>
 								<text class='member-item-text'>二维码</text>
 							</button>
 							<!-- #endif -->
 							<!-- #ifndef MP-WEIXIN -->
 							<button class='share btn' @click="createPoster()">
-								<image class='member-item-icon' src='../../../static/image/qr_code.png'></image>
+								<image class='member-item-icon' src='/static/image/qr_code.png'></image>
 								<text class='member-item-text'>二维码</text>
 							</button>
 							<!-- #endif -->
@@ -44,16 +44,16 @@
 								{{ searchKey }}
 							</view>
 						</view>
-						<image class="icon search-icon" src="../../../static/image/zoom.png"></image>
+						<image class="icon search-icon" src="/static/image/zoom.png"></image>
 					</view>
 				</view>
 			</view>
 			<!-- 收藏弹出窗 -->
 			<lvv-popup position="bottom" ref="lvvpopref" @click="closePopup()">
 				<view class="collect-pop" @click="closePopup()">
-					<image v-if="isWeixinBrowser" src="../../../static/image/wxh5.png" mode="widthFix"></image>
+					<image v-if="isWeixinBrowser" src="/static/image/wxh5.png" mode="widthFix"></image>
 					<!-- #ifdef MP-WEIXIN -->
-					<image src="../../../static/image/wxxcx.png" mode="widthFix"></image>
+					<image src="/static/image/wxxcx.png" mode="widthFix"></image>
 					<!-- #endif -->
 					<!-- #ifdef H5 -->
 					<view class="h5-tip color-f fsz38">
@@ -114,11 +114,11 @@
 					},
 					{
 						name: '收藏本店',
-						icon: '../../../static/image/ic-me-collect.png',
+						icon: '/static/image/ic-me-collect.png',
 					},
 					{
 						name: '二维码',
-						icon: '../../../static/image/qr_code.png',
+						icon: '/static/image/qr_code.png',
 					}
 				],
 				storeCode: '',
@@ -270,7 +270,7 @@
 				let page_path = '/pages/share/jump';
 				// #ifdef H5
 				data.source = 1;
-				data.return_url = apiBaseUrl + 'wap/#' + page_path;
+				data.return_url = apiBaseUrl + 'wap/' + page_path;
 				// #endif
 
 				// #ifdef MP-WEIXIN

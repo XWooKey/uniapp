@@ -13,7 +13,7 @@
         </view>
         <view class="login-item" v-if="isCaptcha">
           <input class="login-item-input" placeholder-class="login-item-i-p" type="text" v-model="captcha" placeholder="输入验证码" />
-          <img :src="captchaUrl" alt="">
+          <img class='codeimg' :src="captchaUrl" alt="">
         </view>
       </view>
       <view class="login-b">
@@ -147,7 +147,7 @@ export default {
     },
     // 获取验证码图片地址
     getCaptchaUrl() {
-      this.captcha = apiBaseUrl + 'captcha.html'
+      this.captchaUrl = this.$config.apiBaseUrl + 'captcha.html'
     },
     // 去注册
     toReg() {
@@ -201,7 +201,7 @@ export default {
     // 获取第三方登录列表
     getAuths() {
       let data = {
-        url: baseUrl + 'wap/#/pages/author'
+        url: baseUrl + 'wap/pages/author'
       }
       this.$api.getTrustLogin(data, res => {
         if (res.status) {
@@ -318,11 +318,17 @@ export default {
   font-size: 28upx;
   color: #333;
   margin-bottom: 30upx;
+  display: flex;
+  align-items: center;
 }
 .login-item-input {
   display: inline-block;
-  width: 60%;
+  // width: 60%;
+  flex: 1;
   box-sizing: border-box;
+}
+.codeimg{
+	width: 210rpx;
 }
 .login-item .btn {
   display: inline-block;
@@ -348,7 +354,6 @@ export default {
 }
 .registered-item .btn-square {
   color: #333;
-  font-size: 26upx;
 }
 .third-block {
   justify-content: center;
