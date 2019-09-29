@@ -14,12 +14,12 @@
 				</view>
 			</view>
 			<view class='cell-item-ft'>
-				<image class='cell-ft-next icon' src='../../../static/image/right.png'></image>
+				<image class='cell-ft-next icon' src='/static/image/right.png'></image>
 			</view>
 		</view>
 		<view class="payment-pop" v-show="popShow">
 			<view class="payment-pop-c">
-				<image src="../../../static/image/wait-pay.png" style="width: 30px;
+				<image src="/static/image/wait-pay.png" style="width: 30px;
 		height: 30px;"></image>
 				<view class="text">支付中，请稍后...</view>
 			</view>
@@ -362,39 +362,39 @@
 
 
 
-.payment-pop {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 400rpx;
-	height: 272rpx;
-	background-color: #fff;
-	text-align: center;
-	box-shadow: 0 0 20rpx #ccc;
-	/* border-radius: 10rpx; */
-}
+	.payment-pop {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: 400rpx;
+		height: 272rpx;
+		background-color: #fff;
+		text-align: center;
+		box-shadow: 0 0 20rpx #ccc;
+		/* border-radius: 10rpx; */
+	}
 
-.payment-pop-c {
-	padding: 50rpx 30rpx;
-	/* line-height: 300rpx; */
-	font-size: 32rpx;
-	color: #999;
-}
+	.payment-pop-c {
+		padding: 50rpx 30rpx;
+		/* line-height: 300rpx; */
+		font-size: 32rpx;
+		color: #999;
+	}
 
-.payment-pop-b {
-	position: absolute;
-	bottom: 0;
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
-}
+	.payment-pop-b {
+		position: absolute;
+		bottom: 0;
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+	}
 
-.payment-pop-b .btn {
-	flex: 1;
-}
+	.payment-pop-b .btn {
+		flex: 1;
+	}
 
-.payment-pop .text {
-	font-size: 24upx;
-}
+	.payment-pop .text {
+		font-size: 24upx;
+	}
 </style>
