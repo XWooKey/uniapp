@@ -24,7 +24,8 @@
 						<open-data type="userAvatarUrl"></open-data>
 					</view>
 					<view>
-						<button class="login-btn" open-type="getUserInfo" @getuserinfo="getUserInfo" hover-class="btn-hover">授权登录</button>
+						<!-- open-type="getUserInfo" @getuserinfo="getUserInfo" -->
+						<button class="login-btn" hover-class="btn-hover" @click="goLogin()">授权登录</button>
 					</view>
 					<!-- #endif -->
 					<!-- #ifdef MP-ALIPAY -->
@@ -244,6 +245,11 @@
 			this.initData()
 		},
 		methods: {
+			goLogin(){
+				uni.navigateTo({
+					url:'/pages/login/choose/index'
+				})
+			},
 			getUserInfo(e) {
 				let _this = this
 				//return false;
